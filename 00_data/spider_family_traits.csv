@@ -1,0 +1,24 @@
+spider_family,capture_web,sensing_web,no_web,tube_web,sheet_web,space_web,orb_web,ambush_hunter,active_hunter,stenophagous,euryphagous,ground,vegetation,diurnal,nocturnal,guild,guild_code
+AGELENIDAE,1,0,0,1,1,0,0,0,0,0,1,1,1,0,1,sheet web weavers,SHW
+AMAUROBIIDAE,1,0,0,1,1,0,0,0,0,0,1,1,1,0,1,sheet web weavers,SHW
+ANTRODIAETIDAE,0,0,1,0,0,0,0,0,1,0,1,1,0,0,1,sensing web weavers,SEW
+CHEIRACANTHIIDAE,0,0,1,0,0,0,0,0,1,0,1,1,1,1,0,other hunters,OTH
+CORINNIDAE,0,0,1,0,0,0,0,0,1,0,1,1,0,1,0,ground hunters,GRH
+CYBAEIDAE,1,0,0,0,1,0,0,0,0,0,1,1,1,0,1,sheet web weavers,SHW
+DICTYNIDAE,1,0,0,1,1,0,0,0,0,0,1,1,1,0,1,space web weavers/ ground hunters,SPW/ GRH
+GNAPHOSIDAE,0,0,1,0,0,0,0,0,1,0,1,1,0,1,0,ground hunters,GRH
+LINYPHIIDAE,1,0,0,0,1,0,0,0,0,0,1,0,1,1,0,sheet web weavers/ other hunters,SHW/ OTH
+LIOCRANIDAE,0,0,1,0,0,0,0,0,1,0,1,1,0,1,0,ground hunters,GRH
+LYCOSIDAE,0,0,1,0,0,0,0,0,1,0,1,1,0,1,1,ground hunters,GRH
+OXYOPIDAE,0,0,1,0,0,0,0,0,1,0,1,1,1,1,1,other hunters,OTH
+PHILODROMIDAE,0,0,1,0,0,0,0,0,1,0,1,1,1,1,0,other hunters,OTH
+PHOLCIDAE,1,0,0,1,1,0,0,0,0,0,1,0,1,1,1,space web weavers,SPW
+PHRUROLITHIDAE,0,0,1,0,0,0,0,0,1,0,1,1,0,1,1,ground hunters,GRH
+SALTICIDAE,0,0,1,0,0,0,0,0,1,0,1,0,1,1,0,other hunters,OTH
+THERIDIIDAE,1,1,0,0,1,1,0,0,0,0,1,0,1,1,1,space web weavers,SPW
+THOMISIDAE,0,0,1,0,0,0,0,1,0,0,1,1,1,1,0,ambush hunters,AMH
+TITANOECIDAE,0,0,1,0,0,0,0,0,1,0,1,1,0,0,1,space web weavers,SPW
+ZODARIIDAE,0,0,1,0,0,0,0,0,1,0,1,1,0,1,0,specialist,SPE
+ARANEIDAE,1,0,0,0,0,0,1,0,0,0,1,0,1,1,1,orb web weavers,ORW
+CLUBIONIDAE,0,0,1,0,0,0,0,0,1,0,1,0,1,0,1,other hunters,OTH
+HAHNIIDAE,1,0,0,0,1,0,0,0,0,0,1,1,0,1,1,sheet web weavers,SHW

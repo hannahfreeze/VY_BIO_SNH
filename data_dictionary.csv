@@ -1,0 +1,23 @@
+dataset,variable,description,data_type,units_or_levels,notes
+carabid_habitat_df,pitfall_ID,Unique pitfall trap identifier,factor,PF0001,
+carabid_habitat_df,site_ID,Unique vineyard site identifier,factor,site codes,Consistent across all datasets
+carabid_habitat_df,year,Sampling year,integer,2024–2025,
+carabid_habitat_df,habitat,Habitat type,factor,VY; SNH,VY = vineyard; SNH = semi-natural habitat
+carabid_habitat_df,subhabitat,Subhabitat type,factor,CR; DR; FM; NH,More detailed habitat codes (CR = crop row; DR = drive row; FM = field margin; NH = natural habitat). Note: CR and DR combined into VY habitat; FM removed from analysis.
+carabid_habitat_df,sample_period,Sampling month,factor,JUNE; SEP,JUNE = June; SEP = September
+carabid_habitat_df,species_richness,Number of carabid species,integer,species,
+carabid_habitat_df,total_abundance,Total number of individuals collected,integer,individuals,
+carabid_traits,carabid_species,Carabid species recorded in the study,character,e.g. Harpalus affinis,Matches spider_habitat_df
+carabid_traits,dispersal_ability,Wing morphology,factor,macropterous; brachypterous; dimorphic; polymorphic,Proxy for dispersal ability
+carabid_traits,status,Biogeographic status,factor,native; introduced,Native to North America or introduced
+spider_habitat_df,pitfall_ID,Unique pitfall trap identifier,factor,PF0001,
+spider_habitat_df,site_ID,Unique vineyard site identifier,factor,site codes,Consistent across all datasets
+spider_habitat_df,year,Sampling year,integer,2024–2025,
+spider_habitat_df,habitat,Habitat type,factor,VY; SNH,Vineyard vs semi-natural habitat
+spider_habitat_df,subhabitat,Subhabitat type,factor,CR; DR; FM; NH,More detailed habitat codes (CR = crop row; DR = drive row; FM = field margin; NH = natural habitat). Note: CR and DR combined into VY habitat; FM removed from analysis.
+spider_habitat_df,sample_period,Sampling month,factor,JUNE; SEP,JUNE = June; SEP = September
+spider_habitat_df,family_richness,Number of spider families,integer,families,
+spider_habitat_df,total_abundance,Total number of individuals collected,integer,individuals,Used in combination with trap metadata to account for trap loss
+spider_family_traits,family,Spider family,factor,taxonomic family,Matches spider_habitat_df
+spider_family_traits,guild,Foraging guild,factor,ground hunter; sheet web weaver; ambusher hunter; others,
+spider_family_traits,guild_code,Abbreviated foraging guild code,factor,GH; SWW; AH,Short codes used in figures and trait analyses

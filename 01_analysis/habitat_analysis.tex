@@ -1,0 +1,3050 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\documentclass[
+]{article}
+\usepackage{xcolor}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{graphicx}
+\makeatletter
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
+% Set default figure placement to htbp
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  pdftitle={Exploring Carabid Beetle and Spider Diversity, Community Composition and Functional Traits Across Vineyard and Semi-Natural Habitats},
+  pdfauthor={Hannah Friesen},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\title{Exploring Carabid Beetle and Spider Diversity, Community
+Composition and Functional Traits Across Vineyard and Semi-Natural
+Habitats}
+\author{Hannah Friesen}
+\date{2026-02-10}
+
+\begin{document}
+\maketitle
+
+{
+\setcounter{tocdepth}{4}
+\tableofcontents
+}
+\subsection{System Info}\label{system-info}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{version}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##                _                                
+## platform       x86_64-w64-mingw32               
+## arch           x86_64                           
+## os             mingw32                          
+## crt            ucrt                             
+## system         x86_64, mingw32                  
+## status                                          
+## major          4                                
+## minor          5.2                              
+## year           2025                             
+## month          10                               
+## day            31                               
+## svn rev        88974                            
+## language       R                                
+## version.string R version 4.5.2 (2025-10-31 ucrt)
+## nickname       [Not] Part in a Rumble
+\end{verbatim}
+
+\subsection{Set up}\label{set-up}
+
+\subsubsection{Loading Packages}\label{loading-packages}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Load necessary libraries}
+\FunctionTok{library}\NormalTok{(dplyr)}
+\FunctionTok{library}\NormalTok{(ggplot2)}
+\FunctionTok{library}\NormalTok{(tidyr)}
+\FunctionTok{library}\NormalTok{(stringr)}
+\FunctionTok{library}\NormalTok{(vegan)}
+\FunctionTok{library}\NormalTok{(tibble)}
+\FunctionTok{library}\NormalTok{(purrr)}
+\FunctionTok{library}\NormalTok{(gllvm)}
+\FunctionTok{library}\NormalTok{(corrplot)}
+\FunctionTok{library}\NormalTok{(ggvenn)}
+\FunctionTok{library}\NormalTok{(iNEXT)}
+\FunctionTok{library}\NormalTok{(lattice)}
+
+
+\DocumentationTok{\#\# Citing packages}
+\NormalTok{grateful}\SpecialCharTok{::}\FunctionTok{cite\_packages}\NormalTok{(}
+  \AttributeTok{output =} \StringTok{"file"}\NormalTok{, }
+  \AttributeTok{out.dir =}\NormalTok{ here}\SpecialCharTok{::}\FunctionTok{here}\NormalTok{(}\StringTok{"01\_analysis"}\NormalTok{)}
+\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "C:/Users/User/OneDrive - UBC/MSC_2024-2026/backup/VY_BIO_SNH/01_analysis/grateful-report.html"
+\end{verbatim}
+
+\subsection{CONTEXT}\label{context}
+
+This research is exploratory and observational.
+
+\subsubsection{Objective}\label{objective}
+
+The aim of this research is to characterize carabid beetle and spider
+communities in vineyard agroecosystems and adjacent SNH in the Okanagan
+Valley. Specifically, this study explores how carabid beetle and spider
+diversity and community composition vary between vineyard and SNH, and
+if functional traits explain any of the variation.
+
+\subsection{SPIDERS}\label{spiders}
+
+\subsubsection{Data import and
+pre-processing}\label{data-import-and-pre-processing}
+
+Let's import the raw spider data and summarize by site/ habitat/ year.
+We will filter out field margin samples from the main analysis as they
+were not sampled in 2025. September samples were excluded due to low
+trap recovery.
+
+Let's also calculate the total number of spiders collected, and the
+number of different families. Note that spiders that could not be
+identified to family level, either due to damage or being juveniles, are
+included in total spider count but not in family richness count.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Load spider data}
+\NormalTok{spider\_habitat\_df }\OtherTok{\textless{}{-}} \FunctionTok{read.csv}\NormalTok{(here}\SpecialCharTok{::}\FunctionTok{here}\NormalTok{(}\StringTok{"00\_data"}\NormalTok{,}\StringTok{"spider\_habitat\_df.csv"}\NormalTok{))}
+
+\CommentTok{\# Filter out field margins and september data from the main analysis}
+\NormalTok{spider\_habitat\_df }\OtherTok{\textless{}{-}}\NormalTok{ spider\_habitat\_df }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{filter}\NormalTok{(}
+\NormalTok{    subhabitat }\SpecialCharTok{!=} \StringTok{"FM"}\NormalTok{,}
+\NormalTok{    sample\_period }\SpecialCharTok{!=} \StringTok{"SEP"}
+\NormalTok{  )}
+
+\CommentTok{\# Identify family columns from descriptor columns}
+\NormalTok{family\_cols }\OtherTok{\textless{}{-}} \FunctionTok{setdiff}\NormalTok{(}\FunctionTok{names}\NormalTok{(spider\_habitat\_df), }\FunctionTok{c}\NormalTok{(}\StringTok{"pitfall\_ID"}\NormalTok{, }\StringTok{"year"}\NormalTok{, }\StringTok{"habitat"}\NormalTok{, }\StringTok{"subhabitat"}\NormalTok{, }\StringTok{"family\_richness"}\NormalTok{, }\StringTok{"sample\_period"}\NormalTok{, }\StringTok{"site\_ID"}\NormalTok{, }\StringTok{"year\_established"}\NormalTok{, }\StringTok{"total\_count"}\NormalTok{))}
+
+\CommentTok{\# ensure family cols are integer counts}
+\NormalTok{spider\_habitat\_df }\OtherTok{\textless{}{-}}\NormalTok{ spider\_habitat\_df }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}\FunctionTok{across}\NormalTok{(}\FunctionTok{all\_of}\NormalTok{(family\_cols), }\SpecialCharTok{\textasciitilde{}} \FunctionTok{as.integer}\NormalTok{(tidyr}\SpecialCharTok{::}\FunctionTok{replace\_na}\NormalTok{(.x, }\DecValTok{0}\DataTypeTok{L}\NormalTok{))))}
+
+\CommentTok{\# Then re{-}define unid and identified categories}
+\NormalTok{unid\_cols }\OtherTok{\textless{}{-}} \FunctionTok{union}\NormalTok{(}\StringTok{"UNID."}\NormalTok{, }\StringTok{"LYCOSIDAE..juvenile."}\NormalTok{)  }\CommentTok{\# add the juvenile manually}
+\NormalTok{family\_columns }\OtherTok{\textless{}{-}} \FunctionTok{setdiff}\NormalTok{(family\_cols, unid\_cols)}
+
+\CommentTok{\# Summarize spider abundance by site\_ID, habitat, sample period and year}
+\NormalTok{spider\_habitat\_summary }\OtherTok{\textless{}{-}}\NormalTok{ spider\_habitat\_df }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{group\_by}\NormalTok{(site\_ID, habitat, sample\_period, year) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{summarise}\NormalTok{(}
+    \FunctionTok{across}\NormalTok{(}\FunctionTok{all\_of}\NormalTok{(family\_cols), }\SpecialCharTok{\textasciitilde{}} \FunctionTok{sum}\NormalTok{(.x, }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{)),}
+    \AttributeTok{trap\_count =} \FunctionTok{n}\NormalTok{(),     }\CommentTok{\# destroyed traps already removed earlier}
+    \AttributeTok{.groups =} \StringTok{"drop"}
+\NormalTok{  )}
+
+\CommentTok{\# Total number of spiders found in vineyards across all sites and years (including juveniles/ UNID)}
+\NormalTok{total\_spiders }\OtherTok{\textless{}{-}} \FunctionTok{sum}\NormalTok{(spider\_habitat\_df}\SpecialCharTok{$}\NormalTok{total\_count, }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{)}
+
+\CommentTok{\# total number of traps}
+\NormalTok{total\_traps }\OtherTok{\textless{}{-}}\NormalTok{ spider\_habitat\_summary }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{summarise}\NormalTok{(}\AttributeTok{total\_traps =} \FunctionTok{sum}\NormalTok{(trap\_count, }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{)) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{pull}\NormalTok{(total\_traps)}
+
+\CommentTok{\# Convert wide data (family columns) into long format}
+\NormalTok{spider\_long\_habitat }\OtherTok{\textless{}{-}}\NormalTok{ spider\_habitat\_df }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{pivot\_longer}\NormalTok{(}\AttributeTok{cols =} \FunctionTok{all\_of}\NormalTok{(family\_columns), }\AttributeTok{names\_to =} \StringTok{"spider\_family"}\NormalTok{, }\AttributeTok{values\_to =} \StringTok{"count"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{drop\_na}\NormalTok{(count) }\SpecialCharTok{\%\textgreater{}\%}  \CommentTok{\# Remove missing values}
+  \FunctionTok{filter}\NormalTok{(count }\SpecialCharTok{\textgreater{}=} \DecValTok{0}\NormalTok{)  }\CommentTok{\# Ensure only observed families are counted}
+
+\CommentTok{\# Get a list of all families observed at least once}
+\NormalTok{observed\_families\_habitat }\OtherTok{\textless{}{-}}\NormalTok{ spider\_long\_habitat }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{filter}\NormalTok{(count }\SpecialCharTok{\textgreater{}} \DecValTok{0}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{distinct}\NormalTok{(spider\_family) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{arrange}\NormalTok{(spider\_family)}
+
+\CommentTok{\# View the result}
+\FunctionTok{print}\NormalTok{(observed\_families\_habitat)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 23 x 1
+##    spider_family   
+##    <chr>           
+##  1 AGELENIDAE      
+##  2 AMAUROBIIDAE    
+##  3 ANTRODIAETIDAE  
+##  4 ARANEIDAE       
+##  5 CHEIRACANTHIIDAE
+##  6 CLUBIONIDAE     
+##  7 CORINNIDAE      
+##  8 CYBAEIDAE       
+##  9 DICTYNIDAE      
+## 10 GNAPHOSIDAE     
+## # i 13 more rows
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# calculate relative abundance of each spider family}
+\NormalTok{spider\_family\_rel }\OtherTok{\textless{}{-}}\NormalTok{ spider\_long\_habitat }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{group\_by}\NormalTok{(spider\_family) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{summarise}\NormalTok{(}\AttributeTok{n =} \FunctionTok{sum}\NormalTok{(count, }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{), }\AttributeTok{.groups =} \StringTok{"drop"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{rel\_abund =}\NormalTok{ n }\SpecialCharTok{/} \FunctionTok{sum}\NormalTok{(n)) }\SpecialCharTok{\%\textgreater{}\%}   \CommentTok{\# relative abundance within each habitat}
+  \FunctionTok{ungroup}\NormalTok{() }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{filter}\NormalTok{(n }\SpecialCharTok{\textgreater{}} \DecValTok{0}\NormalTok{)}
+
+\NormalTok{spider\_family\_rel}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 23 x 3
+##    spider_family        n rel_abund
+##    <chr>            <int>     <dbl>
+##  1 AGELENIDAE          97  0.0148  
+##  2 AMAUROBIIDAE         4  0.000612
+##  3 ANTRODIAETIDAE       3  0.000459
+##  4 ARANEIDAE            1  0.000153
+##  5 CHEIRACANTHIIDAE     1  0.000153
+##  6 CLUBIONIDAE          7  0.00107 
+##  7 CORINNIDAE          20  0.00306 
+##  8 CYBAEIDAE            7  0.00107 
+##  9 DICTYNIDAE          64  0.00979 
+## 10 GNAPHOSIDAE        585  0.0895  
+## # i 13 more rows
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# calculate sample size}
+\NormalTok{habitat\_n }\OtherTok{\textless{}{-}}\NormalTok{ spider\_habitat\_summary }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{group\_by}\NormalTok{(habitat) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{summarise}\NormalTok{(}\AttributeTok{n =} \FunctionTok{n}\NormalTok{(), }\AttributeTok{.groups =} \StringTok{"drop"}\NormalTok{)}
+
+\NormalTok{habitat\_n}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 2 x 2
+##   habitat     n
+##   <chr>   <int>
+## 1 SNH        45
+## 2 VY         45
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# sample size by year}
+\NormalTok{habitat\_n\_year }\OtherTok{\textless{}{-}}\NormalTok{ spider\_habitat\_summary }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{group\_by}\NormalTok{(year, habitat) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{summarise}\NormalTok{(}\AttributeTok{n =} \FunctionTok{n}\NormalTok{(), }\AttributeTok{.groups =} \StringTok{"drop"}\NormalTok{)}
+
+\NormalTok{habitat\_n\_year}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 4 x 3
+##    year habitat     n
+##   <int> <chr>   <int>
+## 1  2024 SNH        14
+## 2  2024 VY         14
+## 3  2025 SNH        31
+## 4  2025 VY         31
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}\StringTok{"Total spiders in all habitats across all sites and years:"}\NormalTok{, total\_spiders, }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Total spiders in all habitats across all sites and years: 7070
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}
+  \StringTok{"Total number of observed families in all habitats across all sites and years:"}\NormalTok{,}
+  \FunctionTok{nrow}\NormalTok{(observed\_families\_habitat),}
+  \StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}
+\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Total number of observed families in all habitats across all sites and years: 23
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}\StringTok{"Total traps in all habitats across all sites and years:"}\NormalTok{, total\_traps, }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Total traps in all habitats across all sites and years: 520
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}\StringTok{"Number of site × habitat × year combinations:"}\NormalTok{, }\FunctionTok{nrow}\NormalTok{(spider\_habitat\_summary), }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Number of site × habitat × year combinations: 90
+\end{verbatim}
+
+\subsubsection{Summary table}\label{summary-table}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# table summarizing spider family abundance by habitat/ year}
+\NormalTok{spider\_family\_table }\OtherTok{\textless{}{-}}\NormalTok{ spider\_long\_habitat }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{group\_by}\NormalTok{(spider\_family, habitat, year) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{summarise}\NormalTok{(}
+    \AttributeTok{total\_abundance =} \FunctionTok{sum}\NormalTok{(count, }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{),}
+    \AttributeTok{.groups =} \StringTok{"drop"}
+\NormalTok{  ) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{unite}\NormalTok{(habitat\_year, habitat, year) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{pivot\_wider}\NormalTok{(}
+    \AttributeTok{names\_from  =}\NormalTok{ habitat\_year,}
+    \AttributeTok{values\_from =}\NormalTok{ total\_abundance,}
+    \AttributeTok{values\_fill =} \DecValTok{0}
+\NormalTok{  ) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{Total =} \FunctionTok{rowSums}\NormalTok{(}\FunctionTok{across}\NormalTok{(}\FunctionTok{where}\NormalTok{(is.numeric)))) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{arrange}\NormalTok{(}\FunctionTok{desc}\NormalTok{(Total))}
+
+\CommentTok{\# make labels little letters for clarity}
+\NormalTok{spider\_family\_table }\OtherTok{\textless{}{-}}\NormalTok{ spider\_family\_table }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{spider\_family =}\NormalTok{ stringr}\SpecialCharTok{::}\FunctionTok{str\_to\_title}\NormalTok{(spider\_family))}
+
+\NormalTok{spider\_family\_table}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 30 x 6
+##    spider_family  SNH_2024 SNH_2025 VY_2024 VY_2025 Total
+##    <chr>             <int>    <int>   <int>   <int> <dbl>
+##  1 Zodariidae          149      549     394    1398  2490
+##  2 Lycosidae           223      517     262     640  1642
+##  3 Linyphiidae           5       42     142     520   709
+##  4 Gnaphosidae          65      165     135     220   585
+##  5 Thomisidae           21      160      29     165   375
+##  6 Phrurolithidae       29      240       1      22   292
+##  7 Theridiidae           5       70      10      37   122
+##  8 Agelenidae           11       53       3      30    97
+##  9 Salticidae            4       38       8      21    71
+## 10 Dictynidae            0       19       7      38    64
+## # i 20 more rows
+\end{verbatim}
+
+\subsubsection{Sample Coverage and Hill
+Diversity}\label{sample-coverage-and-hill-diversity}
+
+Let's use iNEXT to evaluate sampling completeness (sample coverage) and
+calculate hill diversity (richness, shannon and simpson). Use only adult
+family counts (not juveniles and unidentified species)
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{custom\_colors }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"VY"}\OtherTok{=}\StringTok{"\#8E44AD"}\NormalTok{,}\StringTok{"SNH"}\OtherTok{=}\StringTok{"\#009E73"}\NormalTok{)}
+
+\CommentTok{\#  Summarize by habitat}
+\NormalTok{spider\_by\_habitat }\OtherTok{\textless{}{-}}\NormalTok{ spider\_habitat\_summary }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{group\_by}\NormalTok{(habitat) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{summarise}\NormalTok{(}\FunctionTok{across}\NormalTok{(}\FunctionTok{all\_of}\NormalTok{(family\_columns), }\SpecialCharTok{\textasciitilde{}} \FunctionTok{sum}\NormalTok{(.x, }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{)),}
+            \AttributeTok{.groups =} \StringTok{"drop"}\NormalTok{)}
+
+\CommentTok{\# Build iNEXT list: named abundance vectors (one per habitat)}
+\NormalTok{spider\_list\_habitat }\OtherTok{\textless{}{-}} \FunctionTok{setNames}\NormalTok{(}
+  \FunctionTok{lapply}\NormalTok{(}\FunctionTok{seq\_len}\NormalTok{(}\FunctionTok{nrow}\NormalTok{(spider\_by\_habitat)), }\ControlFlowTok{function}\NormalTok{(i) \{}
+\NormalTok{    v }\OtherTok{\textless{}{-}} \FunctionTok{unlist}\NormalTok{(spider\_by\_habitat[i, family\_columns], }\AttributeTok{use.names =} \ConstantTok{TRUE}\NormalTok{)}
+\NormalTok{    v[}\FunctionTok{is.na}\NormalTok{(v)] }\OtherTok{\textless{}{-}} \DecValTok{0}
+\NormalTok{    v}
+\NormalTok{  \}),}
+\NormalTok{  spider\_by\_habitat}\SpecialCharTok{$}\NormalTok{habitat}
+\NormalTok{)}
+
+\CommentTok{\# Sample coverage + totals}
+\NormalTok{spider\_coverage }\OtherTok{\textless{}{-}} \FunctionTok{DataInfo}\NormalTok{(spider\_list\_habitat, }\AttributeTok{datatype =} \StringTok{"abundance"}\NormalTok{)}
+
+\NormalTok{spider\_coverage}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##   Assemblage    n S.obs     SC f1 f2 f3 f4 f5 f6 f7 f8 f9 f10
+## 1        SNH 2436    22 0.9992  2  1  3  1  0  0  2  0  0   1
+## 2         VY 4099    16 0.9998  1  1  3  0  1  0  0  0  0   0
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Hill numbers}
+\NormalTok{spider\_hill }\OtherTok{\textless{}{-}} \FunctionTok{iNEXT}\NormalTok{(spider\_list\_habitat, }\AttributeTok{q =} \FunctionTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{2}\NormalTok{), }\AttributeTok{datatype =} \StringTok{"abundance"}\NormalTok{)}
+
+\NormalTok{spider\_hill\_diversity}\OtherTok{\textless{}{-}}\NormalTok{ spider\_hill}\SpecialCharTok{$}\NormalTok{AsyEst}
+
+\NormalTok{spider\_hill\_diversity}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##   Assemblage         Diversity  Observed Estimator       s.e.       LCL       UCL
+## 1        SNH  Species richness 22.000000 23.999179 3.06468789 22.000000 30.005857
+## 2        SNH Shannon diversity  6.906559  6.940797 0.16609676  6.615253  7.266340
+## 3        SNH Simpson diversity  4.914015  4.921927 0.11750859  4.691614  5.152239
+## 4         VY  Species richness 16.000000 16.499878 2.43038193 16.000000 21.263339
+## 5         VY Shannon diversity  4.850399  4.859983 0.06941120  4.723940  4.996027
+## 6         VY Simpson diversity  3.626140  3.628465 0.05558859  3.519513  3.737416
+\end{verbatim}
+
+Sample completeness very high for both VY and SNH (\textgreater0.99).
+Likely so high because we are evaluating at the family level (coarse
+taxonomic resolution), only a few singletons/ doubletons in each
+habitat.
+
+Higher observed and estimated richness in SNH (22) compared to VY (16).
+Pretty high confidence for both Also higher shannon and simpson
+diversity in SNH's. indicates more evenness in SNH's compared to VY's.
+
+Let's make some curves for the sample coverage and hill diversity
+metrics
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Coverage{-}based curves}
+\NormalTok{spider\_sample\_coverage }\OtherTok{\textless{}{-}} \FunctionTok{ggiNEXT}\NormalTok{(spider\_hill, }\AttributeTok{type =} \DecValTok{2}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{scale\_colour\_manual}\NormalTok{(}\AttributeTok{values =}\NormalTok{ custom\_colors) }\SpecialCharTok{+}
+  \FunctionTok{scale\_fill\_manual}\NormalTok{(}\AttributeTok{values =}\NormalTok{ custom\_colors) }\SpecialCharTok{+}
+  \FunctionTok{theme}\NormalTok{(}
+    \AttributeTok{legend.title =} \FunctionTok{element\_blank}\NormalTok{(),}
+    \AttributeTok{axis.title  =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{12}\NormalTok{),}
+    \AttributeTok{axis.text   =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{10}\NormalTok{)}
+\NormalTok{  )}
+
+\NormalTok{spider\_sample\_coverage}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{habitat_analysis_files/figure-latex/unnamed-chunk-5-1.pdf}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# sample{-}based Hill curves}
+\NormalTok{spider\_hill\_size }\OtherTok{\textless{}{-}} \FunctionTok{ggiNEXT}\NormalTok{(spider\_hill, }\AttributeTok{type =} \DecValTok{1}\NormalTok{,}
+  \AttributeTok{facet.var=}\StringTok{"Order.q"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{scale\_colour\_manual}\NormalTok{(}\AttributeTok{values =}\NormalTok{ custom\_colors) }\SpecialCharTok{+}
+  \FunctionTok{scale\_fill\_manual}\NormalTok{(}\AttributeTok{values =}\NormalTok{ custom\_colors)  }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}
+    \AttributeTok{x =} \StringTok{"Sample coverage"}\NormalTok{,}
+    \AttributeTok{y =} \StringTok{"Family Diversity"}
+\NormalTok{  )}
+
+
+
+\NormalTok{spider\_hill\_size}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{habitat_analysis_files/figure-latex/unnamed-chunk-5-2.pdf}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Coverage{-}based Hill curves}
+\NormalTok{spider\_hill\_coverage }\OtherTok{\textless{}{-}} \FunctionTok{ggiNEXT}\NormalTok{(spider\_hill, }\AttributeTok{type =} \DecValTok{3}\NormalTok{,}
+  \AttributeTok{facet.var=}\StringTok{"Order.q"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{scale\_colour\_manual}\NormalTok{(}\AttributeTok{values =}\NormalTok{ custom\_colors) }\SpecialCharTok{+}
+  \FunctionTok{scale\_fill\_manual}\NormalTok{(}\AttributeTok{values =}\NormalTok{ custom\_colors) }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}
+    \AttributeTok{x =} \StringTok{"Sample coverage"}\NormalTok{,}
+    \AttributeTok{y =} \StringTok{"Family Diversity"}
+\NormalTok{  )}
+
+\NormalTok{spider\_hill\_coverage}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{habitat_analysis_files/figure-latex/unnamed-chunk-5-3.pdf}}
+
+\subsubsection{Data Exploration}\label{data-exploration}
+
+This section explores spiders by habitat type
+
+\paragraph{Relative abundance plots}\label{relative-abundance-plots}
+
+This section uses a bubble plot to visualize spider family relative
+abundance by habitat type
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{custom\_colors }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"VY"}\OtherTok{=}\StringTok{"\#8E44AD"}\NormalTok{,}\StringTok{"SNH"}\OtherTok{=}\StringTok{"\#009E73"}\NormalTok{)}
+
+\CommentTok{\# 1) Summarise total individuals per habitat x family}
+\NormalTok{spider\_family\_habitat\_rel }\OtherTok{\textless{}{-}}\NormalTok{ spider\_long\_habitat }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{group\_by}\NormalTok{(habitat, spider\_family) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{summarise}\NormalTok{(}\AttributeTok{n =} \FunctionTok{sum}\NormalTok{(count, }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{), }\AttributeTok{.groups =} \StringTok{"drop"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{group\_by}\NormalTok{(habitat) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{rel\_abund =}\NormalTok{ n }\SpecialCharTok{/} \FunctionTok{sum}\NormalTok{(n)) }\SpecialCharTok{\%\textgreater{}\%}   \CommentTok{\# relative abundance within each habitat}
+  \FunctionTok{ungroup}\NormalTok{() }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{filter}\NormalTok{(n }\SpecialCharTok{\textgreater{}} \DecValTok{0}\NormalTok{)}
+
+
+\CommentTok{\# make labels little letters for clarity}
+\NormalTok{spider\_family\_habitat\_rel }\OtherTok{\textless{}{-}}\NormalTok{ spider\_family\_habitat\_rel }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{spider\_family =}\NormalTok{ stringr}\SpecialCharTok{::}\FunctionTok{str\_to\_title}\NormalTok{(spider\_family))}
+
+\CommentTok{\# 2) Order families (overall abundance across all habitats)}
+\NormalTok{family\_order }\OtherTok{\textless{}{-}}\NormalTok{ spider\_family\_habitat\_rel }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{group\_by}\NormalTok{(spider\_family) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{summarise}\NormalTok{(}\AttributeTok{total\_n =} \FunctionTok{sum}\NormalTok{(n), }\AttributeTok{.groups =} \StringTok{"drop"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{arrange}\NormalTok{(total\_n) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{pull}\NormalTok{(spider\_family)}
+
+\NormalTok{spider\_family\_habitat\_rel }\OtherTok{\textless{}{-}}\NormalTok{ spider\_family\_habitat\_rel }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{spider\_family =} \FunctionTok{factor}\NormalTok{(spider\_family, }\AttributeTok{levels =}\NormalTok{ family\_order))}
+
+
+\CommentTok{\# 3) Bubble plot of relative abundance of each family by habitat type}
+\NormalTok{spider\_relative\_abundance }\OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{(spider\_family\_habitat\_rel,}
+       \FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ spider\_family, }\AttributeTok{y =}\NormalTok{ habitat,}
+           \AttributeTok{size =}\NormalTok{ rel\_abund, }\AttributeTok{fill =}\NormalTok{ habitat)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_point}\NormalTok{(}\AttributeTok{shape =} \DecValTok{21}\NormalTok{, }\AttributeTok{color =} \StringTok{"black"}\NormalTok{, }\AttributeTok{alpha =} \DecValTok{1}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{scale\_size\_continuous}\NormalTok{(}\AttributeTok{name =} \StringTok{"Relative abundance"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{scale\_fill\_manual}\NormalTok{(}\AttributeTok{values =}\NormalTok{ custom\_colors) }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{x =} \ConstantTok{NULL}\NormalTok{, }\AttributeTok{y =} \StringTok{"Habitat"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{theme\_classic}\NormalTok{(}\AttributeTok{base\_size =} \DecValTok{12}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{theme}\NormalTok{(}
+    \AttributeTok{axis.text.x =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{angle =} \DecValTok{45}\NormalTok{, }\AttributeTok{hjust =} \DecValTok{1}\NormalTok{),}
+    \AttributeTok{legend.position =} \StringTok{"right"}
+\NormalTok{  ) }\SpecialCharTok{+}
+  \FunctionTok{guides}\NormalTok{(}\AttributeTok{fill =} \StringTok{"none"}\NormalTok{)}
+
+
+\NormalTok{spider\_relative\_abundance}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{habitat_analysis_files/figure-latex/unnamed-chunk-6-1.pdf}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggsave}\NormalTok{(}\StringTok{"spider\_relative\_abundance.png"}\NormalTok{, }\AttributeTok{height =} \FloatTok{2.5}\NormalTok{, }\AttributeTok{width =} \DecValTok{8}\NormalTok{, }\AttributeTok{dpi =} \DecValTok{400}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\paragraph{Abundance and richness by
+habitat}\label{abundance-and-richness-by-habitat}
+
+This section uses boxplots to look at the mean abundance per trap and
+rarefied richness
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# define custom colors}
+\NormalTok{custom\_colors }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"VY"}\OtherTok{=}\StringTok{"\#8E44AD"}\NormalTok{,}\StringTok{"SNH"}\OtherTok{=}\StringTok{"\#009E73"}\NormalTok{)}
+
+\CommentTok{\# {-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}}
+\CommentTok{\# HABITAT ABUNDACE, family RICHNESS, MEAN PER TRAP AND RAREFIED RICHNESS}
+\CommentTok{\# {-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}}
+\CommentTok{\# ALL HABITATS RICHNESS}
+\NormalTok{fam\_mat            }\OtherTok{\textless{}{-}} \FunctionTok{as.matrix}\NormalTok{(dplyr}\SpecialCharTok{::}\FunctionTok{select}\NormalTok{(spider\_habitat\_summary, }\FunctionTok{all\_of}\NormalTok{(family\_columns)))}
+\NormalTok{total\_abundance   }\OtherTok{\textless{}{-}} \FunctionTok{rowSums}\NormalTok{(fam\_mat)}
+\NormalTok{family\_richness  }\OtherTok{\textless{}{-}} \FunctionTok{rowSums}\NormalTok{(fam\_mat }\SpecialCharTok{\textgreater{}} \DecValTok{0}\NormalTok{)}
+
+\CommentTok{\#   Use the minimum total individuals among groups with \textgreater{} min\_m\_individuals}
+\NormalTok{min\_m\_individuals }\OtherTok{\textless{}{-}} \DecValTok{20}\DataTypeTok{L}
+\NormalTok{m\_candidates      }\OtherTok{\textless{}{-}}\NormalTok{ total\_abundance[total\_abundance }\SpecialCharTok{\textgreater{}}\NormalTok{ min\_m\_individuals]}
+
+\NormalTok{rarefaction\_m }\OtherTok{\textless{}{-}} \ControlFlowTok{if}\NormalTok{ (}\FunctionTok{length}\NormalTok{(m\_candidates)) }\FunctionTok{min}\NormalTok{(m\_candidates) }\ControlFlowTok{else} \ConstantTok{NA\_integer\_}
+
+\CommentTok{\# Rarefy (individual{-}based); NA if m not available}
+\NormalTok{rarefied\_richness }\OtherTok{\textless{}{-}} \ControlFlowTok{if}\NormalTok{ (}\FunctionTok{is.na}\NormalTok{(rarefaction\_m)) \{}
+  \FunctionTok{rep}\NormalTok{(}\ConstantTok{NA\_real\_}\NormalTok{, }\FunctionTok{nrow}\NormalTok{(fam\_mat))}
+\NormalTok{\} }\ControlFlowTok{else}\NormalTok{ \{}
+\NormalTok{  vegan}\SpecialCharTok{::}\FunctionTok{rarefy}\NormalTok{(fam\_mat, }\AttributeTok{sample =}\NormalTok{ rarefaction\_m)}
+\NormalTok{\}}
+
+\CommentTok{\# Assemble final summary table}
+\NormalTok{spider\_habitat\_data }\OtherTok{\textless{}{-}}\NormalTok{ spider\_habitat\_summary }\SpecialCharTok{\%\textgreater{}\%}
+\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{select}\NormalTok{(site\_ID, habitat, sample\_period, year, trap\_count) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}
+    \AttributeTok{total\_abundance   =}\NormalTok{ total\_abundance,}
+    \AttributeTok{mean\_per\_trap     =} \FunctionTok{ifelse}\NormalTok{(trap\_count }\SpecialCharTok{\textgreater{}} \DecValTok{0}\NormalTok{, total\_abundance }\SpecialCharTok{/}\NormalTok{ trap\_count, }\ConstantTok{NA\_real\_}\NormalTok{),}
+    \AttributeTok{family\_richness  =}\NormalTok{ family\_richness,}
+    \AttributeTok{rarefied\_richness =}\NormalTok{ rarefied\_richness,}
+    \AttributeTok{rarefaction\_m     =}\NormalTok{ rarefaction\_m}
+\NormalTok{  ) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{arrange}\NormalTok{(site\_ID, year, sample\_period, habitat)}
+
+\CommentTok{\# calculate mean per trap by habitat}
+\NormalTok{spider\_mean\_by\_habitat }\OtherTok{\textless{}{-}}\NormalTok{ spider\_habitat\_data }\SpecialCharTok{\%\textgreater{}\%}
+\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{group\_by}\NormalTok{(habitat) }\SpecialCharTok{\%\textgreater{}\%}
+\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{summarise}\NormalTok{(}
+    \AttributeTok{mean\_per\_trap =} \FunctionTok{mean}\NormalTok{(mean\_per\_trap, }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{),}
+    \AttributeTok{n             =}\NormalTok{ dplyr}\SpecialCharTok{::}\FunctionTok{n}\NormalTok{(),}
+    \AttributeTok{.groups =} \StringTok{"drop"}
+\NormalTok{  )}
+\NormalTok{spider\_mean\_by\_habitat}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 2 x 3
+##   habitat mean_per_trap     n
+##   <chr>           <dbl> <int>
+## 1 SNH              10.2    45
+## 2 VY               15.3    45
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# plot mean abundance per trap by Habitat (VY/ SNH)}
+\CommentTok{\# lets use line plots to account for paired design (each site has a VY and SNH)}
+\CommentTok{\# we\textquotesingle{}re using mean per plot instead of total abundance to account for traps lost in the field}
+\NormalTok{spider\_abundance\_line }\OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{(}
+\NormalTok{  spider\_habitat\_data,}
+  \FunctionTok{aes}\NormalTok{(}
+    \AttributeTok{x =}\NormalTok{ habitat,}
+    \AttributeTok{y =}\NormalTok{ mean\_per\_trap,}
+    \AttributeTok{group =} \FunctionTok{interaction}\NormalTok{(site\_ID, year)}
+\NormalTok{  )}
+\NormalTok{) }\SpecialCharTok{+}
+  \CommentTok{\# paired lines in grey}
+  \FunctionTok{geom\_line}\NormalTok{(}
+    \AttributeTok{color =} \StringTok{"black"}\NormalTok{,}
+    \AttributeTok{alpha =} \FloatTok{0.5}
+\NormalTok{  ) }\SpecialCharTok{+}
+  \CommentTok{\# points coloured by habitat}
+  \FunctionTok{geom\_point}\NormalTok{(}
+    \FunctionTok{aes}\NormalTok{(}\AttributeTok{color =}\NormalTok{ habitat),}
+    \AttributeTok{shape =} \DecValTok{21}\NormalTok{,}
+    \AttributeTok{size =} \DecValTok{3}\NormalTok{,}
+    \AttributeTok{stroke =} \FloatTok{1.2}
+\NormalTok{  ) }\SpecialCharTok{+}
+  \FunctionTok{scale\_color\_manual}\NormalTok{(}\AttributeTok{values =}\NormalTok{ custom\_colors) }\SpecialCharTok{+}
+  \FunctionTok{scale\_fill\_manual}\NormalTok{(}\AttributeTok{values =}\NormalTok{ custom\_colors) }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}
+    \AttributeTok{title =} \StringTok{"Spider abundance"}\NormalTok{,}
+    \AttributeTok{x =} \ConstantTok{NULL}\NormalTok{,}
+    \AttributeTok{y =} \StringTok{"Mean abundance per trap"}
+\NormalTok{  ) }\SpecialCharTok{+}
+  \FunctionTok{theme\_minimal}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{theme}\NormalTok{(}
+    \AttributeTok{plot.title =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{hjust =} \FloatTok{0.5}\NormalTok{),}
+    \AttributeTok{legend.position =} \StringTok{"none"}
+\NormalTok{  ) }\SpecialCharTok{+} \FunctionTok{theme}\NormalTok{(}
+  \AttributeTok{axis.text.x  =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{14}\NormalTok{),}
+  \AttributeTok{axis.text.y  =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{14}\NormalTok{),}
+  \AttributeTok{axis.title.y =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{16}\NormalTok{)}
+\NormalTok{)}
+
+
+\NormalTok{spider\_abundance\_line}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{habitat_analysis_files/figure-latex/unnamed-chunk-7-1.pdf}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# plots mean per trap by Habitat (VY/ SNH)}
+\NormalTok{spider\_mean\_abundance }\OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{(spider\_habitat\_data, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ habitat, }\AttributeTok{y =}\NormalTok{ mean\_per\_trap, }\AttributeTok{fill =}\NormalTok{ habitat)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_boxplot}\NormalTok{(}\AttributeTok{outlier.shape =} \ConstantTok{NA}\NormalTok{, }\AttributeTok{alpha =} \FloatTok{0.7}\NormalTok{, }\AttributeTok{color =} \StringTok{"black"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{geom\_jitter}\NormalTok{(}\AttributeTok{width =} \FloatTok{0.2}\NormalTok{, }\AttributeTok{height =} \FloatTok{0.3}\NormalTok{, }\AttributeTok{alpha =} \FloatTok{0.5}\NormalTok{, }\AttributeTok{size =} \DecValTok{2}\NormalTok{, }\AttributeTok{color =} \StringTok{"black"}\NormalTok{)}\SpecialCharTok{+}
+  \FunctionTok{coord\_cartesian}\NormalTok{(}\AttributeTok{ylim =} \FunctionTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{75}\NormalTok{)) }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}
+    \AttributeTok{x =} \StringTok{"Habitat type"}\NormalTok{,}
+    \AttributeTok{y =} \StringTok{"Abundance per trap"}
+\NormalTok{  ) }\SpecialCharTok{+}
+  \FunctionTok{theme\_minimal}\NormalTok{(}\AttributeTok{base\_size =} \DecValTok{14}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{scale\_fill\_manual}\NormalTok{(}\AttributeTok{values =}\NormalTok{ custom\_colors) }\SpecialCharTok{+}
+  \FunctionTok{theme}\NormalTok{(}
+    \AttributeTok{legend.position =} \StringTok{"none"}\NormalTok{,}
+    \AttributeTok{plot.title =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{face =} \StringTok{"bold"}\NormalTok{, }\AttributeTok{hjust =} \FloatTok{0.5}\NormalTok{),}
+    \AttributeTok{axis.text.x =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{angle =} \DecValTok{45}\NormalTok{, }\AttributeTok{hjust =} \DecValTok{1}\NormalTok{)}
+\NormalTok{  )}
+
+\NormalTok{spider\_mean\_abundance}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{habitat_analysis_files/figure-latex/unnamed-chunk-7-2.pdf}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# plot rarefied richness}
+\NormalTok{spider\_rarefied\_richness }\OtherTok{\textless{}{-}}\FunctionTok{ggplot}\NormalTok{(spider\_habitat\_data, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ habitat, }\AttributeTok{y =}\NormalTok{ rarefied\_richness, }\AttributeTok{fill =}\NormalTok{ habitat)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_boxplot}\NormalTok{(}\AttributeTok{outlier.shape =} \ConstantTok{NA}\NormalTok{, }\AttributeTok{alpha =} \FloatTok{0.7}\NormalTok{, }\AttributeTok{color =} \StringTok{"black"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{geom\_jitter}\NormalTok{(}\AttributeTok{width =} \FloatTok{0.2}\NormalTok{, }\AttributeTok{alpha =} \FloatTok{0.5}\NormalTok{, }\AttributeTok{size =} \DecValTok{2}\NormalTok{, }\AttributeTok{color =} \StringTok{"black"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{geom\_text}\NormalTok{(}
+    \AttributeTok{data =}\NormalTok{ habitat\_n,}
+    \FunctionTok{aes}\NormalTok{(}
+      \AttributeTok{x =}\NormalTok{ habitat,}
+      \AttributeTok{y =} \FunctionTok{max}\NormalTok{(spider\_habitat\_data}\SpecialCharTok{$}\NormalTok{rarefied\_richness, }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{) }\SpecialCharTok{+} \DecValTok{2}\NormalTok{,}
+      \AttributeTok{label =} \FunctionTok{paste0}\NormalTok{(}\StringTok{"n = "}\NormalTok{, n)}
+\NormalTok{    ),}
+    \AttributeTok{inherit.aes =} \ConstantTok{FALSE}\NormalTok{,}
+    \AttributeTok{size =} \DecValTok{4}
+\NormalTok{  ) }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}
+    \AttributeTok{title =} \StringTok{"Spider Rarefied Richness by Habitat Type"}\NormalTok{,}
+    \AttributeTok{x =} \StringTok{"Habitat Type"}\NormalTok{,}
+    \AttributeTok{y =} \StringTok{"Spider Rarefied Richness"}
+\NormalTok{  ) }\SpecialCharTok{+}
+  \FunctionTok{theme\_minimal}\NormalTok{(}\AttributeTok{base\_size =} \DecValTok{14}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{scale\_fill\_manual}\NormalTok{(}\AttributeTok{values =}\NormalTok{ custom\_colors) }\SpecialCharTok{+}
+  \FunctionTok{theme}\NormalTok{(}
+    \AttributeTok{legend.position =} \StringTok{"none"}\NormalTok{,}
+    \AttributeTok{plot.title =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{face =} \StringTok{"bold"}\NormalTok{, }\AttributeTok{hjust =} \FloatTok{0.5}\NormalTok{),}
+    \AttributeTok{axis.text.x =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{angle =} \DecValTok{45}\NormalTok{, }\AttributeTok{hjust =} \DecValTok{1}\NormalTok{))}
+
+\NormalTok{spider\_rarefied\_richness}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{habitat_analysis_files/figure-latex/unnamed-chunk-7-3.pdf}}
+
+Vineyards generally have higher mean abundance, but a little lower
+(rarefied) richness
+
+\paragraph{Venn diagrams by habitat}\label{venn-diagrams-by-habitat}
+
+This section uses venn diagrams to visualize the distribution of
+families by habitat
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Presence{-}absence by subhabitat}
+\NormalTok{spider\_presence }\OtherTok{\textless{}{-}}\NormalTok{ spider\_habitat\_df }\SpecialCharTok{\%\textgreater{}\%}
+\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{select}\NormalTok{(}\FunctionTok{all\_of}\NormalTok{(family\_columns), habitat) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{group\_by}\NormalTok{(habitat) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{summarise}\NormalTok{(}\FunctionTok{across}\NormalTok{(}\FunctionTok{where}\NormalTok{(is.numeric), }\SpecialCharTok{\textasciitilde{}} \FunctionTok{sum}\NormalTok{(.x }\SpecialCharTok{\textgreater{}} \DecValTok{0}\NormalTok{) }\SpecialCharTok{\textgreater{}} \DecValTok{0}\NormalTok{))}
+
+\CommentTok{\# Create lists of spider families present in each habitat}
+\NormalTok{spider\_families\_by\_habitat }\OtherTok{\textless{}{-}} \FunctionTok{lapply}\NormalTok{(}\FunctionTok{split}\NormalTok{(spider\_presence, spider\_presence}\SpecialCharTok{$}\NormalTok{habitat), }\ControlFlowTok{function}\NormalTok{(df) \{}
+  \FunctionTok{names}\NormalTok{(df)[}\FunctionTok{which}\NormalTok{(}\FunctionTok{as.logical}\NormalTok{(df[}\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{])) }\SpecialCharTok{+} \DecValTok{1}\NormalTok{]  }\CommentTok{\# Skip habitat column}
+\NormalTok{\})}
+
+\NormalTok{spider\_families\_by\_habitat}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## $SNH
+##  [1] "AGELENIDAE"       "AMAUROBIIDAE"     "ANTRODIAETIDAE"   "ARANEIDAE"        "CHEIRACANTHIIDAE" "CLUBIONIDAE"      "CORINNIDAE"       "CYBAEIDAE"        "DICTYNIDAE"       "GNAPHOSIDAE"      "HAHNIIDAE"        "LINYPHIIDAE"      "LIOCRANIDAE"      "LYCOSIDAE"        "PHILODROMIDAE"    "PHOLCIDAE"        "PHRUROLITHIDAE"   "SALTICIDAE"       "THERIDIIDAE"      "THOMISIDAE"       "TITANOECIDAE"     "ZODARIIDAE"      
+## 
+## $VY
+##  [1] "AGELENIDAE"     "AMAUROBIIDAE"   "CORINNIDAE"     "DICTYNIDAE"     "GNAPHOSIDAE"    "LINYPHIIDAE"    "LYCOSIDAE"      "OXYOPIDAE"      "PHILODROMIDAE"  "PHOLCIDAE"      "PHRUROLITHIDAE" "SALTICIDAE"     "THERIDIIDAE"    "THOMISIDAE"     "TITANOECIDAE"   "ZODARIIDAE"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# plot as a venn diagram}
+\NormalTok{ggvenn\_spider\_families }\OtherTok{\textless{}{-}} \FunctionTok{ggvenn}\NormalTok{(spider\_families\_by\_habitat,}
+       \AttributeTok{fill\_color =} \FunctionTok{c}\NormalTok{(}\StringTok{"\#009E73"}\NormalTok{, }\StringTok{"\#8E44AD"}\NormalTok{),}
+       \AttributeTok{stroke\_size =} \FloatTok{0.5}\NormalTok{,}
+       \AttributeTok{set\_name\_size =} \DecValTok{4}\NormalTok{) }
+
+\NormalTok{ggvenn\_spider\_families}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{habitat_analysis_files/figure-latex/unnamed-chunk-8-1.pdf}}
+
+15 spider families found in both habitats, 1 found only in VY and 7
+found only in SNH
+
+\paragraph{Spider traits by habitat}\label{spider-traits-by-habitat}
+
+This section explores uses barplots and pie charts to explore spider
+traits/ guilds by habitat type.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# upload the spider traits data}
+\NormalTok{spider\_traits }\OtherTok{\textless{}{-}} \FunctionTok{read.csv}\NormalTok{(here}\SpecialCharTok{::}\FunctionTok{here}\NormalTok{ (}\StringTok{"00\_data"}\NormalTok{, }\StringTok{"spider\_family\_traits.csv"}\NormalTok{))}
+
+\CommentTok{\# join to spider habitat data (in long format)}
+\NormalTok{spider\_long\_traits\_habitat }\OtherTok{\textless{}{-}}\NormalTok{ spider\_long\_habitat }\SpecialCharTok{\%\textgreater{}\%}
+\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{left\_join}\NormalTok{(}
+\NormalTok{    dplyr}\SpecialCharTok{::}\FunctionTok{select}\NormalTok{(spider\_traits, spider\_family, guild\_code),}
+    \AttributeTok{by =} \StringTok{"spider\_family"}
+\NormalTok{  )}
+
+\CommentTok{\# summarize guild abundance by site\_ID, habitat and year}
+\NormalTok{guild\_abundance\_habitat }\OtherTok{\textless{}{-}}\NormalTok{ spider\_long\_traits\_habitat }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{group\_by}\NormalTok{(site\_ID, habitat, year, guild\_code) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{summarise}\NormalTok{(}\AttributeTok{total\_abundance =} \FunctionTok{sum}\NormalTok{(count), }\AttributeTok{.groups =} \StringTok{"drop"}\NormalTok{)}
+
+\CommentTok{\# pivot to wide format}
+\NormalTok{guild\_abundance\_wide }\OtherTok{\textless{}{-}}\NormalTok{ guild\_abundance\_habitat }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{pivot\_wider}\NormalTok{(}
+    \AttributeTok{names\_from =}\NormalTok{ guild\_code,}
+    \AttributeTok{values\_from =}\NormalTok{ total\_abundance,}
+    \AttributeTok{values\_fill =} \DecValTok{0}  \CommentTok{\# fill missing combinations with 0}
+\NormalTok{  )}
+
+\CommentTok{\# Make sure guild\_abundance\_habitat is prepared}
+\NormalTok{guild\_abundance\_plot }\OtherTok{\textless{}{-}}\NormalTok{ guild\_abundance\_habitat }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{group\_by}\NormalTok{(habitat, guild\_code) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{summarise}\NormalTok{(}\AttributeTok{total\_abundance =} \FunctionTok{sum}\NormalTok{(total\_abundance), }\AttributeTok{.groups =} \StringTok{"drop"}\NormalTok{)}
+\NormalTok{guild\_abundance\_plot }\OtherTok{\textless{}{-}}\NormalTok{ guild\_abundance\_plot }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{filter}\NormalTok{(}\SpecialCharTok{!}\FunctionTok{is.na}\NormalTok{(guild\_code))}
+
+
+\CommentTok{\# Custom colors (edit to match your desired palette)}
+\NormalTok{guild\_colors }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}
+  \StringTok{"AMH"} \OtherTok{=} \StringTok{"\#E69F00"}\NormalTok{,     }\CommentTok{\# orange}
+  \StringTok{"GRH"} \OtherTok{=} \StringTok{"\#009E73"}\NormalTok{,     }\CommentTok{\# bluish green}
+  \StringTok{"ORW"} \OtherTok{=} \StringTok{"\#56B4E9"}\NormalTok{,     }\CommentTok{\# sky blue}
+  \StringTok{"SHW"} \OtherTok{=} \StringTok{"\#0072B2"}\NormalTok{,     }\CommentTok{\# blue}
+  \StringTok{"SPW"} \OtherTok{=} \StringTok{"\#D55E00"}\NormalTok{,     }\CommentTok{\# vermillion}
+  \StringTok{"SPE"} \OtherTok{=} \StringTok{"\#CC79A7"}\NormalTok{,     }\CommentTok{\# reddish purple}
+  \StringTok{"OTH"} \OtherTok{=} \StringTok{"\#999999"}\NormalTok{,     }\CommentTok{\# grey}
+  \StringTok{"SHW/ GRH"} \OtherTok{=} \StringTok{"\#F0E442"}\NormalTok{, }\CommentTok{\# yellow}
+  \StringTok{"SHW/ OTH"} \OtherTok{=} \StringTok{"\#7D3C98"}  \CommentTok{\# black}
+\NormalTok{)}
+
+\NormalTok{guild\_labels }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}
+  \StringTok{"AMH"} \OtherTok{=} \StringTok{"Ambush hunters"}\NormalTok{,}
+  \StringTok{"GRH"} \OtherTok{=} \StringTok{"Ground hunters"}\NormalTok{,}
+  \StringTok{"ORW"} \OtherTok{=} \StringTok{"Orb web weavers"}\NormalTok{,}
+  \StringTok{"SHW"} \OtherTok{=} \StringTok{"Sheet web weavers"}\NormalTok{,}
+  \StringTok{"SPW"} \OtherTok{=} \StringTok{"Space web weavers"}\NormalTok{,}
+  \StringTok{"SPE"} \OtherTok{=} \StringTok{"Specialists"}\NormalTok{,}
+  \StringTok{"OTH"} \OtherTok{=} \StringTok{"Other hunters"}\NormalTok{,}
+  \StringTok{"SHW/ GRH"} \OtherTok{=} \StringTok{"Sheet web weavers/Ground hunters"}\NormalTok{,}
+  \StringTok{"SHW/ OTH"} \OtherTok{=} \StringTok{"Sheet web weavers/Other hunters"}
+\NormalTok{)}
+
+
+\CommentTok{\# Create the stacked bar chart}
+\FunctionTok{ggplot}\NormalTok{(guild\_abundance\_plot, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ habitat, }\AttributeTok{y =}\NormalTok{ total\_abundance, }\AttributeTok{fill =}\NormalTok{ guild\_code)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_bar}\NormalTok{(}\AttributeTok{stat =} \StringTok{"identity"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{scale\_fill\_manual}\NormalTok{(}\AttributeTok{values =}\NormalTok{ guild\_colors, }\AttributeTok{labels =}\NormalTok{ guild\_labels) }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}
+    \AttributeTok{x =} \ConstantTok{NULL}\NormalTok{,}
+    \AttributeTok{y =} \StringTok{"No. spiders"}\NormalTok{,}
+    \AttributeTok{fill =} \StringTok{"Guild"}\NormalTok{,}
+    \AttributeTok{title =} \StringTok{"Guild composition by habitat type"}
+\NormalTok{  ) }\SpecialCharTok{+}
+  \FunctionTok{theme\_minimal}\NormalTok{(}\AttributeTok{base\_size =} \DecValTok{12}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{theme}\NormalTok{(}
+    \AttributeTok{axis.text =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{color =} \StringTok{"black"}\NormalTok{),}
+    \AttributeTok{panel.grid.major.x =} \FunctionTok{element\_blank}\NormalTok{(),}
+    \AttributeTok{panel.grid.minor =} \FunctionTok{element\_blank}\NormalTok{()}
+\NormalTok{  )}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{habitat_analysis_files/figure-latex/unnamed-chunk-9-1.pdf}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Summarize total abundance by habitat and guild, then calculate proportion}
+\NormalTok{guild\_prop\_habitat }\OtherTok{\textless{}{-}}\NormalTok{ guild\_abundance\_habitat }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{group\_by}\NormalTok{(habitat, guild\_code) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{summarise}\NormalTok{(}\AttributeTok{total\_abundance =} \FunctionTok{sum}\NormalTok{(total\_abundance), }\AttributeTok{.groups =} \StringTok{"drop"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{group\_by}\NormalTok{(habitat) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{prop =}\NormalTok{ total\_abundance }\SpecialCharTok{/} \FunctionTok{sum}\NormalTok{(total\_abundance))}
+
+\NormalTok{guild\_prop\_habitat }\OtherTok{\textless{}{-}}\NormalTok{ guild\_prop\_habitat }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{filter}\NormalTok{(}\SpecialCharTok{!}\FunctionTok{is.na}\NormalTok{(guild\_code))}
+
+\CommentTok{\# set factor order for consistent pie layout}
+\NormalTok{guild\_prop\_habitat}\SpecialCharTok{$}\NormalTok{guild\_code }\OtherTok{\textless{}{-}} \FunctionTok{factor}\NormalTok{(guild\_prop\_habitat}\SpecialCharTok{$}\NormalTok{guild\_code)}
+
+
+\CommentTok{\# Plot pie chart by habitat using facet}
+\NormalTok{spider\_traits\_pie }\OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{(guild\_prop\_habitat, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =} \StringTok{""}\NormalTok{, }\AttributeTok{y =}\NormalTok{ prop, }\AttributeTok{fill =}\NormalTok{ guild\_code)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_bar}\NormalTok{(}\AttributeTok{stat =} \StringTok{"identity"}\NormalTok{, }\AttributeTok{width =} \DecValTok{1}\NormalTok{, }\AttributeTok{color =} \StringTok{"white"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{coord\_polar}\NormalTok{(}\StringTok{"y"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{facet\_wrap}\NormalTok{(}\SpecialCharTok{\textasciitilde{}}\NormalTok{habitat) }\SpecialCharTok{+}
+  \FunctionTok{scale\_fill\_manual}\NormalTok{(}\AttributeTok{values =}\NormalTok{ guild\_colors, }\AttributeTok{labels =}\NormalTok{ guild\_labels) }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}
+    \AttributeTok{fill =} \StringTok{"Guild"}\NormalTok{,}
+\NormalTok{  ) }\SpecialCharTok{+}
+  \FunctionTok{theme\_void}\NormalTok{(}\AttributeTok{base\_size =} \DecValTok{12}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{theme}\NormalTok{(}
+    \AttributeTok{strip.text =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{12}\NormalTok{, }\AttributeTok{face =} \StringTok{"bold"}\NormalTok{),}
+    \AttributeTok{legend.position =} \StringTok{"right"}
+\NormalTok{  )}
+
+\NormalTok{spider\_traits\_pie }
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{habitat_analysis_files/figure-latex/unnamed-chunk-9-2.pdf}}
+
+No obvious difference between SNH and VY as far as traits go. Both have
+large proportions of specialists (mainly Zodariidae) and ground hunters
+(mainly Lycosidae)
+
+\subsection{CARABIDS}\label{carabids}
+
+\subsubsection{Data import and
+pre-processing}\label{data-import-and-pre-processing-1}
+
+This section loads the carabid raw data and prepares it for modelling.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Load data and coordinates for sites}
+\NormalTok{carabid\_habitat\_df }\OtherTok{\textless{}{-}} \FunctionTok{read.csv}\NormalTok{(here}\SpecialCharTok{::}\FunctionTok{here}\NormalTok{(}\StringTok{"00\_data"}\NormalTok{,}\StringTok{"carabid\_habitat\_df.csv"}\NormalTok{))}
+
+\CommentTok{\# Filter out field margins and september data from the main analysis}
+\NormalTok{carabid\_habitat\_df }\OtherTok{\textless{}{-}}\NormalTok{ carabid\_habitat\_df }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{filter}\NormalTok{(}
+\NormalTok{    subhabitat }\SpecialCharTok{!=} \StringTok{"FM"}\NormalTok{,}
+\NormalTok{    sample\_period }\SpecialCharTok{!=} \StringTok{"SEP"}
+\NormalTok{  )}
+
+
+\CommentTok{\# Identify species columns}
+\NormalTok{non\_species }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}
+  \StringTok{"pitfall\_ID"}\NormalTok{,}\StringTok{"total\_abundance"}\NormalTok{,}\StringTok{"carabid\_abundance"}\NormalTok{,}\StringTok{"species\_richness"}\NormalTok{,}\StringTok{"destroyed"}\NormalTok{,}
+  \StringTok{"site\_code"}\NormalTok{,}\StringTok{"site\_ID"}\NormalTok{,}\StringTok{"habitat"}\NormalTok{,}\StringTok{"subhabitat"}\NormalTok{,}\StringTok{"management\_type"}\NormalTok{,}
+  \StringTok{"sample\_period"}\NormalTok{,}\StringTok{"year"}\NormalTok{,}\StringTok{"trap\_number"}\NormalTok{, }\StringTok{"trap\_count"}
+\NormalTok{)}
+
+\NormalTok{species\_cols }\OtherTok{\textless{}{-}} \FunctionTok{setdiff}\NormalTok{(}\FunctionTok{names}\NormalTok{(carabid\_habitat\_df), non\_species)}
+
+\CommentTok{\# drop any UNID (do not include in species count, only in total abundance)}
+\NormalTok{unid\_cols }\OtherTok{\textless{}{-}}\NormalTok{ species\_cols[}\FunctionTok{grepl}\NormalTok{(}\StringTok{"\^{}UNID}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{b|\^{}UNID}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{."}\NormalTok{, species\_cols)]}
+\NormalTok{species\_columns }\OtherTok{\textless{}{-}} \FunctionTok{setdiff}\NormalTok{(species\_cols, unid\_cols)}
+
+\CommentTok{\# ensure species cols are integer counts}
+\NormalTok{carabid\_habitat\_df }\OtherTok{\textless{}{-}}\NormalTok{ carabid\_habitat\_df }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}\FunctionTok{across}\NormalTok{(}\FunctionTok{all\_of}\NormalTok{(species\_columns), }\SpecialCharTok{\textasciitilde{}} \FunctionTok{as.integer}\NormalTok{(tidyr}\SpecialCharTok{::}\FunctionTok{replace\_na}\NormalTok{(.x, }\DecValTok{0}\DataTypeTok{L}\NormalTok{))))}
+
+\CommentTok{\# Summarize carabid abundance by site\_ID, habitat, sample period and year}
+\NormalTok{carabid\_habitat\_summary }\OtherTok{\textless{}{-}}\NormalTok{ carabid\_habitat\_df }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{group\_by}\NormalTok{(site\_ID, habitat, sample\_period, year) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{summarise}\NormalTok{(}
+    \FunctionTok{across}\NormalTok{(}\FunctionTok{all\_of}\NormalTok{(species\_columns), }\SpecialCharTok{\textasciitilde{}} \FunctionTok{sum}\NormalTok{(.x, }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{)),}
+    \AttributeTok{trap\_count =} \FunctionTok{n}\NormalTok{(),     }\CommentTok{\# destroyed traps already removed earlier}
+    \AttributeTok{.groups =} \StringTok{"drop"}
+\NormalTok{  )}
+
+\CommentTok{\# Total number of carabids found in vineyards across all sites and years}
+\NormalTok{total\_carabids\_habitat }\OtherTok{\textless{}{-}} \FunctionTok{sum}\NormalTok{(carabid\_habitat\_df}\SpecialCharTok{$}\NormalTok{total\_abundance, }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{)}
+
+\CommentTok{\# Convert wide data (species columns) into long format}
+\NormalTok{carabid\_long\_habitat }\OtherTok{\textless{}{-}}\NormalTok{ carabid\_habitat\_summary }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{pivot\_longer}\NormalTok{(}\AttributeTok{cols =} \FunctionTok{all\_of}\NormalTok{(species\_columns), }\AttributeTok{names\_to =} \StringTok{"carabid\_species"}\NormalTok{, }\AttributeTok{values\_to =} \StringTok{"count"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{drop\_na}\NormalTok{(count) }\SpecialCharTok{\%\textgreater{}\%}  \CommentTok{\# Remove missing values}
+  \FunctionTok{filter}\NormalTok{(count }\SpecialCharTok{\textgreater{}=} \DecValTok{0}\NormalTok{)  }\CommentTok{\# Ensure only observed families are counted}
+
+\CommentTok{\# Get a list of all species observed at least once}
+\NormalTok{observed\_species\_habitat }\OtherTok{\textless{}{-}}\NormalTok{ carabid\_long\_habitat }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{filter}\NormalTok{(count }\SpecialCharTok{\textgreater{}} \DecValTok{0}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{distinct}\NormalTok{(carabid\_species) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{arrange}\NormalTok{(carabid\_species)}
+
+
+\FunctionTok{print}\NormalTok{(observed\_species\_habitat)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 36 x 1
+##    carabid_species       
+##    <chr>                 
+##  1 Agonoleptus_conjunctus
+##  2 Agonum_placidum       
+##  3 Amara_aenea           
+##  4 Amara_apricaria       
+##  5 Amara_carinata        
+##  6 Amara_conflata        
+##  7 Amara_cupreolata      
+##  8 Amara_latior          
+##  9 Amara_littoralis      
+## 10 Amara_obesa           
+## # i 26 more rows
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Also group at genus level}
+\NormalTok{carabid\_long\_genus\_habitat }\OtherTok{\textless{}{-}}\NormalTok{ carabid\_long\_habitat }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{carabid\_genus =} \FunctionTok{str\_extract}\NormalTok{(carabid\_species, }\StringTok{"\^{}[A{-}Za{-}z]+"}\NormalTok{)) }\SpecialCharTok{\%\textgreater{}\%}  \CommentTok{\# extract genus from species name}
+  \FunctionTok{group\_by}\NormalTok{(site\_ID, habitat, carabid\_genus) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{summarise}\NormalTok{(}\AttributeTok{count =} \FunctionTok{sum}\NormalTok{(count, }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{), }\AttributeTok{.groups =} \StringTok{"drop"}\NormalTok{)}
+
+\CommentTok{\# Get a list of all genera observed at least once}
+\NormalTok{observed\_genus\_habitat }\OtherTok{\textless{}{-}}\NormalTok{ carabid\_long\_genus\_habitat }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{filter}\NormalTok{(count }\SpecialCharTok{\textgreater{}} \DecValTok{0}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%} 
+  \FunctionTok{distinct}\NormalTok{(carabid\_genus) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{arrange}\NormalTok{(carabid\_genus)}
+
+
+\FunctionTok{print}\NormalTok{(observed\_genus\_habitat)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 16 x 1
+##    carabid_genus  
+##    <chr>          
+##  1 Agonoleptus    
+##  2 Agonum         
+##  3 Amara          
+##  4 Anisodactylus  
+##  5 Bembidion      
+##  6 Calathus       
+##  7 Calosoma       
+##  8 Carabus        
+##  9 Dicheirotrichus
+## 10 Dicheirus      
+## 11 Euryderus      
+## 12 Harpalus       
+## 13 Poecilus       
+## 14 Pterostichus   
+## 15 Scaphinotus    
+## 16 Trechus
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# calculate relative abundance of each spider family}
+\NormalTok{carabid\_genus\_rel }\OtherTok{\textless{}{-}}\NormalTok{ carabid\_long\_genus\_habitat }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{group\_by}\NormalTok{(carabid\_genus) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{summarise}\NormalTok{(}\AttributeTok{n =} \FunctionTok{sum}\NormalTok{(count, }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{), }\AttributeTok{.groups =} \StringTok{"drop"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{rel\_abund =}\NormalTok{ n }\SpecialCharTok{/} \FunctionTok{sum}\NormalTok{(n)) }\SpecialCharTok{\%\textgreater{}\%}   \CommentTok{\# relative abundance within each habitat}
+  \FunctionTok{ungroup}\NormalTok{() }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{filter}\NormalTok{(n }\SpecialCharTok{\textgreater{}} \DecValTok{0}\NormalTok{)}
+
+\NormalTok{carabid\_genus\_rel}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 16 x 3
+##    carabid_genus       n rel_abund
+##    <chr>           <int>     <dbl>
+##  1 Agonoleptus        12  0.0108  
+##  2 Agonum              7  0.00628 
+##  3 Amara              99  0.0888  
+##  4 Anisodactylus      34  0.0305  
+##  5 Bembidion           8  0.00717 
+##  6 Calathus          232  0.208   
+##  7 Calosoma           39  0.0350  
+##  8 Carabus            35  0.0314  
+##  9 Dicheirotrichus     3  0.00269 
+## 10 Dicheirus           2  0.00179 
+## 11 Euryderus          14  0.0126  
+## 12 Harpalus          444  0.398   
+## 13 Poecilus            7  0.00628 
+## 14 Pterostichus      164  0.147   
+## 15 Scaphinotus         1  0.000897
+## 16 Trechus            14  0.0126
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}\StringTok{"Total carabids in all habitats across all sites and years:"}\NormalTok{, total\_carabids\_habitat, }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Total carabids in all habitats across all sites and years: 1115
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}
+  \StringTok{"Total number of observed species in all habitats across all sites and years:"}\NormalTok{,}
+  \FunctionTok{nrow}\NormalTok{(observed\_species\_habitat),}
+  \StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}
+\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Total number of observed species in all habitats across all sites and years: 36
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}
+  \StringTok{"Total number of observed genera in all habitats across all sites and years:"}\NormalTok{,}
+  \FunctionTok{nrow}\NormalTok{(observed\_genus\_habitat),}
+  \StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}
+\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Total number of observed genera in all habitats across all sites and years: 16
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}\StringTok{"Number of site × habitat × year combinations:"}\NormalTok{, }\FunctionTok{nrow}\NormalTok{(carabid\_habitat\_summary), }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Number of site × habitat × year combinations: 90
+\end{verbatim}
+
+\subsubsection{Summary table}\label{summary-table-1}
+
+Let's make a summary table for my appendix, looking at carabids by
+habitat type and year
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# table summarizing carabid species abundance by habitat/ year}
+\NormalTok{carabid\_species\_table }\OtherTok{\textless{}{-}}\NormalTok{ carabid\_long\_habitat }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{group\_by}\NormalTok{(carabid\_species, habitat, year) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{summarise}\NormalTok{(}
+    \AttributeTok{total\_abundance =} \FunctionTok{sum}\NormalTok{(count, }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{),}
+    \AttributeTok{.groups =} \StringTok{"drop"}
+\NormalTok{  ) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{unite}\NormalTok{(habitat\_year, habitat, year) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{pivot\_wider}\NormalTok{(}
+    \AttributeTok{names\_from  =}\NormalTok{ habitat\_year,}
+    \AttributeTok{values\_from =}\NormalTok{ total\_abundance,}
+    \AttributeTok{values\_fill =} \DecValTok{0}
+\NormalTok{  ) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{Total =} \FunctionTok{rowSums}\NormalTok{(}\FunctionTok{across}\NormalTok{(}\FunctionTok{where}\NormalTok{(is.numeric)))) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{filter}\NormalTok{(Total }\SpecialCharTok{\textgreater{}} \DecValTok{0}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}     \CommentTok{\# \textless{}{-}{-} keep only species with \textgreater{}0 counts}
+  \FunctionTok{arrange}\NormalTok{(}\FunctionTok{desc}\NormalTok{(Total))}
+
+\CommentTok{\# Clean column names for Word (ie. remove the "\_")}
+\NormalTok{carabid\_species\_table }\OtherTok{\textless{}{-}}\NormalTok{ carabid\_species\_table }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}
+    \AttributeTok{carabid\_species =} \FunctionTok{gsub}\NormalTok{(}\StringTok{"\_"}\NormalTok{, }\StringTok{" "}\NormalTok{, carabid\_species)}
+\NormalTok{  )}
+
+
+\NormalTok{carabid\_species\_table}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 36 x 6
+##    carabid_species         SNH_2024 SNH_2025 VY_2024 VY_2025 Total
+##    <chr>                      <int>    <int>   <int>   <int> <dbl>
+##  1 Harpalus affinis              11       22      67     203   303
+##  2 Calathus fuscipes              2       15       6     209   232
+##  3 Pterostichus melanarius        1       27      15     121   164
+##  4 Harpalus fraternus             4        5      12      26    47
+##  5 Amara aenea                    1        3      11      24    39
+##  6 Calosoma tepidum               0        1      12      26    39
+##  7 Harpalus opacipennis           3        1       0      35    39
+##  8 Anisodactylus binotatus        0       13       1      14    28
+##  9 Harpalus herbivagus            0        2       3      23    28
+## 10 Amara apricaria                0        1       4      16    21
+## # i 26 more rows
+\end{verbatim}
+
+\subsubsection{Sample Coverage and Hill
+Diversity}\label{sample-coverage-and-hill-diversity-1}
+
+Let's calculate sample coverage and hill diversity by habitat using the
+iNEXT package to evaluate sample completeness among habitats and compare
+diversity patterns.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# HILL DIVERSITY AND SAMPLE COVERAGE}
+\CommentTok{\# Summarize by habitat}
+\NormalTok{carabid\_by\_habitat }\OtherTok{\textless{}{-}}\NormalTok{ carabid\_habitat\_summary }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{group\_by}\NormalTok{(habitat) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{summarise}\NormalTok{(}\FunctionTok{across}\NormalTok{(}\FunctionTok{all\_of}\NormalTok{(species\_columns), }\SpecialCharTok{\textasciitilde{}} \FunctionTok{sum}\NormalTok{(.x, }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{)),}
+            \AttributeTok{.groups =} \StringTok{"drop"}\NormalTok{)}
+
+\CommentTok{\# Build iNEXT list: named abundance vectors (one per habitat)}
+\NormalTok{carabid\_list\_habitat }\OtherTok{\textless{}{-}} \FunctionTok{setNames}\NormalTok{(}
+  \FunctionTok{lapply}\NormalTok{(}\FunctionTok{seq\_len}\NormalTok{(}\FunctionTok{nrow}\NormalTok{(carabid\_by\_habitat)), }\ControlFlowTok{function}\NormalTok{(i) \{}
+\NormalTok{    v }\OtherTok{\textless{}{-}} \FunctionTok{unlist}\NormalTok{(carabid\_by\_habitat[i, species\_columns], }\AttributeTok{use.names =} \ConstantTok{TRUE}\NormalTok{)}
+\NormalTok{    v[}\FunctionTok{is.na}\NormalTok{(v)] }\OtherTok{\textless{}{-}} \DecValTok{0}
+\NormalTok{    v}
+\NormalTok{  \}),}
+\NormalTok{  carabid\_by\_habitat}\SpecialCharTok{$}\NormalTok{habitat}
+\NormalTok{)}
+
+\CommentTok{\# Sample coverage + totals}
+\NormalTok{carabid\_sample\_coverage }\OtherTok{\textless{}{-}} \FunctionTok{DataInfo}\NormalTok{(carabid\_list\_habitat, }\AttributeTok{datatype =} \StringTok{"abundance"}\NormalTok{)}
+
+\NormalTok{carabid\_sample\_coverage}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##   Assemblage   n S.obs     SC f1 f2 f3 f4 f5 f6 f7 f8 f9 f10
+## 1        SNH 183    23 0.9619  7  3  1  3  0  0  0  0  1   0
+## 2         VY 932    31 0.9946  5  2  3  1  1  1  3  3  0   0
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{write.csv}\NormalTok{(}
+\NormalTok{  carabid\_sample\_coverage,}
+  \AttributeTok{file =} \StringTok{"appendix\_carabid\_sample\_coverage.csv"}\NormalTok{,}
+  \AttributeTok{row.names =} \ConstantTok{FALSE}
+\NormalTok{)}
+
+\CommentTok{\# Hill numbers}
+\NormalTok{carabid\_hill }\OtherTok{\textless{}{-}} \FunctionTok{iNEXT}\NormalTok{(carabid\_list\_habitat, }\AttributeTok{q =} \FunctionTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{2}\NormalTok{), }\AttributeTok{datatype =} \StringTok{"abundance"}\NormalTok{)}
+
+\CommentTok{\# table for hill numbers}
+\NormalTok{carabid\_hill\_diversity }\OtherTok{\textless{}{-}}\NormalTok{ carabid\_hill}\SpecialCharTok{$}\NormalTok{AsyEst}
+
+\NormalTok{carabid\_hill\_diversity}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##   Assemblage         Diversity  Observed Estimator       s.e.       LCL       UCL
+## 1        SNH  Species richness 23.000000 31.122040 10.8999165 23.000000 52.485484
+## 2        SNH Shannon diversity 13.411639 14.670355  1.1976558 12.322993 17.017718
+## 3        SNH Simpson diversity 10.320185 10.877204  0.9583836  8.998807 12.755602
+## 4         VY  Species richness 31.000000 37.243294  9.6365252 31.000000 56.130536
+## 5         VY Shannon diversity  9.860282 10.065073  0.3852699  9.309958 10.820188
+## 6         VY Simpson diversity  5.988198  6.020455  0.2483795  5.533640  6.507269
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{write.csv}\NormalTok{(}
+\NormalTok{  carabid\_hill\_diversity,}
+  \AttributeTok{file =} \StringTok{"appendix\_carabid\_hill\_diversity.csv"}\NormalTok{,}
+  \AttributeTok{row.names =} \ConstantTok{FALSE}
+\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+VY sample completeness very high (\textasciitilde0.99), SNH slightly
+lower but still good (\textasciitilde0.96). Quite a few singletons (7 in
+SNH, 5 in VY), a couple doubles/ triples.
+
+Based on the output for hill diversity, higher observed and estimated
+species richness in VY, more uncertainty in SNH richness. Shannon/
+simpson diversity higher in SNH but also higher uncertainty. Indicate
+SNH has a more even community, while VY are dominated by a few species
+
+Let's make some plots to visualize diversity by both sample size and
+sample completeness
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Coverage{-}based curves}
+\NormalTok{carabid\_sample\_coverage }\OtherTok{\textless{}{-}} \FunctionTok{ggiNEXT}\NormalTok{(carabid\_hill, }\AttributeTok{type =} \DecValTok{2}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{scale\_colour\_manual}\NormalTok{(}\AttributeTok{values =}\NormalTok{ custom\_colors) }\SpecialCharTok{+}
+  \FunctionTok{scale\_fill\_manual}\NormalTok{(}\AttributeTok{values =}\NormalTok{ custom\_colors) }\SpecialCharTok{+}
+  \FunctionTok{theme}\NormalTok{(}
+    \AttributeTok{legend.title =} \FunctionTok{element\_blank}\NormalTok{(),}
+    \AttributeTok{axis.title  =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{12}\NormalTok{),}
+    \AttributeTok{axis.text   =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{10}\NormalTok{)}
+\NormalTok{  )}
+
+\NormalTok{carabid\_sample\_coverage}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{habitat_analysis_files/figure-latex/unnamed-chunk-13-1.pdf}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Coverage{-}based Hill curves}
+\NormalTok{carabid\_hill\_size }\OtherTok{\textless{}{-}} \FunctionTok{ggiNEXT}\NormalTok{(carabid\_hill, }\AttributeTok{type =} \DecValTok{1}\NormalTok{,}
+  \AttributeTok{facet.var=}\StringTok{"Order.q"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{scale\_colour\_manual}\NormalTok{(}\AttributeTok{values =}\NormalTok{ custom\_colors) }\SpecialCharTok{+}
+  \FunctionTok{scale\_fill\_manual}\NormalTok{(}\AttributeTok{values =}\NormalTok{ custom\_colors)}
+
+\NormalTok{carabid\_hill\_size}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{habitat_analysis_files/figure-latex/unnamed-chunk-13-2.pdf}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Coverage{-}based Hill curves}
+\NormalTok{carabid\_hill\_coverage }\OtherTok{\textless{}{-}} \FunctionTok{ggiNEXT}\NormalTok{(}
+\NormalTok{  carabid\_hill,}
+  \AttributeTok{type =} \DecValTok{3}\NormalTok{,}
+  \AttributeTok{facet.var =} \StringTok{"Order.q"}
+\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{scale\_colour\_manual}\NormalTok{(}\AttributeTok{values =}\NormalTok{ custom\_colors) }\SpecialCharTok{+}
+  \FunctionTok{scale\_fill\_manual}\NormalTok{(}\AttributeTok{values =}\NormalTok{ custom\_colors)}
+
+\NormalTok{carabid\_hill\_coverage}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{habitat_analysis_files/figure-latex/unnamed-chunk-13-3.pdf}}
+
+\subsubsection{Data Exploration}\label{data-exploration-1}
+
+\paragraph{Relative abundance plots}\label{relative-abundance-plots-1}
+
+Let's visualize the carabid relative abundance (at the genus level since
+it's easier to read x axis)
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{custom\_colors }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"VY"}\OtherTok{=}\StringTok{"\#8E44AD"}\NormalTok{,}\StringTok{"SNH"}\OtherTok{=}\StringTok{"\#009E73"}\NormalTok{)}
+
+\CommentTok{\# 1) Summarise total individuals per habitat x genus}
+\NormalTok{carabid\_species\_habitat\_rel }\OtherTok{\textless{}{-}}\NormalTok{ carabid\_long\_genus\_habitat }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{group\_by}\NormalTok{(habitat, carabid\_genus) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{summarise}\NormalTok{(}\AttributeTok{n =} \FunctionTok{sum}\NormalTok{(count, }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{), }\AttributeTok{.groups =} \StringTok{"drop"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{group\_by}\NormalTok{(habitat) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{rel\_abund =}\NormalTok{ n }\SpecialCharTok{/} \FunctionTok{sum}\NormalTok{(n)) }\SpecialCharTok{\%\textgreater{}\%}   \CommentTok{\# relative abundance within each habitat}
+  \FunctionTok{ungroup}\NormalTok{() }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{filter}\NormalTok{(n }\SpecialCharTok{\textgreater{}} \DecValTok{0}\NormalTok{)}
+
+\CommentTok{\# 2) Order species (overall abundance across all habitats)}
+\NormalTok{species\_order }\OtherTok{\textless{}{-}}\NormalTok{ carabid\_species\_habitat\_rel }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{group\_by}\NormalTok{(carabid\_genus) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{summarise}\NormalTok{(}\AttributeTok{total\_n =} \FunctionTok{sum}\NormalTok{(n), }\AttributeTok{.groups =} \StringTok{"drop"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{arrange}\NormalTok{(total\_n) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{pull}\NormalTok{(carabid\_genus)}
+
+\NormalTok{carabid\_species\_habitat\_rel }\OtherTok{\textless{}{-}}\NormalTok{ carabid\_species\_habitat\_rel }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{carabid\_genus =} \FunctionTok{factor}\NormalTok{(carabid\_genus, }\AttributeTok{levels =}\NormalTok{ species\_order))}
+
+\CommentTok{\# 3) Bubble plot of relative abundance of each family by habitat type}
+\NormalTok{carabid\_genus\_relative\_abundance }\OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{(carabid\_species\_habitat\_rel,}
+       \FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ carabid\_genus, }\AttributeTok{y =}\NormalTok{ habitat,}
+           \AttributeTok{size =}\NormalTok{ rel\_abund, }\AttributeTok{fill =}\NormalTok{ habitat)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_point}\NormalTok{(}\AttributeTok{shape =} \DecValTok{21}\NormalTok{, }\AttributeTok{color =} \StringTok{"black"}\NormalTok{, }\AttributeTok{alpha =} \DecValTok{1}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{scale\_size\_continuous}\NormalTok{(}\AttributeTok{name =} \StringTok{"Relative abundance"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{scale\_fill\_manual}\NormalTok{(}\AttributeTok{values =}\NormalTok{ custom\_colors) }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}\AttributeTok{x =} \ConstantTok{NULL}\NormalTok{, }\AttributeTok{y =} \StringTok{"Habitat"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{theme\_classic}\NormalTok{(}\AttributeTok{base\_size =} \DecValTok{12}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{theme}\NormalTok{(}
+    \AttributeTok{axis.text.x =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{angle =} \DecValTok{45}\NormalTok{, }\AttributeTok{hjust =} \DecValTok{1}\NormalTok{,  }\AttributeTok{face =} \StringTok{"italic"}\NormalTok{),}
+    \AttributeTok{legend.position =} \StringTok{"right"}
+\NormalTok{  ) }\SpecialCharTok{+}
+  \FunctionTok{guides}\NormalTok{(}\AttributeTok{fill =} \StringTok{"none"}\NormalTok{)}
+
+
+\NormalTok{carabid\_genus\_relative\_abundance}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{habitat_analysis_files/figure-latex/unnamed-chunk-14-1.pdf}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggsave}\NormalTok{(}\StringTok{"carabid\_genus\_relative\_abundance.png"}\NormalTok{, }\AttributeTok{height =} \FloatTok{2.5}\NormalTok{, }\AttributeTok{width =} \DecValTok{8}\NormalTok{, }\AttributeTok{dpi =} \DecValTok{400}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\paragraph{Abundance and richness by
+habitat}\label{abundance-and-richness-by-habitat-1}
+
+Now we'll look at the overall mean abundance and rarefied richness by
+habitat using boxplots
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# define custom colors}
+\NormalTok{custom\_colors }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"VY"}\OtherTok{=}\StringTok{"\#8E44AD"}\NormalTok{,}\StringTok{"SNH"}\OtherTok{=}\StringTok{"\#009E73"}\NormalTok{)}
+
+\CommentTok{\# {-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}}
+\CommentTok{\# HABITAT ABUNDANCE, SPECIES RICHNESS, MEAN PER TRAP AND RAREFIED RICHNESS}
+\CommentTok{\# {-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}}
+\CommentTok{\# ALL HABITATS RICHNESS}
+\NormalTok{sp\_mat            }\OtherTok{\textless{}{-}} \FunctionTok{as.matrix}\NormalTok{(dplyr}\SpecialCharTok{::}\FunctionTok{select}\NormalTok{(carabid\_habitat\_summary, }\FunctionTok{all\_of}\NormalTok{(species\_columns)))}
+\NormalTok{total\_abundance   }\OtherTok{\textless{}{-}} \FunctionTok{rowSums}\NormalTok{(sp\_mat)}
+\NormalTok{species\_richness  }\OtherTok{\textless{}{-}} \FunctionTok{rowSums}\NormalTok{(sp\_mat }\SpecialCharTok{\textgreater{}} \DecValTok{0}\NormalTok{)}
+
+\CommentTok{\#   Use the minimum total individuals among groups with \textgreater{} min\_m\_individuals}
+\NormalTok{min\_m\_individuals }\OtherTok{\textless{}{-}} \DecValTok{20}\DataTypeTok{L}
+\NormalTok{m\_candidates      }\OtherTok{\textless{}{-}}\NormalTok{ total\_abundance[total\_abundance }\SpecialCharTok{\textgreater{}}\NormalTok{ min\_m\_individuals]}
+
+\NormalTok{rarefaction\_m }\OtherTok{\textless{}{-}} \ControlFlowTok{if}\NormalTok{ (}\FunctionTok{length}\NormalTok{(m\_candidates)) }\FunctionTok{min}\NormalTok{(m\_candidates) }\ControlFlowTok{else} \ConstantTok{NA\_integer\_}
+
+\CommentTok{\# Rarefy (individual{-}based); NA if m not available}
+\NormalTok{rarefied\_richness }\OtherTok{\textless{}{-}} \ControlFlowTok{if}\NormalTok{ (}\FunctionTok{is.na}\NormalTok{(rarefaction\_m)) \{}
+  \FunctionTok{rep}\NormalTok{(}\ConstantTok{NA\_real\_}\NormalTok{, }\FunctionTok{nrow}\NormalTok{(sp\_mat))}
+\NormalTok{\} }\ControlFlowTok{else}\NormalTok{ \{}
+\NormalTok{  vegan}\SpecialCharTok{::}\FunctionTok{rarefy}\NormalTok{(sp\_mat, }\AttributeTok{sample =}\NormalTok{ rarefaction\_m)}
+\NormalTok{\}}
+
+\CommentTok{\# Assemble final summary table}
+\NormalTok{carabid\_habitat\_data }\OtherTok{\textless{}{-}}\NormalTok{ carabid\_habitat\_summary }\SpecialCharTok{\%\textgreater{}\%}
+\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{select}\NormalTok{(site\_ID, habitat, sample\_period, year, trap\_count) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}
+    \AttributeTok{total\_abundance   =}\NormalTok{ total\_abundance,}
+    \AttributeTok{mean\_per\_trap     =} \FunctionTok{ifelse}\NormalTok{(trap\_count }\SpecialCharTok{\textgreater{}} \DecValTok{0}\NormalTok{, total\_abundance }\SpecialCharTok{/}\NormalTok{ trap\_count, }\ConstantTok{NA\_real\_}\NormalTok{),}
+    \AttributeTok{species\_richness  =}\NormalTok{ species\_richness,}
+    \AttributeTok{rarefied\_richness =}\NormalTok{ rarefied\_richness,}
+    \AttributeTok{rarefaction\_m     =}\NormalTok{ rarefaction\_m}
+\NormalTok{  ) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{arrange}\NormalTok{(site\_ID, year, sample\_period, habitat)}
+
+\CommentTok{\# calculate mean per trap by habitat}
+\NormalTok{carabid\_mean\_by\_habitat }\OtherTok{\textless{}{-}}\NormalTok{ carabid\_habitat\_data }\SpecialCharTok{\%\textgreater{}\%}
+\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{group\_by}\NormalTok{(habitat) }\SpecialCharTok{\%\textgreater{}\%}
+\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{summarise}\NormalTok{(}
+    \AttributeTok{mean\_per\_trap =} \FunctionTok{mean}\NormalTok{(mean\_per\_trap, }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{),}
+    \AttributeTok{n             =}\NormalTok{ dplyr}\SpecialCharTok{::}\FunctionTok{n}\NormalTok{(),}
+    \AttributeTok{.groups =} \StringTok{"drop"}
+\NormalTok{  )}
+\NormalTok{carabid\_mean\_by\_habitat}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 2 x 3
+##   habitat mean_per_trap     n
+##   <chr>           <dbl> <int>
+## 1 SNH             0.760    45
+## 2 VY              3.53     45
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# plot mean abundance per trap by Habitat (VY/ SNH)}
+\CommentTok{\# lets use line plots to account for paired design (each site has a VY and SNH)}
+\CommentTok{\# we\textquotesingle{}re using mean per plot instead of total abundance to account for traps lost in the field}
+\NormalTok{carabid\_abundance\_line }\OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{(}
+\NormalTok{  carabid\_habitat\_data,}
+  \FunctionTok{aes}\NormalTok{(}
+    \AttributeTok{x =}\NormalTok{ habitat,}
+    \AttributeTok{y =}\NormalTok{ mean\_per\_trap,}
+    \AttributeTok{group =} \FunctionTok{interaction}\NormalTok{(site\_ID, year)}
+\NormalTok{  )}
+\NormalTok{) }\SpecialCharTok{+}
+  \CommentTok{\# paired lines in grey}
+  \FunctionTok{geom\_line}\NormalTok{(}
+    \AttributeTok{color =} \StringTok{"black"}\NormalTok{,}
+    \AttributeTok{alpha =} \FloatTok{0.5}
+\NormalTok{  ) }\SpecialCharTok{+}
+  \CommentTok{\# points coloured by habitat}
+  \FunctionTok{geom\_point}\NormalTok{(}
+    \FunctionTok{aes}\NormalTok{(}\AttributeTok{color =}\NormalTok{ habitat),}
+    \AttributeTok{shape =} \DecValTok{21}\NormalTok{,}
+    \AttributeTok{size =} \DecValTok{3}\NormalTok{,}
+    \AttributeTok{stroke =} \FloatTok{1.2}
+\NormalTok{  ) }\SpecialCharTok{+}
+  \FunctionTok{scale\_color\_manual}\NormalTok{(}\AttributeTok{values =}\NormalTok{ custom\_colors) }\SpecialCharTok{+}
+  \FunctionTok{scale\_fill\_manual}\NormalTok{(}\AttributeTok{values =}\NormalTok{ custom\_colors) }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}
+    \AttributeTok{title =} \StringTok{"Carabid abundance"}\NormalTok{,}
+    \AttributeTok{x =} \ConstantTok{NULL}\NormalTok{,}
+    \AttributeTok{y =} \StringTok{"Mean abundance per trap"}
+\NormalTok{  ) }\SpecialCharTok{+}
+  \FunctionTok{theme\_minimal}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{theme}\NormalTok{(}
+    \AttributeTok{plot.title =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{hjust =} \FloatTok{0.5}\NormalTok{),}
+    \AttributeTok{legend.position =} \StringTok{"none"}
+\NormalTok{  ) }\SpecialCharTok{+} \FunctionTok{theme}\NormalTok{(}
+  \AttributeTok{axis.text.x  =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{14}\NormalTok{),}
+  \AttributeTok{axis.text.y  =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{14}\NormalTok{),}
+  \AttributeTok{axis.title.y =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{16}\NormalTok{)}
+\NormalTok{)}
+
+
+\NormalTok{carabid\_abundance\_line}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{habitat_analysis_files/figure-latex/unnamed-chunk-15-1.pdf}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# let\textquotesingle{}s also try with boxplots}
+\NormalTok{carabid\_mean\_abundance }\OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{(carabid\_habitat\_data, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ habitat, }\AttributeTok{y =}\NormalTok{ mean\_per\_trap, }\AttributeTok{fill =}\NormalTok{ habitat)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_boxplot}\NormalTok{(}\AttributeTok{outlier.shape =} \ConstantTok{NA}\NormalTok{, }\AttributeTok{alpha =} \FloatTok{0.7}\NormalTok{, }\AttributeTok{color =} \StringTok{"black"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{geom\_jitter}\NormalTok{(}\AttributeTok{width =} \FloatTok{0.2}\NormalTok{, }\AttributeTok{height =} \FloatTok{0.3}\NormalTok{, }\AttributeTok{alpha =} \FloatTok{0.5}\NormalTok{, }\AttributeTok{size =} \DecValTok{2}\NormalTok{, }\AttributeTok{color =} \StringTok{"black"}\NormalTok{)}\SpecialCharTok{+}
+  \FunctionTok{coord\_cartesian}\NormalTok{(}\AttributeTok{ylim =} \FunctionTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{20}\NormalTok{)) }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}
+    \AttributeTok{x =} \StringTok{"Habitat type"}\NormalTok{,}
+    \AttributeTok{y =} \StringTok{"Abundance per trap"}
+\NormalTok{  ) }\SpecialCharTok{+}
+  \FunctionTok{theme\_minimal}\NormalTok{(}\AttributeTok{base\_size =} \DecValTok{14}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{scale\_fill\_manual}\NormalTok{(}\AttributeTok{values =}\NormalTok{ custom\_colors) }\SpecialCharTok{+}
+  \FunctionTok{theme}\NormalTok{(}
+    \AttributeTok{legend.position =} \StringTok{"none"}\NormalTok{,}
+    \AttributeTok{plot.title =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{face =} \StringTok{"bold"}\NormalTok{, }\AttributeTok{hjust =} \FloatTok{0.5}\NormalTok{),}
+    \AttributeTok{axis.text.x =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{angle =} \DecValTok{45}\NormalTok{, }\AttributeTok{hjust =} \DecValTok{1}\NormalTok{)}
+\NormalTok{  )}
+\NormalTok{carabid\_mean\_abundance}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{habitat_analysis_files/figure-latex/unnamed-chunk-15-2.pdf}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# rarefied richness}
+\NormalTok{carabid\_rarefied\_richness }\OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{(carabid\_habitat\_data, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ habitat, }\AttributeTok{y =}\NormalTok{ rarefied\_richness, }\AttributeTok{fill =}\NormalTok{ habitat)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_boxplot}\NormalTok{(}\AttributeTok{outlier.shape =} \ConstantTok{NA}\NormalTok{, }\AttributeTok{alpha =} \FloatTok{0.7}\NormalTok{, }\AttributeTok{color =} \StringTok{"black"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{geom\_jitter}\NormalTok{(}\AttributeTok{width =} \FloatTok{0.2}\NormalTok{, }\AttributeTok{alpha =} \FloatTok{0.5}\NormalTok{, }\AttributeTok{size =} \DecValTok{2}\NormalTok{, }\AttributeTok{color =} \StringTok{"black"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{geom\_text}\NormalTok{(}
+    \AttributeTok{data =}\NormalTok{ habitat\_n,}
+    \FunctionTok{aes}\NormalTok{(}
+      \AttributeTok{x =}\NormalTok{ habitat,}
+      \AttributeTok{y =} \FunctionTok{max}\NormalTok{(carabid\_habitat\_data}\SpecialCharTok{$}\NormalTok{rarefied\_richness, }\AttributeTok{na.rm =} \ConstantTok{TRUE}\NormalTok{) }\SpecialCharTok{+} \DecValTok{2}\NormalTok{,}
+      \AttributeTok{label =} \FunctionTok{paste0}\NormalTok{(}\StringTok{"n = "}\NormalTok{, n)}
+\NormalTok{    ),}
+    \AttributeTok{inherit.aes =} \ConstantTok{FALSE}\NormalTok{,}
+    \AttributeTok{size =} \DecValTok{4}
+\NormalTok{  ) }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}
+    \AttributeTok{title =} \StringTok{"Carabid Rarefied Richness by Habitat Type"}\NormalTok{,}
+    \AttributeTok{x =} \StringTok{"Habitat Type"}\NormalTok{,}
+    \AttributeTok{y =} \StringTok{"Carabid Rarefied Richness"}
+\NormalTok{  ) }\SpecialCharTok{+}
+  \FunctionTok{theme\_minimal}\NormalTok{(}\AttributeTok{base\_size =} \DecValTok{14}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{scale\_fill\_manual}\NormalTok{(}\AttributeTok{values =}\NormalTok{ custom\_colors) }\SpecialCharTok{+}
+  \FunctionTok{theme}\NormalTok{(}
+    \AttributeTok{legend.position =} \StringTok{"none"}\NormalTok{,}
+    \AttributeTok{plot.title =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{face =} \StringTok{"bold"}\NormalTok{, }\AttributeTok{hjust =} \FloatTok{0.5}\NormalTok{),}
+    \AttributeTok{axis.text.x =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{angle =} \DecValTok{45}\NormalTok{, }\AttributeTok{hjust =} \DecValTok{1}\NormalTok{))}
+    
+\NormalTok{carabid\_rarefied\_richness }
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{habitat_analysis_files/figure-latex/unnamed-chunk-15-3.pdf}}
+
+Generally, much higher abundance in VY compared to SNH.
+
+\paragraph{Venn diagrams by habitat}\label{venn-diagrams-by-habitat-1}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# plot as venn diagram}
+\CommentTok{\# Presence{-}absence by habitat}
+\NormalTok{carabid\_presence }\OtherTok{\textless{}{-}}\NormalTok{ carabid\_habitat\_summary }\SpecialCharTok{\%\textgreater{}\%}
+\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{select}\NormalTok{(}\SpecialCharTok{{-}}\NormalTok{site\_ID, }\SpecialCharTok{{-}}\NormalTok{sample\_period, }\SpecialCharTok{{-}}\NormalTok{year, }\SpecialCharTok{{-}}\NormalTok{trap\_count) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{group\_by}\NormalTok{(habitat) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{summarise}\NormalTok{(}\FunctionTok{across}\NormalTok{(}\FunctionTok{where}\NormalTok{(is.numeric), }\SpecialCharTok{\textasciitilde{}} \FunctionTok{sum}\NormalTok{(.x }\SpecialCharTok{\textgreater{}} \DecValTok{0}\NormalTok{) }\SpecialCharTok{\textgreater{}} \DecValTok{0}\NormalTok{))}
+
+\CommentTok{\# Create lists of carabid families present in each habitat}
+\NormalTok{carabid\_species\_by\_habitat }\OtherTok{\textless{}{-}} \FunctionTok{lapply}\NormalTok{(}\FunctionTok{split}\NormalTok{(carabid\_presence, carabid\_presence}\SpecialCharTok{$}\NormalTok{habitat), }\ControlFlowTok{function}\NormalTok{(df) \{}
+  \FunctionTok{names}\NormalTok{(df)[}\FunctionTok{which}\NormalTok{(}\FunctionTok{as.logical}\NormalTok{(df[}\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{])) }\SpecialCharTok{+} \DecValTok{1}\NormalTok{]  }\CommentTok{\# Skip habitat column}
+\NormalTok{\})}
+\NormalTok{carabid\_species\_by\_habitat}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## $SNH
+##  [1] "Agonoleptus_conjunctus"   "Amara_aenea"              "Amara_apricaria"          "Amara_cupreolata"         "Amara_obesa"              "Amara_quenseli"           "Amara_spp"                "Anisodactylus_binotatus"  "Calathus_fuscipes"        "Calosoma_tepidum"         "Carabus_nemoralis"        "Carabus_taedatus"         "Dicheirotrichus_cognatus" "Dicheirus_piceus"         "Euryderus_grossus"        "Harpalus_affinis"         "Harpalus_fraternus"       "Harpalus_herbivagus"      "Harpalus_nigritarsis"     "Harpalus_opacipennis"     "Pterostichus_melanarius"  "Scaphinotus_marginatus"   "Trechus_chalybeus"       
+## 
+## $VY
+##  [1] "Agonoleptus_conjunctus"  "Agonum_placidum"         "Amara_aenea"             "Amara_apricaria"         "Amara_carinata"          "Amara_conflata"          "Amara_cupreolata"        "Amara_latior"            "Amara_littoralis"        "Amara_obesa"             "Amara_quenseli"          "Amara_sinuosa"           "Amara_spp"               "Anisodactylus_binotatus" "Anisodactylus_similis"   "Bembidion_lampros"       "Calathus_fuscipes"       "Calosoma_tepidum"        "Carabus_granulatus"      "Carabus_nemoralis"       "Carabus_taedatus"        "Harpalus_affinis"        "Harpalus_fraternus"      "Harpalus_herbivagus"     "Harpalus_nigritarsis"    "Harpalus_obnixus"        "Harpalus_opacipennis"    "Harpalus_pensylvanicus"  "Harpalus_spp"            "Poecilus_lucublandus"    "Pterostichus_melanarius"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# plot as a venn diagram}
+\NormalTok{ggvenn\_carabid\_species }\OtherTok{\textless{}{-}} \FunctionTok{ggvenn}\NormalTok{(carabid\_species\_by\_habitat,}
+                        \AttributeTok{fill\_color =} \FunctionTok{c}\NormalTok{(}\StringTok{"\#009E73"}\NormalTok{, }\StringTok{"\#8E44AD"}\NormalTok{),}
+                        \AttributeTok{stroke\_size =} \FloatTok{0.5}\NormalTok{,}
+                        \AttributeTok{set\_name\_size =} \DecValTok{4}\NormalTok{, }
+                        \AttributeTok{text\_size =} \DecValTok{4}\NormalTok{) }
+\NormalTok{ggvenn\_carabid\_species}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{habitat_analysis_files/figure-latex/unnamed-chunk-16-1.pdf}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# GENUS LEVEL}
+\CommentTok{\# Step 1: Summarize genus presence by habitat}
+\NormalTok{carabid\_genus\_presence }\OtherTok{\textless{}{-}}\NormalTok{ carabid\_long\_genus\_habitat }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{group\_by}\NormalTok{(habitat, carabid\_genus) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{summarise}\NormalTok{(}\AttributeTok{present =} \FunctionTok{any}\NormalTok{(count }\SpecialCharTok{\textgreater{}} \DecValTok{0}\NormalTok{), }\AttributeTok{.groups =} \StringTok{"drop"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{pivot\_wider}\NormalTok{(}\AttributeTok{names\_from =}\NormalTok{ carabid\_genus, }\AttributeTok{values\_from =}\NormalTok{ present, }\AttributeTok{values\_fill =} \ConstantTok{FALSE}\NormalTok{)}
+
+\CommentTok{\# Step 2: Create lists of genera present in each habitat}
+\NormalTok{carabid\_genus\_by\_habitat }\OtherTok{\textless{}{-}} \FunctionTok{lapply}\NormalTok{(}\FunctionTok{split}\NormalTok{(carabid\_genus\_presence, carabid\_genus\_presence}\SpecialCharTok{$}\NormalTok{habitat), }\ControlFlowTok{function}\NormalTok{(df) \{}
+  \FunctionTok{names}\NormalTok{(df)[}\FunctionTok{which}\NormalTok{(}\FunctionTok{as.logical}\NormalTok{(df[}\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{])) }\SpecialCharTok{+} \DecValTok{1}\NormalTok{]  }\CommentTok{\# skip habitat column}
+\NormalTok{\})}
+
+\NormalTok{carabid\_genus\_by\_habitat}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## $SNH
+##  [1] "Agonoleptus"     "Amara"           "Anisodactylus"   "Calathus"        "Calosoma"        "Carabus"         "Dicheirotrichus" "Dicheirus"       "Euryderus"       "Harpalus"        "Pterostichus"    "Scaphinotus"     "Trechus"        
+## 
+## $VY
+##  [1] "Agonoleptus"   "Agonum"        "Amara"         "Anisodactylus" "Bembidion"     "Calathus"      "Calosoma"      "Carabus"       "Harpalus"      "Poecilus"      "Pterostichus"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Step 3: Plot Venn diagram}
+\CommentTok{\# add a margin to prevent the labels from getting cut off when combined}
+\NormalTok{ggvenn\_carabid\_genus }\OtherTok{\textless{}{-}} \FunctionTok{ggvenn}\NormalTok{(}
+\NormalTok{  carabid\_genus\_by\_habitat,}
+  \AttributeTok{fill\_color =} \FunctionTok{c}\NormalTok{(}\StringTok{"\#009E73"}\NormalTok{, }\StringTok{"\#8E44AD"}\NormalTok{),}
+  \AttributeTok{stroke\_size =} \FloatTok{0.5}\NormalTok{,}
+  \AttributeTok{set\_name\_size =} \DecValTok{4}\NormalTok{,}
+  \AttributeTok{text\_size =} \DecValTok{4}\NormalTok{)}
+
+\NormalTok{ggvenn\_carabid\_genus}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{habitat_analysis_files/figure-latex/unnamed-chunk-16-2.pdf}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{print}\NormalTok{(carabid\_genus\_by\_habitat)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## $SNH
+##  [1] "Agonoleptus"     "Amara"           "Anisodactylus"   "Calathus"        "Calosoma"        "Carabus"         "Dicheirotrichus" "Dicheirus"       "Euryderus"       "Harpalus"        "Pterostichus"    "Scaphinotus"     "Trechus"        
+## 
+## $VY
+##  [1] "Agonoleptus"   "Agonum"        "Amara"         "Anisodactylus" "Bembidion"     "Calathus"      "Calosoma"      "Carabus"       "Harpalus"      "Poecilus"      "Pterostichus"
+\end{verbatim}
+
+At the species level, more unique carabids found in VY (13) then SNH
+(5), 18 shared in both habitats. At the genus level, more unique carabid
+genera found in SNH (5) than VY (3), 8 found in both habitats
+
+\paragraph{Carabid Traits by Habitat}\label{carabid-traits-by-habitat}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# upload the traits data (dispersal and status)}
+\NormalTok{carabid\_traits }\OtherTok{\textless{}{-}} \FunctionTok{read.csv}\NormalTok{(here}\SpecialCharTok{::}\FunctionTok{here}\NormalTok{ (}\StringTok{"00\_data"}\NormalTok{, }\StringTok{"carabid\_traits.csv"}\NormalTok{))}
+
+
+\CommentTok{\# join to carabid habitat data (in long format)}
+\NormalTok{carabid\_long\_traits\_habitat }\OtherTok{\textless{}{-}}\NormalTok{ carabid\_long\_habitat }\SpecialCharTok{\%\textgreater{}\%}
+\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{left\_join}\NormalTok{(}
+\NormalTok{    dplyr}\SpecialCharTok{::}\FunctionTok{select}\NormalTok{(carabid\_traits, carabid\_species, dispersal\_power, status),}
+    \AttributeTok{by =} \StringTok{"carabid\_species"}
+\NormalTok{  )}
+
+
+\CommentTok{\# summarize dispersal abundance by site\_ID, habitat and year}
+\NormalTok{dispersal\_abundance\_habitat }\OtherTok{\textless{}{-}}\NormalTok{ carabid\_long\_traits\_habitat }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{group\_by}\NormalTok{(site\_ID, habitat, year, dispersal\_power) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{summarise}\NormalTok{(}\AttributeTok{total\_abundance =} \FunctionTok{sum}\NormalTok{(count), }\AttributeTok{.groups =} \StringTok{"drop"}\NormalTok{)}
+
+\CommentTok{\# summarize dispersal abundance by site\_ID, habitat and year}
+\NormalTok{status\_abundance\_habitat }\OtherTok{\textless{}{-}}\NormalTok{ carabid\_long\_traits\_habitat }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{group\_by}\NormalTok{(site\_ID, habitat, year, status) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{summarise}\NormalTok{(}\AttributeTok{total\_abundance =} \FunctionTok{sum}\NormalTok{(count), }\AttributeTok{.groups =} \StringTok{"drop"}\NormalTok{)}
+
+\CommentTok{\# pivot to wide format}
+\NormalTok{dispersal\_abundance\_wide }\OtherTok{\textless{}{-}}\NormalTok{ dispersal\_abundance\_habitat }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{pivot\_wider}\NormalTok{(}
+    \AttributeTok{names\_from =}\NormalTok{ dispersal\_power,}
+    \AttributeTok{values\_from =}\NormalTok{ total\_abundance,}
+    \AttributeTok{values\_fill =} \DecValTok{0}  \CommentTok{\# fill missing combinations with 0}
+\NormalTok{  )}
+
+\CommentTok{\# Make sure dispersal\_abundance\_habitat is prepared}
+\NormalTok{status\_abundance\_plot }\OtherTok{\textless{}{-}}\NormalTok{ status\_abundance\_habitat }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{group\_by}\NormalTok{(habitat, status) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{summarise}\NormalTok{(}\AttributeTok{total\_abundance =} \FunctionTok{sum}\NormalTok{(total\_abundance), }\AttributeTok{.groups =} \StringTok{"drop"}\NormalTok{)}
+\NormalTok{status\_abundance\_plot }\OtherTok{\textless{}{-}}\NormalTok{ status\_abundance\_plot }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{filter}\NormalTok{(}\SpecialCharTok{!}\FunctionTok{is.na}\NormalTok{(status))}
+
+\CommentTok{\# Make sure dispersal\_abundance\_habitat is prepared}
+\NormalTok{dispersal\_abundance\_plot }\OtherTok{\textless{}{-}}\NormalTok{ dispersal\_abundance\_habitat }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{group\_by}\NormalTok{(habitat, dispersal\_power) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{summarise}\NormalTok{(}\AttributeTok{total\_abundance =} \FunctionTok{sum}\NormalTok{(total\_abundance), }\AttributeTok{.groups =} \StringTok{"drop"}\NormalTok{)}
+\NormalTok{dispersal\_abundance\_plot }\OtherTok{\textless{}{-}}\NormalTok{ dispersal\_abundance\_plot }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{filter}\NormalTok{(}\SpecialCharTok{!}\FunctionTok{is.na}\NormalTok{(dispersal\_power))}
+
+\NormalTok{status\_colors }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}
+  \StringTok{"introduced"} \OtherTok{=} \StringTok{"\#E69F00"}\NormalTok{,     }\CommentTok{\# orange}
+  \StringTok{"native"} \OtherTok{=} \StringTok{"\#009E73"}     \CommentTok{\# bluish green}
+\NormalTok{)}
+
+\CommentTok{\# Custom colors (edit to match your desired palette)}
+\NormalTok{dispersal\_colors }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}
+  \StringTok{"brachypterous"} \OtherTok{=} \StringTok{"\#E69F00"}\NormalTok{,     }\CommentTok{\# orange}
+  \StringTok{"macropterous"} \OtherTok{=} \StringTok{"\#009E73"}\NormalTok{,     }\CommentTok{\# bluish green}
+  \StringTok{"polymorphic"} \OtherTok{=} \StringTok{"\#0072B2"}\NormalTok{,     }\CommentTok{\# sky blue}
+  \StringTok{"dimorphic"} \OtherTok{=} \StringTok{"\#7D3C98"}     \CommentTok{\# blue}
+\NormalTok{)}
+
+\CommentTok{\# Create the stacked bar chart for both dispersal and status}
+\FunctionTok{ggplot}\NormalTok{(dispersal\_abundance\_plot, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ habitat, }\AttributeTok{y =}\NormalTok{ total\_abundance, }\AttributeTok{fill =}\NormalTok{ dispersal\_power)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_bar}\NormalTok{(}\AttributeTok{stat =} \StringTok{"identity"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{scale\_fill\_manual}\NormalTok{(}\AttributeTok{values =}\NormalTok{ dispersal\_colors) }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}
+    \AttributeTok{x =} \ConstantTok{NULL}\NormalTok{,}
+    \AttributeTok{y =} \StringTok{"No. carabids"}\NormalTok{,}
+    \AttributeTok{fill =} \StringTok{"dispersal"}\NormalTok{,}
+    \AttributeTok{title =} \StringTok{"dispersal composition by habitat type"}
+\NormalTok{  ) }\SpecialCharTok{+}
+  \FunctionTok{theme\_minimal}\NormalTok{(}\AttributeTok{base\_size =} \DecValTok{12}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{theme}\NormalTok{(}
+    \AttributeTok{axis.text =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{color =} \StringTok{"black"}\NormalTok{),}
+    \AttributeTok{panel.grid.major.x =} \FunctionTok{element\_blank}\NormalTok{(),}
+    \AttributeTok{panel.grid.minor =} \FunctionTok{element\_blank}\NormalTok{()}
+\NormalTok{  )}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{habitat_analysis_files/figure-latex/unnamed-chunk-17-1.pdf}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Create the stacked bar chart}
+\FunctionTok{ggplot}\NormalTok{(status\_abundance\_plot, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ habitat, }\AttributeTok{y =}\NormalTok{ total\_abundance, }\AttributeTok{fill =}\NormalTok{ status)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_bar}\NormalTok{(}\AttributeTok{stat =} \StringTok{"identity"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{scale\_fill\_manual}\NormalTok{(}\AttributeTok{values =}\NormalTok{ status\_colors) }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}
+    \AttributeTok{x =} \ConstantTok{NULL}\NormalTok{,}
+    \AttributeTok{y =} \StringTok{"No. carabids"}\NormalTok{,}
+    \AttributeTok{fill =} \StringTok{"Status"}\NormalTok{,}
+    \AttributeTok{title =} \StringTok{"Carabid status by habitat type"}
+\NormalTok{  ) }\SpecialCharTok{+}
+  \FunctionTok{theme\_minimal}\NormalTok{(}\AttributeTok{base\_size =} \DecValTok{12}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{theme}\NormalTok{(}
+    \AttributeTok{axis.text =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{color =} \StringTok{"black"}\NormalTok{),}
+    \AttributeTok{panel.grid.major.x =} \FunctionTok{element\_blank}\NormalTok{(),}
+    \AttributeTok{panel.grid.minor =} \FunctionTok{element\_blank}\NormalTok{()}
+\NormalTok{  )}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{habitat_analysis_files/figure-latex/unnamed-chunk-17-2.pdf}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Summarize total abundance by habitat and dispersal, then calculate proportion}
+\NormalTok{dispersal\_prop\_habitat }\OtherTok{\textless{}{-}}\NormalTok{ dispersal\_abundance\_habitat }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{group\_by}\NormalTok{(habitat, dispersal\_power) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{summarise}\NormalTok{(}\AttributeTok{total\_abundance =} \FunctionTok{sum}\NormalTok{(total\_abundance), }\AttributeTok{.groups =} \StringTok{"drop"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{group\_by}\NormalTok{(habitat) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{prop =}\NormalTok{ total\_abundance }\SpecialCharTok{/} \FunctionTok{sum}\NormalTok{(total\_abundance))}
+
+\NormalTok{dispersal\_prop\_habitat }\OtherTok{\textless{}{-}}\NormalTok{ dispersal\_prop\_habitat }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{filter}\NormalTok{(}\SpecialCharTok{!}\FunctionTok{is.na}\NormalTok{(dispersal\_power))}
+
+\CommentTok{\# Summarize total abundance by habitat and dispersal, then calculate proportion}
+\NormalTok{status\_prop\_habitat }\OtherTok{\textless{}{-}}\NormalTok{ status\_abundance\_habitat }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{group\_by}\NormalTok{(habitat, status) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{summarise}\NormalTok{(}\AttributeTok{total\_abundance =} \FunctionTok{sum}\NormalTok{(total\_abundance), }\AttributeTok{.groups =} \StringTok{"drop"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{group\_by}\NormalTok{(habitat) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}\AttributeTok{prop =}\NormalTok{ total\_abundance }\SpecialCharTok{/} \FunctionTok{sum}\NormalTok{(total\_abundance))}
+
+
+\CommentTok{\# set factor order for consistent pie layout}
+\NormalTok{dispersal\_prop\_habitat}\SpecialCharTok{$}\NormalTok{dispersal\_power }\OtherTok{\textless{}{-}} \FunctionTok{factor}\NormalTok{(dispersal\_prop\_habitat}\SpecialCharTok{$}\NormalTok{dispersal\_power)}
+
+
+\CommentTok{\# Plot pie chart by habitat using facet}
+\NormalTok{carabid\_dispersal\_pie }\OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{(dispersal\_prop\_habitat, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =} \StringTok{""}\NormalTok{, }\AttributeTok{y =}\NormalTok{ prop, }\AttributeTok{fill =}\NormalTok{ dispersal\_power)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_bar}\NormalTok{(}\AttributeTok{stat =} \StringTok{"identity"}\NormalTok{, }\AttributeTok{width =} \DecValTok{1}\NormalTok{, }\AttributeTok{color =} \StringTok{"white"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{coord\_polar}\NormalTok{(}\StringTok{"y"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{facet\_wrap}\NormalTok{(}\SpecialCharTok{\textasciitilde{}}\NormalTok{habitat) }\SpecialCharTok{+}
+  \FunctionTok{scale\_fill\_manual}\NormalTok{(}\AttributeTok{values =}\NormalTok{ dispersal\_colors) }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}
+    \AttributeTok{fill =} \StringTok{"Wing type"}\NormalTok{,}
+\NormalTok{  ) }\SpecialCharTok{+}
+  \FunctionTok{theme\_void}\NormalTok{(}\AttributeTok{base\_size =} \DecValTok{12}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{theme}\NormalTok{(}
+    \AttributeTok{strip.text =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{12}\NormalTok{),}
+    \AttributeTok{legend.position =} \StringTok{"right"}\NormalTok{, }
+    \AttributeTok{legend.text =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{12}\NormalTok{)}
+\NormalTok{  )}
+
+\NormalTok{carabid\_dispersal\_pie}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{habitat_analysis_files/figure-latex/unnamed-chunk-17-3.pdf}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Plot pie chart by habitat using facet}
+\NormalTok{carabid\_status\_pie }\OtherTok{\textless{}{-}} \FunctionTok{ggplot}\NormalTok{(status\_prop\_habitat, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =} \StringTok{""}\NormalTok{, }\AttributeTok{y =}\NormalTok{ prop, }\AttributeTok{fill =}\NormalTok{ status)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_bar}\NormalTok{(}\AttributeTok{stat =} \StringTok{"identity"}\NormalTok{, }\AttributeTok{width =} \DecValTok{1}\NormalTok{, }\AttributeTok{color =} \StringTok{"white"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{coord\_polar}\NormalTok{(}\StringTok{"y"}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{facet\_wrap}\NormalTok{(}\SpecialCharTok{\textasciitilde{}}\NormalTok{habitat) }\SpecialCharTok{+}
+  \FunctionTok{scale\_fill\_manual}\NormalTok{(}\AttributeTok{values =}\NormalTok{ status\_colors) }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}
+    \AttributeTok{fill =} \StringTok{"Origin status"}\NormalTok{,}
+\NormalTok{  ) }\SpecialCharTok{+}
+  \FunctionTok{theme\_void}\NormalTok{(}\AttributeTok{base\_size =} \DecValTok{12}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{theme}\NormalTok{(}
+    \AttributeTok{strip.text =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{12}\NormalTok{),}
+    \AttributeTok{legend.position =} \StringTok{"right"}\NormalTok{,}
+    \AttributeTok{legend.text =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{12}\NormalTok{)}
+\NormalTok{  )}
+
+\NormalTok{carabid\_status\_pie}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{habitat_analysis_files/figure-latex/unnamed-chunk-17-4.pdf}}
+
+Higher proportion of native species in SNH compared to VY, and higher
+proportion of brachypterous and polymorphic wing types in SNH. But also
+much lower abundance overall in SNH, so actually similar number of
+individuals in each habitat.
+
+\subsection{FIGURES AND TABLES}\label{figures-and-tables}
+
+Let's combine some figures from all of the response and predictor
+variables to include in my thesis/ papers.
+
+\subsubsection{Sample coverage and hill
+diversity}\label{sample-coverage-and-hill-diversity-2}
+
+One of sample coverage for the appendix
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# combine sample coverage/ hill diversity plots}
+\NormalTok{combined\_sample\_coverage }\OtherTok{\textless{}{-}}\NormalTok{ cowplot}\SpecialCharTok{::}\FunctionTok{plot\_grid}\NormalTok{(}
+\NormalTok{  spider\_sample\_coverage,}
+\NormalTok{  carabid\_sample\_coverage,}
+  \AttributeTok{labels =} \FunctionTok{c}\NormalTok{(}\StringTok{"A"}\NormalTok{, }\StringTok{"B"}\NormalTok{),}
+  \AttributeTok{label\_size =} \DecValTok{10}\NormalTok{,}
+  \AttributeTok{ncol =} \DecValTok{2}\NormalTok{,}
+  \AttributeTok{rel\_heights =} \FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{1}\NormalTok{)}
+\NormalTok{)}
+\NormalTok{combined\_sample\_coverage}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{habitat_analysis_files/figure-latex/unnamed-chunk-18-1.pdf}}
+combined hill diversity by sample coverage plot
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# combine sample coverage/ hill diversity plots}
+\NormalTok{combined\_hill\_coverage }\OtherTok{\textless{}{-}}\NormalTok{ cowplot}\SpecialCharTok{::}\FunctionTok{plot\_grid}\NormalTok{(}
+\NormalTok{  spider\_hill\_coverage,}
+\NormalTok{  carabid\_hill\_coverage,}
+  \AttributeTok{labels =} \FunctionTok{c}\NormalTok{(}\StringTok{"A"}\NormalTok{, }\StringTok{"B"}\NormalTok{),}
+  \AttributeTok{label\_size =} \DecValTok{10}\NormalTok{,}
+  \AttributeTok{ncol =} \DecValTok{1}\NormalTok{,}
+  \AttributeTok{rel\_heights =} \FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{1}\NormalTok{)}
+\NormalTok{)}
+\NormalTok{combined\_hill\_coverage}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{habitat_analysis_files/figure-latex/unnamed-chunk-19-1.pdf}}
+
+\subsubsection{Boxplots of abundance by habitat
+type}\label{boxplots-of-abundance-by-habitat-type}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# combine mean abundance plots}
+\NormalTok{combined\_mean\_abundance }\OtherTok{\textless{}{-}}\NormalTok{ cowplot}\SpecialCharTok{::}\FunctionTok{plot\_grid}\NormalTok{(}
+\NormalTok{  spider\_mean\_abundance,}
+\NormalTok{  carabid\_mean\_abundance,}
+  \AttributeTok{labels =} \FunctionTok{c}\NormalTok{(}\StringTok{"A"}\NormalTok{, }\StringTok{"B"}\NormalTok{),}
+  \AttributeTok{label\_size =} \DecValTok{10}\NormalTok{,}
+  \AttributeTok{ncol =} \DecValTok{2}\NormalTok{,}
+  \AttributeTok{rel\_heights =} \FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{1}\NormalTok{)}
+\NormalTok{)}
+\NormalTok{combined\_mean\_abundance}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{habitat_analysis_files/figure-latex/unnamed-chunk-20-1.pdf}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# save to figures folder}
+\FunctionTok{ggsave}\NormalTok{(}
+   \AttributeTok{filename =}\NormalTok{ here}\SpecialCharTok{::}\FunctionTok{here}\NormalTok{(}\StringTok{"03\_figures"}\NormalTok{,}\StringTok{"mean\_abundance\_boxplot.png"}\NormalTok{),}
+\NormalTok{  combined\_mean\_abundance,}
+  \AttributeTok{width =} \DecValTok{8}\NormalTok{,}
+  \AttributeTok{height =} \DecValTok{5}\NormalTok{,}
+  \AttributeTok{dpi =} \DecValTok{400}
+\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{Line plots by habitat
+type}\label{line-plots-by-habitat-type}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# combine mean abundnce plots}
+\NormalTok{combined\_abundance\_line }\OtherTok{\textless{}{-}}\NormalTok{ cowplot}\SpecialCharTok{::}\FunctionTok{plot\_grid}\NormalTok{(}
+\NormalTok{  spider\_abundance\_line,}
+\NormalTok{  carabid\_abundance\_line,}
+  \AttributeTok{labels =} \FunctionTok{c}\NormalTok{(}\StringTok{"A"}\NormalTok{, }\StringTok{"B"}\NormalTok{),}
+  \AttributeTok{label\_size =} \DecValTok{14}\NormalTok{,}
+  \AttributeTok{ncol =} \DecValTok{2}\NormalTok{,}
+  \AttributeTok{rel\_heights =} \FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{1}\NormalTok{)}
+\NormalTok{)}
+\NormalTok{combined\_abundance\_line}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{habitat_analysis_files/figure-latex/unnamed-chunk-21-1.pdf}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# save to figures folder}
+\FunctionTok{ggsave}\NormalTok{(}
+   \AttributeTok{filename =}\NormalTok{ here}\SpecialCharTok{::}\FunctionTok{here}\NormalTok{(}\StringTok{"03\_figures"}\NormalTok{,}\StringTok{"mean\_abundance\_lineplot.png"}\NormalTok{),}
+\NormalTok{  combined\_abundance\_line,}
+  \AttributeTok{width =} \DecValTok{8}\NormalTok{,}
+  \AttributeTok{height =} \DecValTok{4}\NormalTok{,}
+  \AttributeTok{dpi =} \DecValTok{400}
+\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{Venn Diagrams}\label{venn-diagrams}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# combine venn diagram plots}
+\NormalTok{combined\_venn }\OtherTok{\textless{}{-}}\NormalTok{ cowplot}\SpecialCharTok{::}\FunctionTok{plot\_grid}\NormalTok{(}
+\NormalTok{  ggvenn\_spider\_families,}
+\NormalTok{  ggvenn\_carabid\_species,}
+\NormalTok{  ggvenn\_carabid\_genus,}
+  \AttributeTok{labels =} \FunctionTok{c}\NormalTok{(}\StringTok{"A"}\NormalTok{, }\StringTok{"B"}\NormalTok{, }\StringTok{"C"}\NormalTok{),}
+  \AttributeTok{label\_size =} \DecValTok{12}\NormalTok{,}
+  \AttributeTok{ncol =} \DecValTok{2}\NormalTok{,}
+  \AttributeTok{rel\_heights =} \FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{1}\NormalTok{)}
+\NormalTok{)}
+\NormalTok{combined\_venn}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{habitat_analysis_files/figure-latex/unnamed-chunk-22-1.pdf}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# save to figures folder}
+\FunctionTok{ggsave}\NormalTok{(}
+   \AttributeTok{filename =}\NormalTok{ here}\SpecialCharTok{::}\FunctionTok{here}\NormalTok{(}\StringTok{"03\_figures"}\NormalTok{,}\StringTok{"ven\_diagram.png"}\NormalTok{),}
+\NormalTok{  combined\_venn,}
+  \AttributeTok{width =} \DecValTok{8}\NormalTok{,}
+  \AttributeTok{height =} \DecValTok{6}\NormalTok{,}
+  \AttributeTok{dpi =} \DecValTok{400}
+\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\subsubsection{Trait figures}\label{trait-figures}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# combine relative abundnce plots}
+\NormalTok{combined\_trait\_carabid }\OtherTok{\textless{}{-}}\NormalTok{ cowplot}\SpecialCharTok{::}\FunctionTok{plot\_grid}\NormalTok{(}
+\NormalTok{  carabid\_status\_pie,}
+\NormalTok{  carabid\_dispersal\_pie,}
+  \AttributeTok{labels =} \FunctionTok{c}\NormalTok{(}\StringTok{"A"}\NormalTok{, }\StringTok{"B"}\NormalTok{, }\StringTok{"C"}\NormalTok{),}
+  \AttributeTok{label\_size =} \DecValTok{12}\NormalTok{,}
+  \AttributeTok{ncol =} \DecValTok{1}\NormalTok{,}
+  \AttributeTok{rel\_heights =} \FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{1}\NormalTok{)}
+\NormalTok{)}
+\NormalTok{combined\_trait\_carabid}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{habitat_analysis_files/figure-latex/unnamed-chunk-23-1.pdf}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# save to figures folder}
+\FunctionTok{ggsave}\NormalTok{(}
+   \AttributeTok{filename =}\NormalTok{ here}\SpecialCharTok{::}\FunctionTok{here}\NormalTok{(}\StringTok{"03\_figures"}\NormalTok{,}\StringTok{"carabid\_traits\_pie.png"}\NormalTok{),}
+\NormalTok{  combined\_trait\_carabid,}
+  \AttributeTok{width =} \DecValTok{8}\NormalTok{,}
+  \AttributeTok{height =} \DecValTok{6}\NormalTok{,}
+  \AttributeTok{dpi =} \DecValTok{400}
+\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\subsection{GLLVM's}\label{gllvms}
+
+\subsubsection{Spider GLLVM}\label{spider-gllvm}
+
+This section uses generalized linear latent variable models (GLLVM)
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Pivot to long format to count presence}
+\NormalTok{family\_presence }\OtherTok{\textless{}{-}}\NormalTok{ spider\_habitat\_summary }\SpecialCharTok{\%\textgreater{}\%}
+\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{select}\NormalTok{(}\FunctionTok{all\_of}\NormalTok{(family\_columns)) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{pivot\_longer}\NormalTok{(}\AttributeTok{cols =} \FunctionTok{everything}\NormalTok{(), }\AttributeTok{names\_to =} \StringTok{"family"}\NormalTok{, }\AttributeTok{values\_to =} \StringTok{"count"}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{group\_by}\NormalTok{(family) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{summarise}\NormalTok{(}\AttributeTok{n\_samples =} \FunctionTok{sum}\NormalTok{(count }\SpecialCharTok{\textgreater{}} \DecValTok{0}\NormalTok{), }\AttributeTok{.groups =} \StringTok{"drop"}\NormalTok{)}
+
+\CommentTok{\# Filter families with at least 5 non{-}zero entries}
+\NormalTok{families\_to\_keep }\OtherTok{\textless{}{-}}\NormalTok{ family\_presence }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{filter}\NormalTok{(n\_samples }\SpecialCharTok{\textgreater{}=} \DecValTok{5}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{pull}\NormalTok{(family)}
+\FunctionTok{print}\NormalTok{(families\_to\_keep)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##  [1] "AGELENIDAE"     "CORINNIDAE"     "DICTYNIDAE"     "GNAPHOSIDAE"    "LINYPHIIDAE"    "LYCOSIDAE"      "PHILODROMIDAE"  "PHOLCIDAE"      "PHRUROLITHIDAE" "SALTICIDAE"     "THERIDIIDAE"    "THOMISIDAE"     "TITANOECIDAE"   "ZODARIIDAE"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{observed\_families }\OtherTok{\textless{}{-}}\NormalTok{ observed\_families\_habitat }\SpecialCharTok{\%\textgreater{}\%}\NormalTok{ dplyr}\SpecialCharTok{::}\FunctionTok{pull}\NormalTok{(spider\_family)}
+
+\CommentTok{\# Response matrix (all family counts)}
+\NormalTok{Y\_spider }\OtherTok{\textless{}{-}}\NormalTok{ spider\_habitat\_summary }\SpecialCharTok{\%\textgreater{}\%}
+\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{select}\NormalTok{(}\FunctionTok{all\_of}\NormalTok{(observed\_families)) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{as.matrix}\NormalTok{()}
+
+\CommentTok{\# Filter Y to include only common species}
+\NormalTok{Y\_spider\_rare\_removed }\OtherTok{\textless{}{-}}\NormalTok{ spider\_habitat\_summary }\SpecialCharTok{\%\textgreater{}\%}
+\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{select}\NormalTok{(}\FunctionTok{all\_of}\NormalTok{(families\_to\_keep)) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{as.matrix}\NormalTok{()}
+
+\CommentTok{\# Offset (log effort) and final response matrix }
+\NormalTok{effort\_vec }\OtherTok{\textless{}{-}} \FunctionTok{pmax}\NormalTok{(spider\_habitat\_summary}\SpecialCharTok{$}\NormalTok{trap\_count, }\DecValTok{1}\DataTypeTok{L}\NormalTok{)}
+\NormalTok{off\_vec    }\OtherTok{\textless{}{-}} \FunctionTok{log}\NormalTok{(effort\_vec)}
+
+
+\NormalTok{site\_ID }\OtherTok{\textless{}{-}}\NormalTok{ spider\_habitat\_summary }\SpecialCharTok{\%\textgreater{}\%}
+\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{pull}\NormalTok{(site\_ID) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{factor}\NormalTok{()}
+
+\NormalTok{studyDesign }\OtherTok{\textless{}{-}} \FunctionTok{data.frame}\NormalTok{(}\AttributeTok{site\_ID =} \FunctionTok{factor}\NormalTok{(site\_ID))}
+
+
+\CommentTok{\# Covariate C matrix (habitat and season only)}
+\NormalTok{X\_spider }\OtherTok{\textless{}{-}}\NormalTok{ spider\_habitat\_summary }\SpecialCharTok{\%\textgreater{}\%}
+\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{select}\NormalTok{(habitat, year) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}\FunctionTok{across}\NormalTok{(}\FunctionTok{everything}\NormalTok{(), as.factor))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Fit GLLVM using factors habitat and year}
+\CommentTok{\# rare families (\textless{}5) removed}
+\NormalTok{gllvm\_spider\_pois }\OtherTok{\textless{}{-}} \FunctionTok{gllvm}\NormalTok{(}
+  \AttributeTok{y =}\NormalTok{ Y\_spider\_rare\_removed,}
+  \AttributeTok{X =}\NormalTok{ X\_spider,                        }
+  \AttributeTok{family =} \StringTok{"poisson"}\NormalTok{, }
+  \AttributeTok{formula =} \SpecialCharTok{\textasciitilde{}}\NormalTok{ habitat }\SpecialCharTok{+}\NormalTok{ year,}
+  \AttributeTok{num.lv =} \DecValTok{2}\NormalTok{,}
+  \AttributeTok{studyDesign =}\NormalTok{ studyDesign,}
+  \AttributeTok{row.eff =} \SpecialCharTok{\textasciitilde{}}\NormalTok{(}\DecValTok{1} \SpecialCharTok{|}\NormalTok{ site\_ID),}
+  \AttributeTok{offset =}\NormalTok{ off\_vec,   }
+  \AttributeTok{method =} \StringTok{"VA"}
+\NormalTok{)}
+
+\FunctionTok{summary}\NormalTok{(gllvm\_spider\_pois)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Call:
+## gllvm(y = Y_spider_rare_removed, X = X_spider, formula = ~habitat + 
+##     year, family = "poisson", num.lv = 2, studyDesign = studyDesign, 
+##     row.eff = ~(1 | site_ID), offset = off_vec, method = "VA")
+## 
+## Family:  poisson 
+## 
+## AIC:  5293.775 AICc:  5302.135 BIC:  5653.496 LL:  -2576.9 df:  70 
+## 
+## Informed LVs:  0 
+## Constrained LVs:  0 
+## Unconstrained LVs:  2 
+## 
+## Formula:  ~habitat + year 
+## LV formula:  ~1 
+## Row effect:  ~(1 | site_ID) 
+## 
+## Coefficients predictors:
+##                           Estimate Std. Error z value Pr(>|z|)    
+## habitatVY:AGELENIDAE     -0.739020   0.214386  -3.447 0.000567 ***
+## habitatVY:CORINNIDAE     -1.758017   0.670649  -2.621 0.008758 ** 
+## habitatVY:DICTYNIDAE      1.160862   0.432365   2.685 0.007255 ** 
+## habitatVY:GNAPHOSIDAE     0.356054   0.123670   2.879 0.003989 ** 
+## habitatVY:LINYPHIIDAE     2.678236   0.363535   7.367 1.74e-13 ***
+## habitatVY:LYCOSIDAE       0.123554   0.104396   1.184 0.236605    
+## habitatVY:PHILODROMIDAE   0.424470   0.736021   0.577 0.564136    
+## habitatVY:PHOLCIDAE      -0.363781   0.767005  -0.474 0.635295    
+## habitatVY:PHRUROLITHIDAE -2.339936   0.530338  -4.412 1.02e-05 ***
+## habitatVY:SALTICIDAE     -0.445191   0.241709  -1.842 0.065497 .  
+## habitatVY:THERIDIIDAE    -0.522624   0.194134  -2.692 0.007101 ** 
+## habitatVY:THOMISIDAE      0.002687   0.155221   0.017 0.986189    
+## habitatVY:TITANOECIDAE   -1.555703   0.655715  -2.373 0.017667 *  
+## habitatVY:ZODARIIDAE      0.828987   0.508561   1.630 0.103088    
+## year2025:AGELENIDAE       1.016572   0.290838   3.495 0.000474 ***
+## year2025:CORINNIDAE      -1.339961   0.529189  -2.532 0.011338 *  
+## year2025:DICTYNIDAE       1.691631   0.544540   3.107 0.001893 ** 
+## year2025:GNAPHOSIDAE     -0.078807   0.134323  -0.587 0.557408    
+## year2025:LINYPHIIDAE      0.602711   0.376265   1.602 0.109195    
+## year2025:LYCOSIDAE        0.171058   0.117108   1.461 0.144101    
+## year2025:PHILODROMIDAE   33.448889   0.304629 109.802  < 2e-16 ***
+## year2025:PHOLCIDAE       -0.446610   0.768857  -0.581 0.561325    
+## year2025:PHRUROLITHIDAE   1.283486   0.574029   2.236 0.025357 *  
+## year2025:SALTICIDAE       0.825331   0.318962   2.588 0.009666 ** 
+## year2025:THERIDIIDAE      1.225697   0.284062   4.315 1.60e-05 ***
+## year2025:THOMISIDAE       1.139962   0.198746   5.736 9.71e-09 ***
+## year2025:TITANOECIDAE     0.029393   0.561964   0.052 0.958286    
+## year2025:ZODARIIDAE       0.780692   0.553685   1.410 0.158542    
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+\end{verbatim}
+
+\paragraph{Meeting model assumptions}\label{meeting-model-assumptions}
+
+Checking for collinearity Model diagnostics and performance
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# biplot of the GLLVM }
+\FunctionTok{plot}\NormalTok{(gllvm\_spider\_pois, }\AttributeTok{biplot =} \ConstantTok{TRUE}\NormalTok{, }\AttributeTok{ind.spp =} \ConstantTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{habitat_analysis_files/figure-latex/unnamed-chunk-26-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{habitat_analysis_files/figure-latex/unnamed-chunk-26-2.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{habitat_analysis_files/figure-latex/unnamed-chunk-26-3.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{habitat_analysis_files/figure-latex/unnamed-chunk-26-4.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{habitat_analysis_files/figure-latex/unnamed-chunk-26-5.pdf}}
+
+Residuals are fan shaped, indicating overdispersion. let's try a
+negative binomial distribution.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Fit GLLVM using factors (without continuous covariates)}
+\CommentTok{\# rare families (\textless{}5) removed}
+\NormalTok{gllvm\_spider\_nb }\OtherTok{\textless{}{-}} \FunctionTok{gllvm}\NormalTok{(}
+  \AttributeTok{y =}\NormalTok{ Y\_spider\_rare\_removed,}
+  \AttributeTok{X =}\NormalTok{ X\_spider,                        }
+  \AttributeTok{family =} \StringTok{"negative.binomial"}\NormalTok{, }
+  \AttributeTok{formula =} \SpecialCharTok{\textasciitilde{}}\NormalTok{ habitat }\SpecialCharTok{+}\NormalTok{ year,}
+  \AttributeTok{num.lv =} \DecValTok{2}\NormalTok{,}
+  \AttributeTok{studyDesign =}\NormalTok{ studyDesign,}
+  \AttributeTok{row.eff =} \SpecialCharTok{\textasciitilde{}}\NormalTok{(}\DecValTok{1} \SpecialCharTok{|}\NormalTok{ site\_ID),}
+  \AttributeTok{offset =}\NormalTok{ off\_vec,   }
+  \AttributeTok{method =} \StringTok{"VA"}
+\NormalTok{)}
+
+\FunctionTok{summary}\NormalTok{(gllvm\_spider\_nb)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Call:
+## gllvm(y = Y_spider_rare_removed, X = X_spider, formula = ~habitat + 
+##     year, family = "negative.binomial", num.lv = 2, studyDesign = studyDesign, 
+##     row.eff = ~(1 | site_ID), offset = off_vec, method = "VA")
+## 
+## Family:  negative.binomial 
+## 
+## AIC:  4452.639 AICc:  4464.792 BIC:  4884.304 LL:  -2142.3 df:  84 
+## 
+## Informed LVs:  0 
+## Constrained LVs:  0 
+## Unconstrained LVs:  2 
+## 
+## Formula:  ~habitat + year 
+## LV formula:  ~1 
+## Row effect:  ~(1 | site_ID) 
+## 
+## Coefficients predictors:
+##                            Estimate Std. Error z value Pr(>|z|)    
+## habitatVY:AGELENIDAE     -7.954e-01  3.260e-01  -2.440 0.014706 *  
+## habitatVY:CORINNIDAE     -2.138e+00  8.882e-01  -2.407 0.016093 *  
+## habitatVY:DICTYNIDAE      1.277e+00  7.696e-01   1.660 0.096984 .  
+## habitatVY:GNAPHOSIDAE     3.569e-01  1.774e-01   2.012 0.044206 *  
+## habitatVY:LINYPHIIDAE     2.591e+00  2.822e-01   9.184  < 2e-16 ***
+## habitatVY:LYCOSIDAE       1.439e-01  1.938e-01   0.743 0.457781    
+## habitatVY:PHILODROMIDAE   4.437e-01  8.930e-01   0.497 0.619264    
+## habitatVY:PHOLCIDAE      -3.328e-01  8.199e-01  -0.406 0.684832    
+## habitatVY:PHRUROLITHIDAE -2.594e+00  4.193e-01  -6.186 6.18e-10 ***
+## habitatVY:SALTICIDAE     -4.196e-01  3.095e-01  -1.356 0.175221    
+## habitatVY:THERIDIIDAE    -4.524e-01  2.734e-01  -1.655 0.097989 .  
+## habitatVY:THOMISIDAE      5.083e-03  2.162e-01   0.024 0.981245    
+## habitatVY:TITANOECIDAE   -1.511e+00  6.763e-01  -2.234 0.025479 *  
+## habitatVY:ZODARIIDAE      7.314e-01  3.602e-01   2.030 0.042306 *  
+## year2025:AGELENIDAE       1.046e+00  3.934e-01   2.659 0.007842 ** 
+## year2025:CORINNIDAE      -1.656e+00  7.805e-01  -2.122 0.033831 *  
+## year2025:DICTYNIDAE       1.487e+00  8.450e-01   1.760 0.078389 .  
+## year2025:GNAPHOSIDAE     -9.928e-02  1.917e-01  -0.518 0.604558    
+## year2025:LINYPHIIDAE      6.660e-01  2.966e-01   2.245 0.024755 *  
+## year2025:LYCOSIDAE        1.229e-01  2.106e-01   0.584 0.559467    
+## year2025:PHILODROMIDAE    1.404e+01  5.923e+02   0.024 0.981092    
+## year2025:PHOLCIDAE       -4.702e-01  8.276e-01  -0.568 0.569939    
+## year2025:PHRUROLITHIDAE   1.594e+00  4.544e-01   3.508 0.000452 ***
+## year2025:SALTICIDAE       7.720e-01  3.790e-01   2.037 0.041682 *  
+## year2025:THERIDIIDAE      1.138e+00  3.468e-01   3.282 0.001032 ** 
+## year2025:THOMISIDAE       1.036e+00  2.541e-01   4.079 4.53e-05 ***
+## year2025:TITANOECIDAE     5.978e-04  6.051e-01   0.001 0.999212    
+## year2025:ZODARIIDAE       5.378e-01  3.967e-01   1.356 0.175234    
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# biplot of the GLLVM }
+\FunctionTok{plot}\NormalTok{(gllvm\_spider\_nb, }\AttributeTok{biplot =} \ConstantTok{TRUE}\NormalTok{, }\AttributeTok{ind.spp =} \ConstantTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{habitat_analysis_files/figure-latex/unnamed-chunk-28-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{habitat_analysis_files/figure-latex/unnamed-chunk-28-2.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{habitat_analysis_files/figure-latex/unnamed-chunk-28-3.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{habitat_analysis_files/figure-latex/unnamed-chunk-28-4.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{habitat_analysis_files/figure-latex/unnamed-chunk-28-5.pdf}}
+
+Residuals look better and AICc is smaller for NB model
+
+\paragraph{Model outputs}\label{model-outputs}
+
+Let's plot the gllvm model coefficients
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# plot the gllvm spider coefficient plot}
+\FunctionTok{coefplot}\NormalTok{(}
+\NormalTok{  gllvm\_spider\_nb,}
+  \AttributeTok{cex.ylab =} \FloatTok{0.7}\NormalTok{,}
+  \AttributeTok{mar =} \FunctionTok{c}\NormalTok{(}\DecValTok{4}\NormalTok{, }\DecValTok{10}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DecValTok{1}\NormalTok{),}
+  \AttributeTok{xlim.list =} \FunctionTok{list}\NormalTok{(}
+    \FunctionTok{c}\NormalTok{(}\SpecialCharTok{{-}}\DecValTok{4}\NormalTok{, }\DecValTok{4}\NormalTok{),   }\CommentTok{\# habitat}
+    \FunctionTok{c}\NormalTok{(}\SpecialCharTok{{-}}\DecValTok{4}\NormalTok{, }\DecValTok{4}\NormalTok{)    }\CommentTok{\# year}
+\NormalTok{  )}
+\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{habitat_analysis_files/figure-latex/unnamed-chunk-29-1.pdf}}
+
+Let's clean up the axis and save the gllvm model coefficient plot
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Convert family names to sentence case}
+\NormalTok{gllvm\_spider\_nb\_sc }\OtherTok{\textless{}{-}}\NormalTok{ gllvm\_spider\_nb}
+\NormalTok{spider\_families }\OtherTok{\textless{}{-}}\NormalTok{ stringr}\SpecialCharTok{::}\FunctionTok{str\_to\_sentence}\NormalTok{(}
+  \FunctionTok{rownames}\NormalTok{(gllvm\_spider\_nb\_sc}\SpecialCharTok{$}\NormalTok{params}\SpecialCharTok{$}\NormalTok{Xcoef)}
+\NormalTok{)}
+
+\FunctionTok{rownames}\NormalTok{(gllvm\_spider\_nb\_sc}\SpecialCharTok{$}\NormalTok{params}\SpecialCharTok{$}\NormalTok{Xcoef) }\OtherTok{\textless{}{-}}\NormalTok{ spider\_families}
+\FunctionTok{rownames}\NormalTok{(gllvm\_spider\_nb\_sc}\SpecialCharTok{$}\NormalTok{sd}\SpecialCharTok{$}\NormalTok{Xcoef)     }\OtherTok{\textless{}{-}}\NormalTok{ spider\_families}
+
+\CommentTok{\# open device to save plot using base R}
+\FunctionTok{png}\NormalTok{(}
+  \AttributeTok{filename =}\NormalTok{ here}\SpecialCharTok{::}\FunctionTok{here}\NormalTok{(}\StringTok{"03\_figures"}\NormalTok{, }\StringTok{"spider\_gllvm\_plot.png"}\NormalTok{),}
+  \AttributeTok{width =} \DecValTok{7}\NormalTok{,}
+  \AttributeTok{height =} \DecValTok{5}\NormalTok{,}
+  \AttributeTok{units =} \StringTok{"in"}\NormalTok{,}
+  \AttributeTok{res =} \DecValTok{400}
+\NormalTok{)}
+
+\CommentTok{\# plot the gllvm spider coefficient plot}
+\FunctionTok{coefplot}\NormalTok{(}
+\NormalTok{  gllvm\_spider\_nb\_sc,}
+  \AttributeTok{cex.ylab =} \FloatTok{0.7}\NormalTok{,}
+  \AttributeTok{mar =} \FunctionTok{c}\NormalTok{(}\DecValTok{4}\NormalTok{, }\DecValTok{10}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DecValTok{1}\NormalTok{),}
+  \AttributeTok{xlim.list =} \FunctionTok{list}\NormalTok{(}
+    \FunctionTok{c}\NormalTok{(}\SpecialCharTok{{-}}\DecValTok{4}\NormalTok{, }\DecValTok{4}\NormalTok{),   }\CommentTok{\# habitat}
+    \FunctionTok{c}\NormalTok{(}\SpecialCharTok{{-}}\DecValTok{4}\NormalTok{, }\DecValTok{4}\NormalTok{)    }\CommentTok{\# year}
+\NormalTok{  )}
+\NormalTok{)}
+
+\CommentTok{\# close device}
+\FunctionTok{dev.off}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## pdf 
+##   2
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# let\textquotesingle{}s also look at the ordination plot, with latent variables as axis}
+\FunctionTok{ordiplot}\NormalTok{(gllvm\_spider\_nb,}
+         \AttributeTok{biplot  =} \ConstantTok{TRUE}\NormalTok{,}
+         \AttributeTok{ind.spp =} \DecValTok{16}\NormalTok{,}
+         \AttributeTok{symbols =} \ConstantTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{habitat_analysis_files/figure-latex/unnamed-chunk-31-1.pdf}}
+
+\subsubsection{Spider Fourth Corner
+Model}\label{spider-fourth-corner-model}
+
+First we'll prepare the traits dataset
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# FAMILY TRAITS}
+\CommentTok{\# Ensure the species names in traits match the columns in Y}
+\NormalTok{spider\_traits\_rare\_removed }\OtherTok{\textless{}{-}}\NormalTok{ spider\_traits }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{filter}\NormalTok{(spider\_family }\SpecialCharTok{\%in\%} \FunctionTok{colnames}\NormalTok{(Y\_spider\_rare\_removed))}
+
+\CommentTok{\# ensure it\textquotesingle{}s a dataframe in the same order as Y}
+\NormalTok{spider\_traits\_ordered }\OtherTok{\textless{}{-}}\NormalTok{ spider\_traits\_rare\_removed[}\FunctionTok{match}\NormalTok{(}\FunctionTok{colnames}\NormalTok{(Y\_spider\_rare\_removed), spider\_traits\_rare\_removed}\SpecialCharTok{$}\NormalTok{spider\_family), ]}
+
+
+\CommentTok{\# make spider\_family the row names}
+\FunctionTok{rownames}\NormalTok{(spider\_traits\_ordered) }\OtherTok{\textless{}{-}}\NormalTok{ spider\_traits\_ordered}\SpecialCharTok{$}\NormalTok{spider\_family}
+
+\CommentTok{\# keep only the guild code column}
+\NormalTok{TR\_spider }\OtherTok{\textless{}{-}}\NormalTok{ spider\_traits\_ordered }\SpecialCharTok{\%\textgreater{}\%}
+\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{select}\NormalTok{(guild\_code)}
+
+\CommentTok{\# Make sure it matches!}
+\FunctionTok{all}\NormalTok{(}\FunctionTok{colnames}\NormalTok{(Y\_spider\_rare\_removed) }\SpecialCharTok{\%in\%} \FunctionTok{rownames}\NormalTok{(TR\_spider))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] TRUE
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{sum}\NormalTok{(}\FunctionTok{colnames}\NormalTok{(Y\_spider\_rare\_removed) }\SpecialCharTok{\%in\%} \FunctionTok{rownames}\NormalTok{(TR\_spider))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 14
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# make sure reference levels make sense for model}
+\NormalTok{X\_spider}\SpecialCharTok{$}\NormalTok{habitat }\OtherTok{\textless{}{-}} \FunctionTok{relevel}\NormalTok{(}\FunctionTok{factor}\NormalTok{(X\_spider}\SpecialCharTok{$}\NormalTok{habitat), }\AttributeTok{ref =} \StringTok{"SNH"}\NormalTok{)}
+
+\CommentTok{\# set dispersal power reference level to macropterous}
+\NormalTok{TR\_spider}\SpecialCharTok{$}\NormalTok{guild\_code }\OtherTok{\textless{}{-}} \FunctionTok{relevel}\NormalTok{(}
+  \FunctionTok{factor}\NormalTok{(TR\_spider}\SpecialCharTok{$}\NormalTok{guild\_code),}
+  \AttributeTok{ref =} \StringTok{"GRH"}
+\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# run gllvm fourth corner model with spider traits}
+\CommentTok{\# still include site\_ID as a row effect and offset}
+\NormalTok{gllvm\_spider\_traits }\OtherTok{\textless{}{-}} \FunctionTok{gllvm}\NormalTok{(}
+  \AttributeTok{y =}\NormalTok{ Y\_spider\_rare\_removed,}
+  \AttributeTok{X =} \FunctionTok{as.data.frame}\NormalTok{(X\_spider),}
+  \AttributeTok{TR =}\NormalTok{ TR\_spider,}
+  \AttributeTok{family =} \StringTok{"negative.binomial"}\NormalTok{,}
+  \AttributeTok{num.lv =} \DecValTok{2}\NormalTok{,}
+  \AttributeTok{method =} \StringTok{"VA"}\NormalTok{,}
+  \AttributeTok{offset =}\NormalTok{ off\_vec,}
+  \AttributeTok{studyDesign =}\NormalTok{ studyDesign,}
+  \AttributeTok{row.eff =} \SpecialCharTok{\textasciitilde{}}\NormalTok{(}\DecValTok{1} \SpecialCharTok{|}\NormalTok{ site\_ID),}
+  \AttributeTok{formula =}\NormalTok{ y }\SpecialCharTok{\textasciitilde{}}\NormalTok{ habitat }\SpecialCharTok{*}\NormalTok{ (guild\_code))}
+
+\FunctionTok{summary}\NormalTok{(gllvm\_spider\_traits)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Call:
+## gllvm(y = Y_spider_rare_removed, X = as.data.frame(X_spider), 
+##     TR = TR_spider, formula = y ~ habitat * (guild_code), family = "negative.binomial", 
+##     num.lv = 2, studyDesign = studyDesign, row.eff = ~(1 | site_ID), 
+##     offset = off_vec, method = "VA")
+## 
+## Family:  negative.binomial 
+## 
+## AIC:  4525.365 AICc:  4533.971 BIC:  4890.224 LL:  -2191.7 df:  71 
+## 
+## Informed LVs:  0 
+## Constrained LVs:  0 
+## Unconstrained LVs:  2 
+## 
+## Formula:  ~habitatVY+guild_codeAMH+guild_codeOTH+guild_codeSHW+guild_codeSHW/ OTH+guild_codeSPE+guild_codeSPW+guild_codeSPW/ GRH+habitatVY:guild_codeAMH+habitatVY:guild_codeOTH+habitatVY:guild_codeSHW+habitatVY:guild_codeSHW/ OTH+habitatVY:guild_codeSPE+habitatVY:guild_codeSPW+habitatVY:guild_codeSPW/ GRH 
+## LV formula:  ~ 0 
+## Row effect:  ~(1 | site_ID) 
+## 
+## Coefficients predictors:
+##                              Estimate Std. Error z value Pr(>|z|)    
+## habitatVY                     0.08883    0.13609   0.653  0.51394    
+## guild_codeAMH                -0.19984    0.08834  -2.262  0.02369 *  
+## guild_codeOTH                -1.94573    0.10296 -18.898  < 2e-16 ***
+## guild_codeSHW                -0.67612    0.11189  -6.042 1.52e-09 ***
+## guild_codeSHW/ OTH           -0.89903    0.12005  -7.489 6.95e-14 ***
+## guild_codeSPE                 0.44473    0.14956   2.974  0.00294 ** 
+## guild_codeSPW                -2.08144    0.08420 -24.721  < 2e-16 ***
+## guild_codeSPW/ GRH           -1.51115    0.31969  -4.727 2.28e-06 ***
+## habitatVY:guild_codeAMH      -0.04075    0.27542  -0.148  0.88238    
+## habitatVY:guild_codeOTH      -0.45968    0.32840  -1.400  0.16159    
+## habitatVY:guild_codeSHW      -0.84335    0.35874  -2.351  0.01873 *  
+## habitatVY:guild_codeSHW/ OTH  2.59722    0.32257   8.052 8.17e-16 ***
+## habitatVY:guild_codeSPE       0.83043    0.41738   1.990  0.04663 *  
+## habitatVY:guild_codeSPW      -0.78525    0.28458  -2.759  0.00579 ** 
+## habitatVY:guild_codeSPW/ GRH  1.29549    0.87066   1.488  0.13677    
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+\end{verbatim}
+
+\paragraph{Meeting model assumptions}\label{meeting-model-assumptions-1}
+
+Checking for collinearity Model diagnostics and performance
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# biplot of the GLLVM }
+\FunctionTok{plot}\NormalTok{(gllvm\_spider\_traits, }\AttributeTok{biplot =} \ConstantTok{TRUE}\NormalTok{, }\AttributeTok{ind.spp =} \ConstantTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{habitat_analysis_files/figure-latex/unnamed-chunk-34-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{habitat_analysis_files/figure-latex/unnamed-chunk-34-2.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{habitat_analysis_files/figure-latex/unnamed-chunk-34-3.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{habitat_analysis_files/figure-latex/unnamed-chunk-34-4.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{habitat_analysis_files/figure-latex/unnamed-chunk-34-5.pdf}}
+residuals look okay!
+
+\paragraph{Model outputs}\label{model-outputs-1}
+
+Let's make a plot for the coefficients from 4th corner model
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{coefplot}\NormalTok{(gllvm\_spider\_traits)}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{habitat_analysis_files/figure-latex/unnamed-chunk-35-1.pdf}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{spider\_fourth }\OtherTok{\textless{}{-}}\NormalTok{ gllvm\_spider\_traits}\SpecialCharTok{$}\NormalTok{fourth.corner}
+\NormalTok{a }\OtherTok{\textless{}{-}} \FunctionTok{max}\NormalTok{( }\FunctionTok{abs}\NormalTok{(spider\_fourth) )}
+
+
+\CommentTok{\# remove guild\_code for plotting}
+\FunctionTok{colnames}\NormalTok{(spider\_fourth) }\OtherTok{\textless{}{-}} \FunctionTok{colnames}\NormalTok{(spider\_fourth) }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{str\_remove}\NormalTok{(}\StringTok{"\^{}guild\_code\_?"}\NormalTok{) }\SpecialCharTok{|\textgreater{}}   \CommentTok{\# remove prefix}
+  \FunctionTok{str\_replace}\NormalTok{(}\StringTok{"\_"}\NormalTok{, }\StringTok{" / "}\NormalTok{)          }\CommentTok{\# optional: make combinations readable}
+
+
+\CommentTok{\# custom colors (gradient based on VY/ SNH colors)}
+\NormalTok{colort }\OtherTok{\textless{}{-}} \FunctionTok{colorRampPalette}\NormalTok{(}\FunctionTok{c}\NormalTok{(}
+\NormalTok{  custom\_colors[}\StringTok{"SNH"}\NormalTok{],  }\CommentTok{\# negative}
+  \StringTok{"white"}\NormalTok{,}
+\NormalTok{  custom\_colors[}\StringTok{"VY"}\NormalTok{]    }\CommentTok{\# positive}
+\NormalTok{))}
+
+\CommentTok{\# plot use level plot from lattice package}
+\NormalTok{spider\_4th\_plot }\OtherTok{\textless{}{-}} \FunctionTok{levelplot}\NormalTok{(}
+  \FunctionTok{as.matrix}\NormalTok{(spider\_fourth),}
+  \AttributeTok{xlab =} \StringTok{"Habitat"}\NormalTok{,}
+  \AttributeTok{ylab =} \StringTok{"Spider hunting strategy"}\NormalTok{,}
+  \AttributeTok{col.regions =} \FunctionTok{colort}\NormalTok{(}\DecValTok{100}\NormalTok{),}
+  \AttributeTok{cex.lab =} \FloatTok{1.3}\NormalTok{,}
+  \AttributeTok{at =} \FunctionTok{seq}\NormalTok{(}\SpecialCharTok{{-}}\NormalTok{a, a, }\AttributeTok{length =} \DecValTok{100}\NormalTok{),}
+  \AttributeTok{scales =} \FunctionTok{list}\NormalTok{(}\AttributeTok{x =} \FunctionTok{list}\NormalTok{(}\AttributeTok{draw =} \ConstantTok{FALSE}\NormalTok{)),}
+  \AttributeTok{par.settings =} \FunctionTok{list}\NormalTok{(}
+    \AttributeTok{axis.text =} \FunctionTok{list}\NormalTok{(}\AttributeTok{cex =} \FloatTok{1.3}\NormalTok{),}
+    \AttributeTok{par.xlab.text =} \FunctionTok{list}\NormalTok{(}\AttributeTok{cex =} \FloatTok{1.5}\NormalTok{),}
+    \AttributeTok{par.ylab.text =} \FunctionTok{list}\NormalTok{(}\AttributeTok{cex =} \FloatTok{1.5}\NormalTok{),}
+    \AttributeTok{par.legend.text =} \FunctionTok{list}\NormalTok{(}\AttributeTok{cex =} \FloatTok{1.3}\NormalTok{)}
+\NormalTok{  )}
+\NormalTok{)}
+
+\NormalTok{spider\_4th\_plot}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{habitat_analysis_files/figure-latex/unnamed-chunk-35-2.pdf}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# open device (save image using base R, lattice not compatible with ggsave)}
+\FunctionTok{png}\NormalTok{(}
+  \AttributeTok{filename =}\NormalTok{ here}\SpecialCharTok{::}\FunctionTok{here}\NormalTok{(}\StringTok{"03\_figures"}\NormalTok{, }\StringTok{"spider\_4th\_plot.png"}\NormalTok{),}
+  \AttributeTok{width =} \DecValTok{7}\NormalTok{,}
+  \AttributeTok{height =} \DecValTok{7}\NormalTok{,}
+  \AttributeTok{units =} \StringTok{"in"}\NormalTok{,}
+  \AttributeTok{res =} \DecValTok{400}
+\NormalTok{)}
+
+\CommentTok{\# draw the plot}
+\FunctionTok{print}\NormalTok{(spider\_4th\_plot)}
+
+\CommentTok{\# close device}
+\FunctionTok{dev.off}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## pdf 
+##   2
+\end{verbatim}
+
+Relative to SNH, VY support more SHW/ OTH
+
+\subsubsection{Carabid GLLVM}\label{carabid-gllvm}
+
+First we'll prepare the data and get it in the right format for GLLVM
+modelling
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Offset (log effort) and final response matrix}
+\NormalTok{effort\_vec }\OtherTok{\textless{}{-}} \FunctionTok{pmax}\NormalTok{(carabid\_habitat\_summary}\SpecialCharTok{$}\NormalTok{trap\_count, }\DecValTok{1}\DataTypeTok{L}\NormalTok{)   }\CommentTok{\# guard against 0}
+\NormalTok{off\_vec    }\OtherTok{\textless{}{-}} \FunctionTok{log}\NormalTok{(effort\_vec)}
+
+\CommentTok{\# {-}{-}{-} site\_ID: grouping factor for random site intercept {-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}}
+\CommentTok{\# one site label per sample row (should be length 90)}
+\NormalTok{site\_ID }\OtherTok{\textless{}{-}}\NormalTok{ carabid\_habitat\_summary }\SpecialCharTok{\%\textgreater{}\%}
+\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{select}\NormalTok{(site\_ID) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}\FunctionTok{across}\NormalTok{(}\FunctionTok{everything}\NormalTok{(), as.factor))}
+
+
+\NormalTok{Y\_carabid }\OtherTok{\textless{}{-}}\NormalTok{ carabid\_habitat\_summary }\SpecialCharTok{\%\textgreater{}\%}
+\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{select}\NormalTok{(}\FunctionTok{all\_of}\NormalTok{(species\_columns)) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{as.matrix}\NormalTok{()}
+
+\CommentTok{\# Covariate matrix (habitat and season only)}
+\NormalTok{X\_carabid }\OtherTok{\textless{}{-}}\NormalTok{ carabid\_habitat\_summary }\SpecialCharTok{\%\textgreater{}\%}
+\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{select}\NormalTok{(site\_ID, habitat, year) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{mutate}\NormalTok{(}\FunctionTok{across}\NormalTok{(}\FunctionTok{everything}\NormalTok{(), as.factor))}
+
+\CommentTok{\# {-}{-}{-} Identify rare species to exclude {-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}}
+\NormalTok{species\_occurrence\_summary }\OtherTok{\textless{}{-}}\NormalTok{ carabid\_habitat\_summary }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{summarise}\NormalTok{(}\FunctionTok{across}\NormalTok{(}\FunctionTok{all\_of}\NormalTok{(species\_columns), }\SpecialCharTok{\textasciitilde{}} \FunctionTok{sum}\NormalTok{(. }\SpecialCharTok{\textgreater{}} \DecValTok{0}\NormalTok{))) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{pivot\_longer}\NormalTok{(}\AttributeTok{cols =} \FunctionTok{everything}\NormalTok{(), }\AttributeTok{names\_to =} \StringTok{"species"}\NormalTok{, }\AttributeTok{values\_to =} \StringTok{"n\_samples"}\NormalTok{)}
+
+\CommentTok{\# Threshold: must occur in at least 5 unique samples}
+\NormalTok{species\_to\_keep }\OtherTok{\textless{}{-}}\NormalTok{ species\_occurrence\_summary }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{filter}\NormalTok{(n\_samples }\SpecialCharTok{\textgreater{}} \DecValTok{5}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{pull}\NormalTok{(species)}
+
+\CommentTok{\# {-}{-}{-} Filter Y to include only common species {-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}{-}}
+\NormalTok{Y\_rare\_carabid\_removed }\OtherTok{\textless{}{-}}\NormalTok{ carabid\_habitat\_summary }\SpecialCharTok{\%\textgreater{}\%}
+\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{select}\NormalTok{(}\FunctionTok{all\_of}\NormalTok{(species\_to\_keep)) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{as.matrix}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+Next we'll run the gllvm model (with poisson distribution to start)
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Fit GLLVM using factors }
+\CommentTok{\# rare species (\textless{}5) removed}
+\CommentTok{\# habitat as predictors (without continuous covariates)}
+\CommentTok{\# include 2 latent variables and offset}
+\NormalTok{gllvm\_carabid\_pois }\OtherTok{\textless{}{-}} \FunctionTok{gllvm}\NormalTok{(}
+  \AttributeTok{y =}\NormalTok{ Y\_rare\_carabid\_removed,}
+  \AttributeTok{X =}\NormalTok{ X\_carabid,}
+  \AttributeTok{family =} \StringTok{"poisson"}\NormalTok{,}
+  \AttributeTok{formula =} \SpecialCharTok{\textasciitilde{}}\NormalTok{ habitat }\SpecialCharTok{+}\NormalTok{ year,}
+  \AttributeTok{num.lv =} \DecValTok{2}\NormalTok{,}
+  \AttributeTok{studyDesign =}\NormalTok{ studyDesign,}
+  \AttributeTok{row.eff =} \SpecialCharTok{\textasciitilde{}}\NormalTok{(}\DecValTok{1} \SpecialCharTok{|}\NormalTok{ site\_ID),}
+  \AttributeTok{offset =}\NormalTok{ off\_vec,}
+  \AttributeTok{method =} \StringTok{"VA"}
+\NormalTok{)}
+
+
+\FunctionTok{summary}\NormalTok{(gllvm\_carabid\_pois)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Call:
+## gllvm(y = Y_rare_carabid_removed, X = X_carabid, formula = ~habitat + 
+##     year, family = "poisson", num.lv = 2, studyDesign = studyDesign, 
+##     row.eff = ~(1 | site_ID), offset = off_vec, method = "VA")
+## 
+## Family:  poisson 
+## 
+## AIC:  1998.26 AICc:  2006.62 BIC:  2357.981 LL:  -929.1 df:  70 
+## 
+## Informed LVs:  0 
+## Constrained LVs:  0 
+## Unconstrained LVs:  2 
+## 
+## Formula:  ~habitat + year 
+## LV formula:  ~1 
+## Row effect:  ~(1 | site_ID) 
+## 
+## Coefficients predictors:
+##                                   Estimate Std. Error z value Pr(>|z|)    
+## habitatVY:Agonoleptus_conjunctus   0.65152    0.61241   1.064  0.28739    
+## habitatVY:Amara_aenea              1.82856    0.80460   2.273  0.02305 *  
+## habitatVY:Amara_apricaria          3.06007    1.24010   2.468  0.01360 *  
+## habitatVY:Amara_quenseli          -1.47915    0.97547  -1.516  0.12943    
+## habitatVY:Anisodactylus_binotatus -0.02761    1.20204  -0.023  0.98167    
+## habitatVY:Calathus_fuscipes        1.89551    0.48611   3.899 9.65e-05 ***
+## habitatVY:Calosoma_tepidum         3.61207    1.17111   3.084  0.00204 ** 
+## habitatVY:Carabus_nemoralis        1.81316    1.18936   1.524  0.12739    
+## habitatVY:Carabus_taedatus        -4.09335    1.65802  -2.469  0.01356 *  
+## habitatVY:Harpalus_affinis         2.08655    0.25953   8.040 9.00e-16 ***
+## habitatVY:Harpalus_fraternus       1.00787    0.61720   1.633  0.10248    
+## habitatVY:Harpalus_herbivagus      1.38587    0.94671   1.464  0.14323    
+## habitatVY:Harpalus_pensylvanicus  21.66251    0.39518  54.817  < 2e-16 ***
+## habitatVY:Pterostichus_melanarius  1.93873    0.74412   2.605  0.00918 ** 
+## year2025:Agonoleptus_conjunctus   -0.10902    0.62140  -0.175  0.86074    
+## year2025:Amara_aenea              -0.61967    0.74033  -0.837  0.40258    
+## year2025:Amara_apricaria          -0.05460    1.10602  -0.049  0.96063    
+## year2025:Amara_quenseli           49.33118    0.50861  96.992  < 2e-16 ***
+## year2025:Anisodactylus_binotatus   1.70371    1.60537   1.061  0.28858    
+## year2025:Calathus_fuscipes         2.08955    0.59847   3.492  0.00048 ***
+## year2025:Calosoma_tepidum         -0.02307    0.76441  -0.030  0.97593    
+## year2025:Carabus_nemoralis        22.65732    0.59163  38.297  < 2e-16 ***
+## year2025:Carabus_taedatus          1.44029    1.66565   0.865  0.38720    
+## year2025:Harpalus_affinis          0.24153    0.25361   0.952  0.34092    
+## year2025:Harpalus_fraternus        0.18787    0.63123   0.298  0.76599    
+## year2025:Harpalus_herbivagus       1.19711    0.98177   1.219  0.22272    
+## year2025:Harpalus_pensylvanicus    0.77795    0.80972   0.961  0.33668    
+## year2025:Pterostichus_melanarius   1.11752    0.81986   1.363  0.17286    
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+\end{verbatim}
+
+\paragraph{Meeting model assumptions}\label{meeting-model-assumptions-2}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# plot the residuals}
+\FunctionTok{plot}\NormalTok{(gllvm\_carabid\_pois, }\AttributeTok{biplot =} \ConstantTok{TRUE}\NormalTok{, }\AttributeTok{ind.spp =} \ConstantTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{habitat_analysis_files/figure-latex/unnamed-chunk-38-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{habitat_analysis_files/figure-latex/unnamed-chunk-38-2.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{habitat_analysis_files/figure-latex/unnamed-chunk-38-3.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{habitat_analysis_files/figure-latex/unnamed-chunk-38-4.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{habitat_analysis_files/figure-latex/unnamed-chunk-38-5.pdf}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# no strong violation of homogeneity of variance.}
+\end{Highlighting}
+\end{Shaded}
+
+Residuals seem okay for poisson model.
+
+\paragraph{Model outputs}\label{model-outputs-2}
+
+Let's plot the model coefficients
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# plot the gllvm carabid coefficient plot}
+\FunctionTok{coefplot}\NormalTok{(}
+\NormalTok{  gllvm\_carabid\_pois,}
+  \AttributeTok{cex.ylab =} \FloatTok{0.7}\NormalTok{,}
+  \AttributeTok{mar =} \FunctionTok{c}\NormalTok{(}\DecValTok{4}\NormalTok{, }\DecValTok{10}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DecValTok{1}\NormalTok{),}
+  \AttributeTok{xlim.list =} \FunctionTok{list}\NormalTok{(}
+    \FunctionTok{c}\NormalTok{(}\SpecialCharTok{{-}}\DecValTok{4}\NormalTok{, }\DecValTok{4}\NormalTok{),   }\CommentTok{\# habitat}
+    \FunctionTok{c}\NormalTok{(}\SpecialCharTok{{-}}\DecValTok{4}\NormalTok{, }\DecValTok{4}\NormalTok{)    }\CommentTok{\# year}
+\NormalTok{  )}
+\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{habitat_analysis_files/figure-latex/unnamed-chunk-39-1.pdf}}
+
+and then clean up the plot axis and save
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# clean up species names (remove underscore)}
+\NormalTok{gllvm\_carabid\_pois\_sc }\OtherTok{\textless{}{-}}\NormalTok{ gllvm\_carabid\_pois}
+
+\NormalTok{carabid\_names\_clean }\OtherTok{\textless{}{-}} \FunctionTok{rownames}\NormalTok{(gllvm\_carabid\_pois\_sc}\SpecialCharTok{$}\NormalTok{params}\SpecialCharTok{$}\NormalTok{Xcoef) }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{str\_replace\_all}\NormalTok{(}\StringTok{"\_"}\NormalTok{, }\StringTok{" "}\NormalTok{) }\SpecialCharTok{|\textgreater{}}    
+  \FunctionTok{str\_to\_sentence}\NormalTok{()}
+
+\FunctionTok{rownames}\NormalTok{(gllvm\_carabid\_pois\_sc}\SpecialCharTok{$}\NormalTok{params}\SpecialCharTok{$}\NormalTok{Xcoef) }\OtherTok{\textless{}{-}}\NormalTok{ carabid\_names\_clean }
+\FunctionTok{rownames}\NormalTok{(gllvm\_carabid\_pois\_sc}\SpecialCharTok{$}\NormalTok{sd}\SpecialCharTok{$}\NormalTok{Xcoef)     }\OtherTok{\textless{}{-}}\NormalTok{ carabid\_names\_clean }
+
+\CommentTok{\# open device to save plot using base R}
+\FunctionTok{png}\NormalTok{(}
+  \AttributeTok{filename =}\NormalTok{ here}\SpecialCharTok{::}\FunctionTok{here}\NormalTok{(}\StringTok{"03\_figures"}\NormalTok{, }\StringTok{"carabid\_gllvm\_plot.png"}\NormalTok{),}
+  \AttributeTok{width =} \DecValTok{7}\NormalTok{,}
+  \AttributeTok{height =} \DecValTok{6}\NormalTok{,}
+  \AttributeTok{units =} \StringTok{"in"}\NormalTok{,}
+  \AttributeTok{res =} \DecValTok{400}
+\NormalTok{)}
+
+
+\CommentTok{\# make italic}
+\FunctionTok{par}\NormalTok{(}\AttributeTok{font.axis =} \DecValTok{3}\NormalTok{)  }\CommentTok{\# 3 = italic}
+
+\CommentTok{\# plot the gllvm carabid coefficient plot}
+\FunctionTok{coefplot}\NormalTok{(}
+\NormalTok{  gllvm\_carabid\_pois\_sc,}
+  \AttributeTok{cex.ylab =} \FloatTok{0.7}\NormalTok{,}
+  \AttributeTok{mar =} \FunctionTok{c}\NormalTok{(}\DecValTok{4}\NormalTok{, }\DecValTok{10}\NormalTok{, }\DecValTok{2}\NormalTok{, }\DecValTok{1}\NormalTok{),}
+  \AttributeTok{xlim.list =} \FunctionTok{list}\NormalTok{(}
+    \FunctionTok{c}\NormalTok{(}\SpecialCharTok{{-}}\DecValTok{4}\NormalTok{, }\DecValTok{4}\NormalTok{),   }\CommentTok{\# habitat}
+    \FunctionTok{c}\NormalTok{(}\SpecialCharTok{{-}}\DecValTok{4}\NormalTok{, }\DecValTok{4}\NormalTok{)    }\CommentTok{\# year}
+\NormalTok{  )}
+\NormalTok{)}
+
+\CommentTok{\# close device}
+\FunctionTok{dev.off}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## pdf 
+##   2
+\end{verbatim}
+
+Also make an ordination plot (latent variables as axis)
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ordiplot}\NormalTok{(gllvm\_carabid\_pois,}
+         \AttributeTok{biplot  =} \ConstantTok{TRUE}\NormalTok{,}
+         \AttributeTok{ind.spp =} \DecValTok{16}\NormalTok{,}
+         \AttributeTok{symbols =} \ConstantTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{habitat_analysis_files/figure-latex/unnamed-chunk-41-1.pdf}}
+
+Nothing too obvious from ordination plot, except how carabus taedatus is
+distanced from the other species.
+
+\subsubsection{Carabid Fourth Corner
+Model}\label{carabid-fourth-corner-model}
+
+First we'll prepare the trait data and make sure it lines up with the Y
+(response) dataframe. Again, we'll only keep the carabid species with
+\textgreater5 individuals. Let's also set the references as SNH,
+macropterous and native.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# SPECIES TRAITS}
+\CommentTok{\# Ensure the species names in traits match the columns in Y}
+\NormalTok{carabid\_traits\_rare\_removed }\OtherTok{\textless{}{-}}\NormalTok{ carabid\_traits }\SpecialCharTok{\%\textgreater{}\%} \FunctionTok{filter}\NormalTok{(carabid\_species }\SpecialCharTok{\%in\%} \FunctionTok{colnames}\NormalTok{(Y\_rare\_carabid\_removed))}
+
+\CommentTok{\# ensure it\textquotesingle{}s a dataframe in the same order as Y}
+\NormalTok{carabid\_traits\_ordered }\OtherTok{\textless{}{-}}\NormalTok{ carabid\_traits\_rare\_removed[}\FunctionTok{match}\NormalTok{(}\FunctionTok{colnames}\NormalTok{(Y\_rare\_carabid\_removed), carabid\_traits\_rare\_removed}\SpecialCharTok{$}\NormalTok{carabid\_species), ]}
+
+\CommentTok{\# make spider\_family the row names}
+\FunctionTok{rownames}\NormalTok{(carabid\_traits\_ordered) }\OtherTok{\textless{}{-}}\NormalTok{ carabid\_traits\_ordered}\SpecialCharTok{$}\NormalTok{carabid\_species}
+
+\CommentTok{\# remove non{-}necessary columns}
+\NormalTok{TR\_carabid }\OtherTok{\textless{}{-}}\NormalTok{ carabid\_traits\_ordered }\SpecialCharTok{\%\textgreater{}\%}
+\NormalTok{  dplyr}\SpecialCharTok{::}\FunctionTok{select}\NormalTok{(}\SpecialCharTok{{-}}\NormalTok{carabid\_species)     }\CommentTok{\# remove non{-}trait columns}
+
+\CommentTok{\# Make sure it matches!}
+\FunctionTok{all}\NormalTok{(}\FunctionTok{colnames}\NormalTok{(Y\_rare\_carabid\_removed) }\SpecialCharTok{\%in\%} \FunctionTok{rownames}\NormalTok{(TR\_carabid))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] TRUE
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{sum}\NormalTok{(}\FunctionTok{colnames}\NormalTok{(Y\_rare\_carabid\_removed) }\SpecialCharTok{\%in\%} \FunctionTok{rownames}\NormalTok{(TR\_carabid))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 14
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# make sure reference levels make sense for model}
+\NormalTok{X\_carabid}\SpecialCharTok{$}\NormalTok{habitat }\OtherTok{\textless{}{-}} \FunctionTok{relevel}\NormalTok{(}\FunctionTok{factor}\NormalTok{(X\_carabid}\SpecialCharTok{$}\NormalTok{habitat), }\AttributeTok{ref =} \StringTok{"SNH"}\NormalTok{)}
+
+\CommentTok{\# set dispersal power reference level to macropterous}
+\NormalTok{TR\_carabid}\SpecialCharTok{$}\NormalTok{dispersal\_power }\OtherTok{\textless{}{-}} \FunctionTok{relevel}\NormalTok{(}
+  \FunctionTok{factor}\NormalTok{(TR\_carabid}\SpecialCharTok{$}\NormalTok{dispersal\_power),}
+  \AttributeTok{ref =} \StringTok{"macropterous"}
+\NormalTok{)}
+
+\CommentTok{\# set status to be introduced}
+\NormalTok{TR\_carabid}\SpecialCharTok{$}\NormalTok{status }\OtherTok{\textless{}{-}} \FunctionTok{relevel}\NormalTok{(}
+  \FunctionTok{factor}\NormalTok{(TR\_carabid}\SpecialCharTok{$}\NormalTok{status),}
+  \AttributeTok{ref =} \StringTok{"native"}
+\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+Now we'll run the gllvm fourth corner model with the traits included.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# run gllvm model}
+\CommentTok{\# Y is spider family matrix grouped by site/ habitat/ year}
+\CommentTok{\# X is predictor variables (habitat)}
+\CommentTok{\# TR is carabid traits}
+\CommentTok{\# offset for trap count, row effect for site ID}
+\NormalTok{gllvm\_carabid\_traits }\OtherTok{\textless{}{-}} \FunctionTok{gllvm}\NormalTok{(}
+  \AttributeTok{y =}\NormalTok{ Y\_rare\_carabid\_removed,}
+  \AttributeTok{X =} \FunctionTok{as.data.frame}\NormalTok{(X\_carabid),}
+  \AttributeTok{TR =}\NormalTok{ TR\_carabid,}
+  \AttributeTok{family =} \StringTok{"negative.binomial"}\NormalTok{,}
+  \AttributeTok{num.lv =} \DecValTok{2}\NormalTok{,}
+  \AttributeTok{method =} \StringTok{"VA"}\NormalTok{,}
+  \AttributeTok{offset =}\NormalTok{ off\_vec,}
+  \AttributeTok{studyDesign =}\NormalTok{ studyDesign,}
+  \AttributeTok{row.eff =} \SpecialCharTok{\textasciitilde{}}\NormalTok{(}\DecValTok{1} \SpecialCharTok{|}\NormalTok{ site\_ID),}
+  \AttributeTok{formula =}\NormalTok{ y }\SpecialCharTok{\textasciitilde{}}\NormalTok{ habitat }\SpecialCharTok{*}\NormalTok{ (dispersal\_power }\SpecialCharTok{+}\NormalTok{ status))}
+
+\FunctionTok{summary}\NormalTok{(gllvm\_carabid\_traits)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## 
+## Call:
+## gllvm(y = Y_rare_carabid_removed, X = as.data.frame(X_carabid), 
+##     TR = TR_carabid, formula = y ~ habitat * (dispersal_power + 
+##         status), family = "negative.binomial", num.lv = 2, studyDesign = studyDesign, 
+##     row.eff = ~(1 | site_ID), offset = off_vec, method = "VA")
+## 
+## Family:  negative.binomial 
+## 
+## AIC:  1859.217 AICc:  1866.403 BIC:  2193.243 LL:  -864.6 df:  65 
+## 
+## Informed LVs:  0 
+## Constrained LVs:  0 
+## Unconstrained LVs:  2 
+## 
+## Formula:  ~habitatVY+dispersal_powerbrachypterous+dispersal_powerdimorphic+dispersal_powerpolymorphic+statusintroduced+habitatVY:dispersal_powerbrachypterous+habitatVY:dispersal_powerdimorphic+habitatVY:dispersal_powerpolymorphic+habitatVY:statusintroduced 
+## LV formula:  ~ 0 
+## Row effect:  ~(1 | site_ID) 
+## 
+## Coefficients predictors:
+##                                        Estimate Std. Error z value Pr(>|z|)    
+## habitatVY                                1.8549     0.3871   4.792 1.65e-06 ***
+## dispersal_powerbrachypterous            -1.4377     0.3498  -4.110 3.95e-05 ***
+## dispersal_powerdimorphic                -1.2266     0.1585  -7.737 1.02e-14 ***
+## dispersal_powerpolymorphic              -1.7216     0.2818  -6.109 1.00e-09 ***
+## statusintroduced                        -2.9417     0.1166 -25.230  < 2e-16 ***
+## habitatVY:dispersal_powerbrachypterous  -2.0648     1.1355  -1.818  0.06899 .  
+## habitatVY:dispersal_powerdimorphic      -0.1542     0.4917  -0.314  0.75382    
+## habitatVY:dispersal_powerpolymorphic    -2.7074     0.9375  -2.888  0.00388 ** 
+## habitatVY:statusintroduced               0.6041     0.4689   1.289  0.19756    
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+\end{verbatim}
+
+\paragraph{Meeting model assumptions}\label{meeting-model-assumptions-3}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# biplot of the GLLVM }
+\FunctionTok{plot}\NormalTok{(gllvm\_carabid\_traits, }\AttributeTok{biplot =} \ConstantTok{TRUE}\NormalTok{, }\AttributeTok{ind.spp =} \ConstantTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{habitat_analysis_files/figure-latex/unnamed-chunk-44-1.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{habitat_analysis_files/figure-latex/unnamed-chunk-44-2.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{habitat_analysis_files/figure-latex/unnamed-chunk-44-3.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{habitat_analysis_files/figure-latex/unnamed-chunk-44-4.pdf}}
+\pandocbounded{\includegraphics[keepaspectratio]{habitat_analysis_files/figure-latex/unnamed-chunk-44-5.pdf}}
+residuals look okay!
+
+\paragraph{Model outputs}\label{model-outputs-3}
+
+Plot and save fourth corner plot
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{coefplot}\NormalTok{(gllvm\_carabid\_traits)}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{habitat_analysis_files/figure-latex/unnamed-chunk-45-1.pdf}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{carabid\_fourth }\OtherTok{\textless{}{-}}\NormalTok{ gllvm\_carabid\_traits}\SpecialCharTok{$}\NormalTok{fourth.corner}
+\NormalTok{a }\OtherTok{\textless{}{-}} \FunctionTok{max}\NormalTok{( }\FunctionTok{abs}\NormalTok{(carabid\_fourth) )}
+
+\CommentTok{\# remove prefix (status/ dispersal power) for plotting}
+\FunctionTok{colnames}\NormalTok{(carabid\_fourth) }\OtherTok{\textless{}{-}} \FunctionTok{colnames}\NormalTok{(carabid\_fourth) }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{str\_remove}\NormalTok{(}\StringTok{"\^{}(status|dispersal\_power)\_?"}\NormalTok{) }\SpecialCharTok{|\textgreater{}}  \CommentTok{\# remove either prefix}
+  \FunctionTok{str\_replace}\NormalTok{(}\StringTok{"\_"}\NormalTok{, }\StringTok{" / "}\NormalTok{)}
+\FunctionTok{colnames}\NormalTok{(carabid\_fourth) }\OtherTok{\textless{}{-}} \FunctionTok{colnames}\NormalTok{(carabid\_fourth) }\SpecialCharTok{|\textgreater{}}
+  \FunctionTok{str\_to\_sentence}\NormalTok{()}
+
+
+\CommentTok{\# add colors for habitats}
+\NormalTok{colort }\OtherTok{\textless{}{-}} \FunctionTok{colorRampPalette}\NormalTok{(}\FunctionTok{c}\NormalTok{(}
+\NormalTok{  custom\_colors[}\StringTok{"SNH"}\NormalTok{],  }\CommentTok{\# negative}
+  \StringTok{"white"}\NormalTok{,}
+\NormalTok{  custom\_colors[}\StringTok{"VY"}\NormalTok{]    }\CommentTok{\# positive}
+\NormalTok{))}
+
+
+\CommentTok{\# plot fourth corner model using levelplot from lattice package}
+\NormalTok{carabid\_4th\_plot }\OtherTok{\textless{}{-}} \FunctionTok{levelplot}\NormalTok{(}
+  \FunctionTok{as.matrix}\NormalTok{(carabid\_fourth),}
+  \AttributeTok{xlab =} \StringTok{"Habitat"}\NormalTok{,}
+  \AttributeTok{ylab =} \StringTok{"Species traits"}\NormalTok{,}
+  \AttributeTok{col.regions =} \FunctionTok{colort}\NormalTok{(}\DecValTok{100}\NormalTok{),}
+  \AttributeTok{at =} \FunctionTok{seq}\NormalTok{(}\SpecialCharTok{{-}}\NormalTok{a, a, }\AttributeTok{length =} \DecValTok{100}\NormalTok{),}
+  \AttributeTok{scales =} \FunctionTok{list}\NormalTok{(}\AttributeTok{x =} \FunctionTok{list}\NormalTok{(}\AttributeTok{draw =} \ConstantTok{FALSE}\NormalTok{)),}
+  \AttributeTok{par.settings =} \FunctionTok{list}\NormalTok{(}
+    \AttributeTok{axis.text =} \FunctionTok{list}\NormalTok{(}\AttributeTok{cex =} \FloatTok{1.3}\NormalTok{),}
+    \AttributeTok{par.xlab.text =} \FunctionTok{list}\NormalTok{(}\AttributeTok{cex =} \FloatTok{1.5}\NormalTok{),}
+    \AttributeTok{par.ylab.text =} \FunctionTok{list}\NormalTok{(}\AttributeTok{cex =} \FloatTok{1.5}\NormalTok{),}
+    \AttributeTok{par.legend.text =} \FunctionTok{list}\NormalTok{(}\AttributeTok{cex =} \FloatTok{1.3}\NormalTok{)}
+\NormalTok{  )}
+\NormalTok{)}
+
+\NormalTok{carabid\_4th\_plot}
+\end{Highlighting}
+\end{Shaded}
+
+\pandocbounded{\includegraphics[keepaspectratio]{habitat_analysis_files/figure-latex/unnamed-chunk-45-2.pdf}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# open device (save image using base R)}
+\FunctionTok{png}\NormalTok{(}
+  \AttributeTok{filename =}\NormalTok{ here}\SpecialCharTok{::}\FunctionTok{here}\NormalTok{(}\StringTok{"03\_figures"}\NormalTok{, }\StringTok{"carabid\_4th\_plot.png"}\NormalTok{),}
+  \AttributeTok{width =} \DecValTok{7}\NormalTok{,}
+  \AttributeTok{height =} \DecValTok{7}\NormalTok{,}
+  \AttributeTok{units =} \StringTok{"in"}\NormalTok{,}
+  \AttributeTok{res =} \DecValTok{400}
+\NormalTok{)}
+
+\CommentTok{\# draw the plot}
+\FunctionTok{print}\NormalTok{(carabid\_4th\_plot)}
+
+\CommentTok{\# close device}
+\FunctionTok{dev.off}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## pdf 
+##   2
+\end{verbatim}
+
+Polymorphic carabid beeltes associated with SNH.
+
+\end{document}

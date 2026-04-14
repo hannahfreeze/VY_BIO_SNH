@@ -1,0 +1,2106 @@
+---
+title: "Exploring Carabid Beetle and Spider Diversity, Community Composition and Functional Traits Across Vineyard and Semi-Natural Habitats"
+author: "Hannah Friesen"
+date: "`r Sys.Date()`"
+output_dir: "02_analysis"
+output:
+  html_document:
+    theme: cosmo
+    toc: true
+    toc_float: true
+    toc_depth: 4
+    df_print: paged
+    highlight: kate
+    number_sections: true
+    code_folding: hide
+  pdf_document:
+    toc: true
+    toc_depth: '4'
+bibliography: "grateful-refs.bib"
+csl: "https://raw.githubusercontent.com/citation-style-language/styles/master/ecology-letters.csl"
+affiliation: University of British Columbia Okanagan
+---
+<style>
+pre {
+  overflow-x: auto;
+}
+pre code {
+  word-wrap: normal;
+  white-space: pre;
+}
+</style>
+
+
+```{r global_options, echo = FALSE, include = FALSE}
+options(width = 999)
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE,
+                      cache = TRUE, tidy = FALSE, size = "small")
+```
+
+## System Info
+
+```{r}
+version
+```
+
+## Set up
+### Loading Packages
+```{r load-packages}
+# Load necessary libraries
+library(dplyr)
+library(ggplot2)
+library(tidyr)
+library(stringr)
+library(vegan)
+library(tibble)
+library(purrr)
+library(gllvm)
+library(corrplot)
+library(ggvenn)
+library(iNEXT)
+library(lattice)
+
+
+## Citing packages
+grateful::cite_packages(
+  output = "file", 
+  out.dir = here::here("01_analysis")
+)
+
+```
+
+
+## CONTEXT
+
+This research is exploratory and observational. 
+
+
+### Objective
+The aim of this research is to characterize carabid beetle and spider communities in vineyard agroecosystems and adjacent SNH in the Okanagan Valley. Specifically, this study explores how carabid beetle and spider diversity and community composition vary between vineyard and SNH, and if functional traits explain any of the variation.
+
+## SPIDERS
+
+### Data import and pre-processing
+
+Let's import the raw spider data and summarize by site/ habitat/ year. We will filter out field margin samples from the main analysis as they were not sampled in 2025. September samples were excluded due to low trap recovery. 
+
+Let's also calculate the total number of spiders collected, and the number of different families. Note that spiders that could not be identified to family level, either due to damage or being juveniles, are included in total spider count but not in family richness count.
+
+```{r}
+# Load spider data
+spider_habitat_df <- read.csv(here::here("00_data","spider_habitat_df.csv"))
+
+# Filter out field margins and september data from the main analysis
+spider_habitat_df <- spider_habitat_df %>%
+  filter(
+    subhabitat != "FM",
+    sample_period != "SEP"
+  )
+
+# Identify family columns from descriptor columns
+family_cols <- setdiff(names(spider_habitat_df), c("pitfall_ID", "year", "habitat", "subhabitat", "family_richness", "sample_period", "site_ID", "year_established", "total_count"))
+
+# ensure family cols are integer counts
+spider_habitat_df <- spider_habitat_df %>%
+  mutate(across(all_of(family_cols), ~ as.integer(tidyr::replace_na(.x, 0L))))
+
+# Then re-define unid and identified categories
+unid_cols <- union("UNID.", "LYCOSIDAE..juvenile.")  # add the juvenile manually
+family_columns <- setdiff(family_cols, unid_cols)
+
+# Summarize spider abundance by site_ID, habitat, sample period and year
+spider_habitat_summary <- spider_habitat_df %>%
+  group_by(site_ID, habitat, sample_period, year) %>%
+  summarise(
+    across(all_of(family_cols), ~ sum(.x, na.rm = TRUE)),
+    trap_count = n(),     # destroyed traps already removed earlier
+    .groups = "drop"
+  )
+
+# Total number of spiders found in vineyards across all sites and years (including juveniles/ UNID)
+total_spiders <- sum(spider_habitat_df$total_count, na.rm = TRUE)
+
+# total number of traps
+total_traps <- spider_habitat_summary %>%
+  summarise(total_traps = sum(trap_count, na.rm = TRUE)) %>%
+  pull(total_traps)
+
+# Convert wide data (family columns) into long format
+spider_long_habitat <- spider_habitat_df %>%
+  pivot_longer(cols = all_of(family_columns), names_to = "spider_family", values_to = "count") %>%
+  drop_na(count) %>%  # Remove missing values
+  filter(count >= 0)  # Ensure only observed families are counted
+
+# Get a list of all families observed at least once
+observed_families_habitat <- spider_long_habitat %>%
+  filter(count > 0) %>% 
+  distinct(spider_family) %>%
+  arrange(spider_family)
+
+# View the result
+print(observed_families_habitat)
+
+# calculate relative abundance of each spider family
+spider_family_rel <- spider_long_habitat %>%
+  group_by(spider_family) %>%
+  summarise(n = sum(count, na.rm = TRUE), .groups = "drop") %>%
+  mutate(rel_abund = n / sum(n)) %>%   # relative abundance within each habitat
+  ungroup() %>%
+  filter(n > 0)
+
+spider_family_rel
+
+# calculate sample size
+habitat_n <- spider_habitat_summary %>%
+  group_by(habitat) %>%
+  summarise(n = n(), .groups = "drop")
+
+habitat_n
+
+# sample size by year
+habitat_n_year <- spider_habitat_summary %>%
+  group_by(year, habitat) %>%
+  summarise(n = n(), .groups = "drop")
+
+habitat_n_year
+
+cat("Total spiders in all habitats across all sites and years:", total_spiders, "\n")
+
+cat(
+  "Total number of observed families in all habitats across all sites and years:",
+  nrow(observed_families_habitat),
+  "\n"
+)
+
+
+cat("Total traps in all habitats across all sites and years:", total_traps, "\n")
+
+cat("Number of site × habitat × year combinations:", nrow(spider_habitat_summary), "\n")
+
+```
+
+### Summary table
+```{r}
+# table summarizing spider family abundance by habitat/ year
+spider_family_table <- spider_long_habitat %>%
+  group_by(spider_family, habitat, year) %>%
+  summarise(
+    total_abundance = sum(count, na.rm = TRUE),
+    .groups = "drop"
+  ) %>%
+  unite(habitat_year, habitat, year) %>%
+  pivot_wider(
+    names_from  = habitat_year,
+    values_from = total_abundance,
+    values_fill = 0
+  ) %>%
+  mutate(Total = rowSums(across(where(is.numeric)))) %>%
+  arrange(desc(Total))
+
+# make labels little letters for clarity
+spider_family_table <- spider_family_table %>%
+  mutate(spider_family = stringr::str_to_title(spider_family))
+
+spider_family_table
+
+# save as table
+write.csv(
+  spider_family_table,
+  here::here("02_tables", "spider_family_table.csv"),
+  row.names = FALSE
+)
+
+```
+
+
+### Sample Coverage and Hill Diversity
+Let's use iNEXT to evaluate sampling completeness (sample coverage) and calculate hill diversity (richness, shannon and simpson). 
+Use only adult family counts (not juveniles and unidentified species)
+
+```{r}
+custom_colors <- c("VY"="#8E44AD","SNH"="#009E73")
+
+#  Summarize by habitat
+spider_by_habitat <- spider_habitat_summary %>%
+  group_by(habitat) %>%
+  summarise(across(all_of(family_columns), ~ sum(.x, na.rm = TRUE)),
+            .groups = "drop")
+
+# Build iNEXT list: named abundance vectors (one per habitat)
+spider_list_habitat <- setNames(
+  lapply(seq_len(nrow(spider_by_habitat)), function(i) {
+    v <- unlist(spider_by_habitat[i, family_columns], use.names = TRUE)
+    v[is.na(v)] <- 0
+    v
+  }),
+  spider_by_habitat$habitat
+)
+
+# Sample coverage + totals
+spider_coverage <- DataInfo(spider_list_habitat, datatype = "abundance")
+
+spider_coverage
+
+
+# Hill numbers
+spider_hill <- iNEXT(spider_list_habitat, q = c(0, 1, 2), datatype = "abundance")
+
+spider_hill_diversity<- spider_hill$AsyEst
+
+spider_hill_diversity
+
+
+# save as csv
+write.csv(
+  spider_hill_diversity,
+  here::here("02_tables", "spider_hill_diversity.csv"),
+  row.names = FALSE
+)
+
+
+```
+Sample completeness very high for both VY and SNH (>0.99). Likely so high because we are evaluating at the family level (coarse taxonomic resolution), only a few singletons/ doubletons in each habitat.
+
+Higher observed and estimated richness in SNH (22) compared to VY (16). Pretty high confidence for both
+Also higher shannon and simpson diversity in SNH's. indicates more evenness in SNH's compared to VY's.
+
+
+Let's make some curves for the sample coverage and hill diversity metrics
+
+```{r}
+# Coverage-based curves
+spider_sample_coverage <- ggiNEXT(spider_hill, type = 2) +
+  scale_colour_manual(values = custom_colors) +
+  scale_fill_manual(values = custom_colors) +
+  theme(
+    legend.title = element_blank(),
+    axis.title  = element_text(size = 12),
+    axis.text   = element_text(size = 10)
+  )
+
+spider_sample_coverage
+
+# sample size based Hill curves
+spider_hill_size <- ggiNEXT(spider_hill, type = 1,
+  facet.var = "Order.q") +
+  scale_colour_manual(values = custom_colors) +
+  scale_fill_manual(values = custom_colors) +
+  labs(
+    x = "Number of individuals",
+    y = "Family diversity"
+  ) +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1)
+  )
+
+
+
+spider_hill_size
+
+# Coverage-based Hill curves
+spider_hill_coverage <- ggiNEXT(spider_hill, type = 3,
+  facet.var="Order.q") +
+  scale_colour_manual(values = custom_colors) +
+  scale_fill_manual(values = custom_colors) +
+  labs(
+    x = "Sample coverage",
+    y = "Family diversity"
+  )
+
+spider_hill_coverage
+
+
+```
+
+
+
+### Data Exploration
+This section explores spiders by habitat type
+
+#### Relative abundance plots
+This section uses a bubble plot to visualize spider family relative abundance by habitat type
+
+```{r}
+custom_colors <- c("VY"="#8E44AD","SNH"="#009E73")
+
+# 1) Summarise total individuals per habitat x family
+spider_family_habitat_rel <- spider_long_habitat %>%
+  group_by(habitat, spider_family) %>%
+  summarise(n = sum(count, na.rm = TRUE), .groups = "drop") %>%
+  group_by(habitat) %>%
+  mutate(rel_abund = n / sum(n)) %>%   # relative abundance within each habitat
+  ungroup() %>%
+  filter(n > 0)
+
+
+# make labels little letters for clarity
+spider_family_habitat_rel <- spider_family_habitat_rel %>%
+  mutate(spider_family = stringr::str_to_title(spider_family))
+
+# 2) Order families (overall abundance across all habitats)
+family_order <- spider_family_habitat_rel %>%
+  group_by(spider_family) %>%
+  summarise(total_n = sum(n), .groups = "drop") %>%
+  arrange(total_n) %>%
+  pull(spider_family)
+
+spider_family_habitat_rel <- spider_family_habitat_rel %>%
+  mutate(spider_family = factor(spider_family, levels = family_order))
+
+
+# 3) Bubble plot of relative abundance of each family by habitat type
+spider_relative_abundance <- ggplot(spider_family_habitat_rel,
+       aes(x = spider_family, y = habitat,
+           size = rel_abund, fill = habitat)) +
+  geom_point(shape = 21, color = "black", alpha = 1) +
+  scale_size_continuous(name = "Relative abundance") +
+  scale_fill_manual(values = custom_colors) +
+  labs(x = NULL, y = "Habitat") +
+  theme_classic(base_size = 12) +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1),
+    legend.position = "right"
+  ) +
+  guides(fill = "none")
+
+
+spider_relative_abundance
+
+
+```
+
+#### Abundance and richness by habitat
+
+This section uses boxplots to look at the mean abundance per trap and rarefied richness
+
+```{r}
+# define custom colors
+custom_colors <- c("VY"="#8E44AD","SNH"="#009E73")
+
+# -----------------------------
+# HABITAT ABUNDACE, family RICHNESS, MEAN PER TRAP AND RAREFIED RICHNESS
+# -----------------------------
+# ALL HABITATS RICHNESS
+fam_mat            <- as.matrix(dplyr::select(spider_habitat_summary, all_of(family_columns)))
+total_abundance   <- rowSums(fam_mat)
+family_richness  <- rowSums(fam_mat > 0)
+
+#   Use the minimum total individuals among groups with > min_m_individuals
+min_m_individuals <- 20L
+m_candidates      <- total_abundance[total_abundance > min_m_individuals]
+
+rarefaction_m <- if (length(m_candidates)) min(m_candidates) else NA_integer_
+
+# Rarefy (individual-based); NA if m not available
+rarefied_richness <- if (is.na(rarefaction_m)) {
+  rep(NA_real_, nrow(fam_mat))
+} else {
+  vegan::rarefy(fam_mat, sample = rarefaction_m)
+}
+
+# Assemble final summary table
+spider_habitat_data <- spider_habitat_summary %>%
+  dplyr::select(site_ID, habitat, sample_period, year, trap_count) %>%
+  mutate(
+    total_abundance   = total_abundance,
+    mean_per_trap     = ifelse(trap_count > 0, total_abundance / trap_count, NA_real_),
+    family_richness  = family_richness,
+    rarefied_richness = rarefied_richness,
+    rarefaction_m     = rarefaction_m
+  ) %>%
+  arrange(site_ID, year, sample_period, habitat)
+
+# calculate mean per trap by habitat
+spider_mean_by_habitat <- spider_habitat_data %>%
+  dplyr::group_by(habitat) %>%
+  dplyr::summarise(
+    mean_per_trap = mean(mean_per_trap, na.rm = TRUE),
+    n             = dplyr::n(),
+    .groups = "drop"
+  )
+spider_mean_by_habitat
+
+# plot mean abundance per trap by Habitat (VY/ SNH)
+# lets use line plots to account for paired design (each site has a VY and SNH)
+# we're using mean per plot instead of total abundance to account for traps lost in the field
+spider_abundance_line <- ggplot(
+  spider_habitat_data,
+  aes(
+    x = habitat,
+    y = mean_per_trap,
+    group = interaction(site_ID, year)
+  )
+) +
+  # paired lines in grey
+  geom_line(
+    color = "black",
+    alpha = 0.5
+  ) +
+  # points coloured by habitat
+  geom_point(
+    aes(color = habitat),
+    shape = 21,
+    size = 3,
+    stroke = 1.2
+  ) +
+  scale_color_manual(values = custom_colors) +
+  scale_fill_manual(values = custom_colors) +
+  labs(
+    title = "Spider abundance",
+    x = NULL,
+    y = "Mean abundance per trap"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(hjust = 0.5),
+    legend.position = "none"
+  ) + theme(
+  axis.text.x  = element_text(size = 14),
+  axis.text.y  = element_text(size = 14),
+  axis.title.y = element_text(size = 16)
+)
+
+
+spider_abundance_line
+
+# plots mean per trap by Habitat (VY/ SNH)
+spider_mean_abundance <- ggplot(spider_habitat_data, aes(x = habitat, y = mean_per_trap, fill = habitat)) +
+  geom_boxplot(outlier.shape = NA, alpha = 0.7, color = "black") +
+  geom_jitter(width = 0.2, height = 0.3, alpha = 0.5, size = 2, color = "black")+
+  coord_cartesian(ylim = c(0, 75)) +
+  labs(
+    x = "Habitat type",
+    y = "Abundance per trap"
+  ) +
+  theme_minimal(base_size = 14) +
+  scale_fill_manual(values = custom_colors) +
+  theme(
+    legend.position = "none",
+    plot.title = element_text(face = "bold", hjust = 0.5),
+    axis.text.x = element_text(angle = 45, hjust = 1)
+  )
+
+spider_mean_abundance
+
+# plot rarefied richness
+spider_rarefied_richness <-ggplot(spider_habitat_data, aes(x = habitat, y = rarefied_richness, fill = habitat)) +
+  geom_boxplot(outlier.shape = NA, alpha = 0.7, color = "black") +
+  geom_jitter(width = 0.2, alpha = 0.5, size = 2, color = "black") +
+  geom_text(
+    data = habitat_n,
+    aes(
+      x = habitat,
+      y = max(spider_habitat_data$rarefied_richness, na.rm = TRUE) + 2,
+      label = paste0("n = ", n)
+    ),
+    inherit.aes = FALSE,
+    size = 4
+  ) +
+  labs(
+    title = "Spider Rarefied Richness by Habitat Type",
+    x = "Habitat Type",
+    y = "Spider Rarefied Richness"
+  ) +
+  theme_minimal(base_size = 14) +
+  scale_fill_manual(values = custom_colors) +
+  theme(
+    legend.position = "none",
+    plot.title = element_text(face = "bold", hjust = 0.5),
+    axis.text.x = element_text(angle = 45, hjust = 1))
+
+spider_rarefied_richness
+
+```
+
+Vineyards generally have higher mean abundance, but a little lower (rarefied) richness
+
+#### Venn diagrams by habitat
+This section uses venn diagrams to visualize the distribution of families by habitat
+
+```{r}
+# Presence-absence by subhabitat
+spider_presence <- spider_habitat_df %>%
+  dplyr::select(all_of(family_columns), habitat) %>%
+  group_by(habitat) %>%
+  summarise(across(where(is.numeric), ~ sum(.x > 0) > 0))
+
+# Create lists of spider families present in each habitat
+spider_families_by_habitat <- lapply(split(spider_presence, spider_presence$habitat), function(df) {
+  names(df)[which(as.logical(df[-1])) + 1]  # Skip habitat column
+})
+
+spider_families_by_habitat
+
+# plot as a venn diagram
+ggvenn_spider_families <- ggvenn(spider_families_by_habitat,
+       fill_color = c("#009E73", "#8E44AD"),
+       stroke_size = 0.5,
+       set_name_size = 4) 
+
+ggvenn_spider_families
+```
+
+
+15 spider families found in both habitats, 1 found only in VY and 7 found only in SNH
+
+#### Spider traits by habitat
+This section explores uses barplots and pie charts to explore spider traits/ guilds by habitat type.
+
+```{r}
+# upload the spider traits data
+spider_traits <- read.csv(here::here ("00_data", "spider_family_traits.csv"))
+
+# join to spider habitat data (in long format)
+spider_long_traits_habitat <- spider_long_habitat %>%
+  dplyr::left_join(
+    dplyr::select(spider_traits, spider_family, guild_code),
+    by = "spider_family"
+  )
+
+# summarize guild abundance by site_ID, habitat and year
+guild_abundance_habitat <- spider_long_traits_habitat %>%
+  group_by(site_ID, habitat, year, guild_code) %>%
+  summarise(total_abundance = sum(count), .groups = "drop")
+
+# pivot to wide format
+guild_abundance_wide <- guild_abundance_habitat %>%
+  pivot_wider(
+    names_from = guild_code,
+    values_from = total_abundance,
+    values_fill = 0  # fill missing combinations with 0
+  )
+
+# Make sure guild_abundance_habitat is prepared
+guild_abundance_plot <- guild_abundance_habitat %>%
+  group_by(habitat, guild_code) %>%
+  summarise(total_abundance = sum(total_abundance), .groups = "drop")
+guild_abundance_plot <- guild_abundance_plot %>%
+  filter(!is.na(guild_code))
+
+
+# Custom colors (edit to match your desired palette)
+guild_colors <- c(
+  "AMH" = "#E69F00",     # orange
+  "GRH" = "#009E73",     # bluish green
+  "ORW" = "#56B4E9",     # sky blue
+  "SHW" = "#0072B2",     # blue
+  "SPW" = "#D55E00",     # vermillion
+  "SPE" = "#CC79A7",     # reddish purple
+  "OTH" = "#999999",     # grey
+  "SHW/ GRH" = "#F0E442", # yellow
+  "SHW/ OTH" = "#7D3C98"  # black
+)
+
+guild_labels <- c(
+  "AMH" = "Ambush hunters",
+  "GRH" = "Ground hunters",
+  "ORW" = "Orb web weavers",
+  "SHW" = "Sheet web weavers",
+  "SPW" = "Space web weavers",
+  "SPE" = "Specialists",
+  "OTH" = "Other hunters",
+  "SHW/ GRH" = "Sheet web weavers/Ground hunters",
+  "SHW/ OTH" = "Sheet web weavers/Other hunters"
+)
+
+
+# Create the stacked bar chart
+ggplot(guild_abundance_plot, aes(x = habitat, y = total_abundance, fill = guild_code)) +
+  geom_bar(stat = "identity") +
+  scale_fill_manual(values = guild_colors, labels = guild_labels) +
+  labs(
+    x = NULL,
+    y = "No. spiders",
+    fill = "Guild",
+    title = "Guild composition by habitat type"
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    axis.text = element_text(color = "black"),
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor = element_blank()
+  )
+
+
+# Summarize total abundance by habitat and guild, then calculate proportion
+guild_prop_habitat <- guild_abundance_habitat %>%
+  group_by(habitat, guild_code) %>%
+  summarise(total_abundance = sum(total_abundance), .groups = "drop") %>%
+  group_by(habitat) %>%
+  mutate(prop = total_abundance / sum(total_abundance))
+
+guild_prop_habitat <- guild_prop_habitat %>%
+  filter(!is.na(guild_code))
+
+# set factor order for consistent pie layout
+guild_prop_habitat$guild_code <- factor(guild_prop_habitat$guild_code)
+
+
+# Plot pie chart by habitat using facet
+spider_traits_pie <- ggplot(guild_prop_habitat, aes(x = "", y = prop, fill = guild_code)) +
+  geom_bar(stat = "identity", width = 1, color = "white") +
+  coord_polar("y") +
+  facet_wrap(~habitat) +
+  scale_fill_manual(values = guild_colors, labels = guild_labels) +
+  labs(
+    fill = "Guild",
+  ) +
+  theme_void(base_size = 12) +
+  theme(
+    strip.text = element_text(size = 12, face = "bold"),
+    legend.position = "right"
+  )
+
+spider_traits_pie 
+
+```
+
+No obvious difference between SNH and VY as far as traits go. Both have large proportions of specialists (mainly Zodariidae) and ground hunters (mainly Lycosidae)
+
+## CARABIDS
+
+### Data import and pre-processing
+This section loads the carabid raw data and prepares it for modelling. 
+
+
+```{r}
+# Load data and coordinates for sites
+carabid_habitat_df <- read.csv(here::here("00_data","carabid_habitat_df.csv"))
+
+# Filter out field margins and september data from the main analysis
+carabid_habitat_df <- carabid_habitat_df %>%
+  filter(
+    subhabitat != "FM",
+    sample_period != "SEP"
+  )
+
+
+# Identify species columns
+non_species <- c(
+  "pitfall_ID","total_abundance","carabid_abundance","species_richness","destroyed",
+  "site_code","site_ID","habitat","subhabitat","management_type",
+  "sample_period","year","trap_number", "trap_count"
+)
+
+species_cols <- setdiff(names(carabid_habitat_df), non_species)
+
+# drop any UNID (do not include in species count, only in total abundance)
+unid_cols <- species_cols[grepl("^UNID\\b|^UNID\\.", species_cols)]
+species_columns <- setdiff(species_cols, unid_cols)
+
+# ensure species cols are integer counts
+carabid_habitat_df <- carabid_habitat_df %>%
+  mutate(across(all_of(species_columns), ~ as.integer(tidyr::replace_na(.x, 0L))))
+
+# Summarize carabid abundance by site_ID, habitat, sample period and year
+carabid_habitat_summary <- carabid_habitat_df %>%
+  group_by(site_ID, habitat, sample_period, year) %>%
+  summarise(
+    across(all_of(species_columns), ~ sum(.x, na.rm = TRUE)),
+    trap_count = n(),     # destroyed traps already removed earlier
+    .groups = "drop"
+  )
+
+# Total number of carabids found in vineyards across all sites and years
+total_carabids_habitat <- sum(carabid_habitat_df$total_abundance, na.rm = TRUE)
+
+# Convert wide data (species columns) into long format
+carabid_long_habitat <- carabid_habitat_summary %>%
+  pivot_longer(cols = all_of(species_columns), names_to = "carabid_species", values_to = "count") %>%
+  drop_na(count) %>%  # Remove missing values
+  filter(count >= 0)  # Ensure only observed families are counted
+
+# Get a list of all species observed at least once
+observed_species_habitat <- carabid_long_habitat %>%
+  filter(count > 0) %>% 
+  distinct(carabid_species) %>%
+  arrange(carabid_species)
+
+
+print(observed_species_habitat)
+
+
+# Also group at genus level
+carabid_long_genus_habitat <- carabid_long_habitat %>%
+  mutate(carabid_genus = str_extract(carabid_species, "^[A-Za-z]+")) %>%  # extract genus from species name
+  group_by(site_ID, habitat, carabid_genus) %>%
+  summarise(count = sum(count, na.rm = TRUE), .groups = "drop")
+
+# Get a list of all genera observed at least once
+observed_genus_habitat <- carabid_long_genus_habitat %>%
+  filter(count > 0) %>% 
+  distinct(carabid_genus) %>%
+  arrange(carabid_genus)
+
+
+print(observed_genus_habitat)
+
+# calculate relative abundance of each spider family
+carabid_genus_rel <- carabid_long_genus_habitat %>%
+  group_by(carabid_genus) %>%
+  summarise(n = sum(count, na.rm = TRUE), .groups = "drop") %>%
+  mutate(rel_abund = n / sum(n)) %>%   # relative abundance within each habitat
+  ungroup() %>%
+  filter(n > 0)
+
+carabid_genus_rel
+
+cat("Total carabids in all habitats across all sites and years:", total_carabids_habitat, "\n")
+
+cat(
+  "Total number of observed species in all habitats across all sites and years:",
+  nrow(observed_species_habitat),
+  "\n"
+)
+
+cat(
+  "Total number of observed genera in all habitats across all sites and years:",
+  nrow(observed_genus_habitat),
+  "\n"
+)
+
+cat("Number of site × habitat × year combinations:", nrow(carabid_habitat_summary), "\n")
+```
+
+### Summary table
+Let's make a summary table for my appendix, looking at carabids by habitat type and year
+```{r}
+# table summarizing carabid species abundance by habitat/ year
+carabid_species_table <- carabid_long_habitat %>%
+  group_by(carabid_species, habitat, year) %>%
+  summarise(
+    total_abundance = sum(count, na.rm = TRUE),
+    .groups = "drop"
+  ) %>%
+  unite(habitat_year, habitat, year) %>%
+  pivot_wider(
+    names_from  = habitat_year,
+    values_from = total_abundance,
+    values_fill = 0
+  ) %>%
+  mutate(Total = rowSums(across(where(is.numeric)))) %>%
+  filter(Total > 0) %>%     # <-- keep only species with >0 counts
+  arrange(desc(Total))
+
+# Clean column names for Word (ie. remove the "_")
+carabid_species_table <- carabid_species_table %>%
+  mutate(
+    carabid_species = gsub("_", " ", carabid_species)
+  )
+
+
+carabid_species_table
+
+# save as table
+write.csv(
+  carabid_species_table,
+  here::here("02_tables", "carabid_species_table.csv"),
+  row.names = FALSE
+)
+
+```
+
+
+### Sample Coverage and Hill Diversity
+Let's calculate sample coverage and hill diversity by habitat using the iNEXT package to evaluate sample completeness among habitats and compare diversity patterns.
+
+```{r}
+# HILL DIVERSITY AND SAMPLE COVERAGE
+# Summarize by habitat
+carabid_by_habitat <- carabid_habitat_summary %>%
+  group_by(habitat) %>%
+  summarise(across(all_of(species_columns), ~ sum(.x, na.rm = TRUE)),
+            .groups = "drop")
+
+# Build iNEXT list: named abundance vectors (one per habitat)
+carabid_list_habitat <- setNames(
+  lapply(seq_len(nrow(carabid_by_habitat)), function(i) {
+    v <- unlist(carabid_by_habitat[i, species_columns], use.names = TRUE)
+    v[is.na(v)] <- 0
+    v
+  }),
+  carabid_by_habitat$habitat
+)
+
+# Sample coverage + totals
+carabid_sample_coverage <- DataInfo(carabid_list_habitat, datatype = "abundance")
+
+carabid_sample_coverage
+
+write.csv(
+  carabid_sample_coverage,
+  here::here("02_tables", "carabid_sample_coverage.csv"),
+  row.names = FALSE
+)
+
+# Hill numbers
+carabid_hill <- iNEXT(carabid_list_habitat, q = c(0, 1, 2), datatype = "abundance")
+
+# table for hill numbers
+carabid_hill_diversity <- carabid_hill$AsyEst
+
+carabid_hill_diversity
+
+# save as csv
+write.csv(
+  carabid_hill_diversity,
+  here::here("02_tables", "carabid_hill_diversity.csv"),
+  row.names = FALSE
+)
+
+```
+
+VY sample completeness very high (~0.99), SNH slightly lower but still good (~0.96). 
+Quite a few singletons (7 in SNH, 5 in VY), a couple doubles/ triples. 
+
+Based on the output for hill diversity, higher observed and estimated species richness in VY, more uncertainty in SNH richness. 
+Shannon/ simpson diversity higher in SNH but also higher uncertainty. Indicate SNH has a more even community, while VY are dominated by a few species
+
+
+Let's make some plots to visualize diversity by both sample size and sample completeness
+
+```{r}
+# Coverage-based curves
+carabid_sample_coverage <- ggiNEXT(carabid_hill, type = 2) +
+  scale_colour_manual(values = custom_colors) +
+  scale_fill_manual(values = custom_colors) +
+  theme(
+    legend.title = element_blank(),
+    axis.title  = element_text(size = 12),
+    axis.text   = element_text(size = 10)
+  )
+
+carabid_sample_coverage
+
+
+# Coverage-based Hill curves
+carabid_hill_size <- ggiNEXT(carabid_hill, type = 1,
+  facet.var="Order.q") +
+  scale_colour_manual(values = custom_colors) +
+  scale_fill_manual(values = custom_colors) +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1)
+  )
+
+carabid_hill_size
+
+
+# Coverage-based Hill curves
+carabid_hill_coverage <- ggiNEXT(
+  carabid_hill,
+  type = 3,
+  facet.var = "Order.q"
+) +
+  scale_colour_manual(values = custom_colors) +
+  scale_fill_manual(values = custom_colors)
+
+carabid_hill_coverage
+
+```
+
+
+### Data Exploration
+
+
+#### Relative abundance plots
+Let's visualize the carabid relative abundance (at the genus level since it's easier to read x axis)
+
+```{r}
+custom_colors <- c("VY"="#8E44AD","SNH"="#009E73")
+
+# 1) Summarise total individuals per habitat x genus
+carabid_species_habitat_rel <- carabid_long_genus_habitat %>%
+  group_by(habitat, carabid_genus) %>%
+  summarise(n = sum(count, na.rm = TRUE), .groups = "drop") %>%
+  group_by(habitat) %>%
+  mutate(rel_abund = n / sum(n)) %>%   # relative abundance within each habitat
+  ungroup() %>%
+  filter(n > 0)
+
+# 2) Order species (overall abundance across all habitats)
+species_order <- carabid_species_habitat_rel %>%
+  group_by(carabid_genus) %>%
+  summarise(total_n = sum(n), .groups = "drop") %>%
+  arrange(total_n) %>%
+  pull(carabid_genus)
+
+carabid_species_habitat_rel <- carabid_species_habitat_rel %>%
+  mutate(carabid_genus = factor(carabid_genus, levels = species_order))
+
+# 3) Bubble plot of relative abundance of each family by habitat type
+carabid_genus_relative_abundance <- ggplot(carabid_species_habitat_rel,
+       aes(x = carabid_genus, y = habitat,
+           size = rel_abund, fill = habitat)) +
+  geom_point(shape = 21, color = "black", alpha = 1) +
+  scale_size_continuous(name = "Relative abundance") +
+  scale_fill_manual(values = custom_colors) +
+  labs(x = NULL, y = "Habitat") +
+  theme_classic(base_size = 12) +
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1,  face = "italic"),
+    legend.position = "right"
+  ) +
+  guides(fill = "none")
+
+
+carabid_genus_relative_abundance
+
+
+```
+#### Abundance and richness by habitat
+Now we'll look at the overall mean abundance and rarefied richness by habitat using boxplots
+
+```{r}
+# define custom colors
+custom_colors <- c("VY"="#8E44AD","SNH"="#009E73")
+
+# -----------------------------
+# HABITAT ABUNDANCE, SPECIES RICHNESS, MEAN PER TRAP AND RAREFIED RICHNESS
+# -----------------------------
+# ALL HABITATS RICHNESS
+sp_mat            <- as.matrix(dplyr::select(carabid_habitat_summary, all_of(species_columns)))
+total_abundance   <- rowSums(sp_mat)
+species_richness  <- rowSums(sp_mat > 0)
+
+#   Use the minimum total individuals among groups with > min_m_individuals
+min_m_individuals <- 20L
+m_candidates      <- total_abundance[total_abundance > min_m_individuals]
+
+rarefaction_m <- if (length(m_candidates)) min(m_candidates) else NA_integer_
+
+# Rarefy (individual-based); NA if m not available
+rarefied_richness <- if (is.na(rarefaction_m)) {
+  rep(NA_real_, nrow(sp_mat))
+} else {
+  vegan::rarefy(sp_mat, sample = rarefaction_m)
+}
+
+# Assemble final summary table
+carabid_habitat_data <- carabid_habitat_summary %>%
+  dplyr::select(site_ID, habitat, sample_period, year, trap_count) %>%
+  mutate(
+    total_abundance   = total_abundance,
+    mean_per_trap     = ifelse(trap_count > 0, total_abundance / trap_count, NA_real_),
+    species_richness  = species_richness,
+    rarefied_richness = rarefied_richness,
+    rarefaction_m     = rarefaction_m
+  ) %>%
+  arrange(site_ID, year, sample_period, habitat)
+
+# calculate mean per trap by habitat
+carabid_mean_by_habitat <- carabid_habitat_data %>%
+  dplyr::group_by(habitat) %>%
+  dplyr::summarise(
+    mean_per_trap = mean(mean_per_trap, na.rm = TRUE),
+    n             = dplyr::n(),
+    .groups = "drop"
+  )
+carabid_mean_by_habitat
+
+
+# plot mean abundance per trap by Habitat (VY/ SNH)
+# lets use line plots to account for paired design (each site has a VY and SNH)
+# we're using mean per plot instead of total abundance to account for traps lost in the field
+carabid_abundance_line <- ggplot(
+  carabid_habitat_data,
+  aes(
+    x = habitat,
+    y = mean_per_trap,
+    group = interaction(site_ID, year)
+  )
+) +
+  # paired lines in grey
+  geom_line(
+    color = "black",
+    alpha = 0.5
+  ) +
+  # points coloured by habitat
+  geom_point(
+    aes(color = habitat),
+    shape = 21,
+    size = 3,
+    stroke = 1.2
+  ) +
+  scale_color_manual(values = custom_colors) +
+  scale_fill_manual(values = custom_colors) +
+  labs(
+    title = "Carabid abundance",
+    x = NULL,
+    y = "Mean abundance per trap"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(hjust = 0.5),
+    legend.position = "none"
+  ) + theme(
+  axis.text.x  = element_text(size = 14),
+  axis.text.y  = element_text(size = 14),
+  axis.title.y = element_text(size = 16)
+)
+
+
+carabid_abundance_line
+
+
+
+# let's also try with boxplots
+carabid_mean_abundance <- ggplot(carabid_habitat_data, aes(x = habitat, y = mean_per_trap, fill = habitat)) +
+  geom_boxplot(outlier.shape = NA, alpha = 0.7, color = "black") +
+  geom_jitter(width = 0.2, height = 0.3, alpha = 0.5, size = 2, color = "black")+
+  coord_cartesian(ylim = c(0, 20)) +
+  labs(
+    x = "Habitat type",
+    y = "Abundance per trap"
+  ) +
+  theme_minimal(base_size = 14) +
+  scale_fill_manual(values = custom_colors) +
+  theme(
+    legend.position = "none",
+    plot.title = element_text(face = "bold", hjust = 0.5),
+    axis.text.x = element_text(angle = 45, hjust = 1)
+  )
+carabid_mean_abundance
+
+# rarefied richness
+carabid_rarefied_richness <- ggplot(carabid_habitat_data, aes(x = habitat, y = rarefied_richness, fill = habitat)) +
+  geom_boxplot(outlier.shape = NA, alpha = 0.7, color = "black") +
+  geom_jitter(width = 0.2, alpha = 0.5, size = 2, color = "black") +
+  geom_text(
+    data = habitat_n,
+    aes(
+      x = habitat,
+      y = max(carabid_habitat_data$rarefied_richness, na.rm = TRUE) + 2,
+      label = paste0("n = ", n)
+    ),
+    inherit.aes = FALSE,
+    size = 4
+  ) +
+  labs(
+    title = "Carabid Rarefied Richness by Habitat Type",
+    x = "Habitat Type",
+    y = "Carabid Rarefied Richness"
+  ) +
+  theme_minimal(base_size = 14) +
+  scale_fill_manual(values = custom_colors) +
+  theme(
+    legend.position = "none",
+    plot.title = element_text(face = "bold", hjust = 0.5),
+    axis.text.x = element_text(angle = 45, hjust = 1))
+    
+carabid_rarefied_richness 
+
+```
+
+Generally, much higher abundance in VY compared to SNH.
+
+#### Venn diagrams by habitat
+
+```{r}
+# plot as venn diagram
+# Presence-absence by habitat
+carabid_presence <- carabid_habitat_summary %>%
+  dplyr::select(-site_ID, -sample_period, -year, -trap_count) %>%
+  group_by(habitat) %>%
+  summarise(across(where(is.numeric), ~ sum(.x > 0) > 0))
+
+# Create lists of carabid families present in each habitat
+carabid_species_by_habitat <- lapply(split(carabid_presence, carabid_presence$habitat), function(df) {
+  names(df)[which(as.logical(df[-1])) + 1]  # Skip habitat column
+})
+carabid_species_by_habitat
+
+# plot as a venn diagram
+ggvenn_carabid_species <- ggvenn(carabid_species_by_habitat,
+                        fill_color = c("#009E73", "#8E44AD"),
+                        stroke_size = 0.5,
+                        set_name_size = 4, 
+                        text_size = 4) 
+ggvenn_carabid_species
+
+
+# GENUS LEVEL
+# Step 1: Summarize genus presence by habitat
+carabid_genus_presence <- carabid_long_genus_habitat %>%
+  group_by(habitat, carabid_genus) %>%
+  summarise(present = any(count > 0), .groups = "drop") %>%
+  pivot_wider(names_from = carabid_genus, values_from = present, values_fill = FALSE)
+
+# Step 2: Create lists of genera present in each habitat
+carabid_genus_by_habitat <- lapply(split(carabid_genus_presence, carabid_genus_presence$habitat), function(df) {
+  names(df)[which(as.logical(df[-1])) + 1]  # skip habitat column
+})
+
+carabid_genus_by_habitat
+
+# Step 3: Plot Venn diagram
+# add a margin to prevent the labels from getting cut off when combined
+ggvenn_carabid_genus <- ggvenn(
+  carabid_genus_by_habitat,
+  fill_color = c("#009E73", "#8E44AD"),
+  stroke_size = 0.5,
+  set_name_size = 4,
+  text_size = 4)
+
+ggvenn_carabid_genus
+
+
+print(carabid_genus_by_habitat)
+```
+
+
+At the species level, more unique carabids found in VY (13) then SNH (5), 18 shared in both habitats.
+At the genus level, more unique carabid genera found in SNH (5) than VY (3), 8 found in both habitats
+
+
+
+#### Carabid Traits by Habitat
+
+```{r}
+
+# upload the traits data (dispersal and status)
+carabid_traits <- read.csv(here::here ("00_data", "carabid_traits.csv"))
+
+
+# join to carabid habitat data (in long format)
+carabid_long_traits_habitat <- carabid_long_habitat %>%
+  dplyr::left_join(
+    dplyr::select(carabid_traits, carabid_species, dispersal_power, status),
+    by = "carabid_species"
+  )
+
+
+# summarize dispersal abundance by site_ID, habitat and year
+dispersal_abundance_habitat <- carabid_long_traits_habitat %>%
+  group_by(site_ID, habitat, year, dispersal_power) %>%
+  summarise(total_abundance = sum(count), .groups = "drop")
+
+# summarize dispersal abundance by site_ID, habitat and year
+status_abundance_habitat <- carabid_long_traits_habitat %>%
+  group_by(site_ID, habitat, year, status) %>%
+  summarise(total_abundance = sum(count), .groups = "drop")
+
+# pivot to wide format
+dispersal_abundance_wide <- dispersal_abundance_habitat %>%
+  pivot_wider(
+    names_from = dispersal_power,
+    values_from = total_abundance,
+    values_fill = 0  # fill missing combinations with 0
+  )
+
+# Make sure dispersal_abundance_habitat is prepared
+status_abundance_plot <- status_abundance_habitat %>%
+  group_by(habitat, status) %>%
+  summarise(total_abundance = sum(total_abundance), .groups = "drop")
+status_abundance_plot <- status_abundance_plot %>%
+  filter(!is.na(status))
+
+# Make sure dispersal_abundance_habitat is prepared
+dispersal_abundance_plot <- dispersal_abundance_habitat %>%
+  group_by(habitat, dispersal_power) %>%
+  summarise(total_abundance = sum(total_abundance), .groups = "drop")
+dispersal_abundance_plot <- dispersal_abundance_plot %>%
+  filter(!is.na(dispersal_power))
+
+status_colors <- c(
+  "introduced" = "#E69F00",     # orange
+  "native" = "#009E73"     # bluish green
+)
+
+# Custom colors (edit to match your desired palette)
+dispersal_colors <- c(
+  "brachypterous" = "#E69F00",     # orange
+  "macropterous" = "#009E73",     # bluish green
+  "polymorphic" = "#0072B2",     # sky blue
+  "dimorphic" = "#7D3C98"     # blue
+)
+
+# Create the stacked bar chart for both dispersal and status
+ggplot(dispersal_abundance_plot, aes(x = habitat, y = total_abundance, fill = dispersal_power)) +
+  geom_bar(stat = "identity") +
+  scale_fill_manual(values = dispersal_colors) +
+  labs(
+    x = NULL,
+    y = "No. carabids",
+    fill = "dispersal",
+    title = "dispersal composition by habitat type"
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    axis.text = element_text(color = "black"),
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor = element_blank()
+  )
+
+# Create the stacked bar chart
+ggplot(status_abundance_plot, aes(x = habitat, y = total_abundance, fill = status)) +
+  geom_bar(stat = "identity") +
+  scale_fill_manual(values = status_colors) +
+  labs(
+    x = NULL,
+    y = "No. carabids",
+    fill = "Status",
+    title = "Carabid status by habitat type"
+  ) +
+  theme_minimal(base_size = 12) +
+  theme(
+    axis.text = element_text(color = "black"),
+    panel.grid.major.x = element_blank(),
+    panel.grid.minor = element_blank()
+  )
+
+
+# Summarize total abundance by habitat and dispersal, then calculate proportion
+dispersal_prop_habitat <- dispersal_abundance_habitat %>%
+  group_by(habitat, dispersal_power) %>%
+  summarise(total_abundance = sum(total_abundance), .groups = "drop") %>%
+  group_by(habitat) %>%
+  mutate(prop = total_abundance / sum(total_abundance))
+
+dispersal_prop_habitat <- dispersal_prop_habitat %>%
+  filter(!is.na(dispersal_power))
+
+# Summarize total abundance by habitat and dispersal, then calculate proportion
+status_prop_habitat <- status_abundance_habitat %>%
+  group_by(habitat, status) %>%
+  summarise(total_abundance = sum(total_abundance), .groups = "drop") %>%
+  group_by(habitat) %>%
+  mutate(prop = total_abundance / sum(total_abundance))
+
+
+# set factor order for consistent pie layout
+dispersal_prop_habitat$dispersal_power <- factor(dispersal_prop_habitat$dispersal_power)
+
+
+# Plot pie chart by habitat using facet
+carabid_dispersal_pie <- ggplot(dispersal_prop_habitat, aes(x = "", y = prop, fill = dispersal_power)) +
+  geom_bar(stat = "identity", width = 1, color = "white") +
+  coord_polar("y") +
+  facet_wrap(~habitat) +
+  scale_fill_manual(values = dispersal_colors) +
+  labs(
+    fill = "Wing type",
+  ) +
+  theme_void(base_size = 12) +
+  theme(
+    strip.text = element_text(size = 12),
+    legend.position = "right", 
+    legend.text = element_text(size = 12)
+  )
+
+carabid_dispersal_pie
+
+# Plot pie chart by habitat using facet
+carabid_status_pie <- ggplot(status_prop_habitat, aes(x = "", y = prop, fill = status)) +
+  geom_bar(stat = "identity", width = 1, color = "white") +
+  coord_polar("y") +
+  facet_wrap(~habitat) +
+  scale_fill_manual(values = status_colors) +
+  labs(
+    fill = "Origin status",
+  ) +
+  theme_void(base_size = 12) +
+  theme(
+    strip.text = element_text(size = 12),
+    legend.position = "right",
+    legend.text = element_text(size = 12)
+  )
+
+carabid_status_pie
+
+```
+
+Higher proportion of native species in SNH compared to VY, and higher proportion of brachypterous and polymorphic wing types in SNH. But also much lower abundance overall in SNH, so actually similar number of individuals in each habitat. 
+
+## FIGURES
+
+Let's combine some figures from all of the response and predictor  variables to include in my thesis/ papers.
+
+### Sample coverage and hill diversity
+One of sample coverage for the appendix
+```{r fig.height=5, fig.width=9}
+# combine sample coverage/ hill diversity plots
+combined_sample_coverage <- cowplot::plot_grid(
+  spider_sample_coverage,
+  carabid_sample_coverage,
+  labels = c("A", "B"),
+  label_size = 10,
+  ncol = 2,
+  rel_heights = c(1, 1)
+)
+combined_sample_coverage
+
+# save to figures folder
+ggsave(
+   filename = here::here("03_figures","combined_sample_coverage.png"),
+  combined_sample_coverage,
+  width = 8,
+  height = 4,
+  dpi = 400
+)
+```
+combined hill diversity by sample coverage plot
+
+```{r fig.height=9, fig.width=7}
+# combine sample coverage/ hill diversity plots
+combined_hill_coverage <- cowplot::plot_grid(
+  spider_hill_coverage,
+  carabid_hill_coverage,
+  labels = c("A", "B"),
+  label_size = 10,
+  ncol = 1,
+  rel_heights = c(1, 1)
+)
+combined_hill_coverage
+
+# save to figures folder
+ggsave(
+   filename = here::here("03_figures","combined_hill_coverage.png"),
+  combined_hill_coverage,
+  width = 7,
+  height = 8,
+  dpi = 400
+)
+```
+
+
+```{r fig.height=9, fig.width=7}
+# combine hill diversity plots by sample size 
+combined_hill_size <- cowplot::plot_grid(
+  spider_hill_size,
+  carabid_hill_size,
+  labels = c("A", "B"),
+  label_size = 10,
+  ncol = 1,
+  rel_heights = c(1, 1)
+)
+combined_hill_size
+
+# save to figures folder
+ggsave(
+   filename = here::here("03_figures","combined_hill_size.png"),
+  combined_hill_size,
+  width = 7,
+  height = 8,
+  dpi = 400
+)
+```
+
+
+### Boxplots of abundance by habitat type
+```{r}
+# combine mean abundance plots
+combined_mean_abundance <- cowplot::plot_grid(
+  spider_mean_abundance,
+  carabid_mean_abundance,
+  labels = c("A", "B"),
+  label_size = 10,
+  ncol = 2,
+  rel_heights = c(1, 1)
+)
+combined_mean_abundance
+
+# save to figures folder
+ggsave(
+   filename = here::here("03_figures","mean_abundance_boxplot.png"),
+  combined_mean_abundance,
+  width = 8,
+  height = 5,
+  dpi = 400
+)
+
+
+```
+
+
+### Line plots by habitat type
+```{r}
+# combine mean abundnce plots
+combined_abundance_line <- cowplot::plot_grid(
+  spider_abundance_line,
+  carabid_abundance_line,
+  labels = c("A", "B"),
+  label_size = 14,
+  ncol = 2,
+  rel_heights = c(1, 1)
+)
+combined_abundance_line
+
+# save to figures folder
+ggsave(
+   filename = here::here("03_figures","mean_abundance_lineplot.png"),
+  combined_abundance_line,
+  width = 8,
+  height = 4,
+  dpi = 400
+)
+
+```
+
+### Venn Diagrams
+
+
+```{r fig.height=5, fig.width=8}
+
+# combine venn diagram plots
+combined_venn <- cowplot::plot_grid(
+  ggvenn_spider_families,
+  ggvenn_carabid_species,
+  ggvenn_carabid_genus,
+  labels = c("A", "B", "C"),
+  label_size = 12,
+  ncol = 2,
+  rel_heights = c(1,1)
+)
+combined_venn
+
+# save to figures folder
+ggsave(
+   filename = here::here("03_figures","ven_diagram.png"),
+  combined_venn,
+  width = 8,
+  height = 6,
+  dpi = 400
+)
+
+```
+
+
+### Trait figures
+```{r}
+
+# combine relative abundnce plots
+combined_trait_carabid <- cowplot::plot_grid(
+  carabid_status_pie,
+  carabid_dispersal_pie,
+  labels = c("A", "B", "C"),
+  label_size = 12,
+  ncol = 1,
+  rel_heights = c(1, 1)
+)
+combined_trait_carabid
+
+# save to figures folder
+ggsave(
+   filename = here::here("03_figures","carabid_traits_pie.png"),
+  combined_trait_carabid,
+  width = 8,
+  height = 6,
+  dpi = 400
+)
+
+
+```
+
+## GLLVM's
+
+### Spider GLLVM
+This section uses generalized linear latent variable models (GLLVM) 
+
+
+```{r}
+# Pivot to long format to count presence
+family_presence <- spider_habitat_summary %>%
+  dplyr::select(all_of(family_columns)) %>%
+  pivot_longer(cols = everything(), names_to = "family", values_to = "count") %>%
+  group_by(family) %>%
+  summarise(n_samples = sum(count > 0), .groups = "drop")
+
+# Filter families with at least 5 non-zero entries
+families_to_keep <- family_presence %>%
+  filter(n_samples >= 5) %>%
+  pull(family)
+print(families_to_keep)
+
+observed_families <- observed_families_habitat %>% dplyr::pull(spider_family)
+
+# Response matrix (all family counts)
+Y_spider <- spider_habitat_summary %>%
+  dplyr::select(all_of(observed_families)) %>%
+  as.matrix()
+
+# Filter Y to include only common species
+Y_spider_rare_removed <- spider_habitat_summary %>%
+  dplyr::select(all_of(families_to_keep)) %>%
+  as.matrix()
+
+# Offset (log effort) and final response matrix 
+effort_vec <- pmax(spider_habitat_summary$trap_count, 1L)
+off_vec    <- log(effort_vec)
+
+
+site_ID <- spider_habitat_summary %>%
+  dplyr::pull(site_ID) %>%
+  factor()
+
+studyDesign <- data.frame(site_ID = factor(site_ID))
+
+
+# Covariate C matrix (habitat and season only)
+X_spider <- spider_habitat_summary %>%
+  dplyr::select(habitat, year) %>%
+  mutate(across(everything(), as.factor))
+
+
+```
+
+
+```{r}
+
+# Fit GLLVM using factors habitat and year
+# rare families (<5) removed
+gllvm_spider_pois <- gllvm(
+  y = Y_spider_rare_removed,
+  X = X_spider,                        
+  family = "poisson", 
+  formula = ~ habitat + year,
+  num.lv = 2,
+  studyDesign = studyDesign,
+  row.eff = ~(1 | site_ID),
+  offset = off_vec,   
+  method = "VA"
+)
+
+summary(gllvm_spider_pois)
+
+
+
+```
+
+
+#### Meeting model assumptions
+
+Checking for collinearity
+Model diagnostics and performance
+
+```{r}
+# biplot of the GLLVM 
+plot(gllvm_spider_pois, biplot = TRUE, ind.spp = TRUE)
+```
+
+Residuals are fan shaped, indicating overdispersion. let's try a negative binomial distribution. 
+
+```{r}
+# Fit GLLVM using factors (without continuous covariates)
+# rare families (<5) removed
+gllvm_spider_nb <- gllvm(
+  y = Y_spider_rare_removed,
+  X = X_spider,                        
+  family = "negative.binomial", 
+  formula = ~ habitat + year,
+  num.lv = 2,
+  studyDesign = studyDesign,
+  row.eff = ~(1 | site_ID),
+  offset = off_vec,   
+  method = "VA"
+)
+
+summary(gllvm_spider_nb)
+
+```
+```{r}
+# biplot of the GLLVM 
+plot(gllvm_spider_nb, biplot = TRUE, ind.spp = TRUE)
+```
+
+Residuals look better and AICc is smaller for NB model
+
+#### Model outputs
+
+Let's plot the gllvm model coefficients
+```{r}
+# plot the gllvm spider coefficient plot
+coefplot(
+  gllvm_spider_nb,
+  cex.ylab = 0.7,
+  mar = c(4, 10, 2, 1),
+  xlim.list = list(
+    c(-4, 4),   # habitat
+    c(-4, 4)    # year
+  )
+)
+```
+
+
+Let's clean up the axis and save the gllvm model coefficient plot
+
+```{r}
+
+# Convert family names to sentence case
+gllvm_spider_nb_sc <- gllvm_spider_nb
+spider_families <- stringr::str_to_sentence(
+  rownames(gllvm_spider_nb_sc$params$Xcoef)
+)
+
+rownames(gllvm_spider_nb_sc$params$Xcoef) <- spider_families
+rownames(gllvm_spider_nb_sc$sd$Xcoef)     <- spider_families
+
+# open device to save plot using base R
+png(
+  filename = here::here("03_figures", "spider_gllvm_plot.png"),
+  width = 7,
+  height = 5,
+  units = "in",
+  res = 400
+)
+
+# plot the gllvm spider coefficient plot
+coefplot(
+  gllvm_spider_nb_sc,
+  cex.ylab = 0.7,
+  mar = c(4, 10, 2, 1),
+  xlim.list = list(
+    c(-4, 4),   # habitat
+    c(-4, 4)    # year
+  )
+)
+
+# close device
+dev.off()
+
+
+```
+
+
+
+
+```{r}
+# let's also look at the ordination plot, with latent variables as axis
+ordiplot(gllvm_spider_nb,
+         biplot  = TRUE,
+         ind.spp = 16,
+         symbols = TRUE)
+
+
+```
+
+
+### Spider Fourth Corner Model
+
+First we'll prepare the traits dataset
+```{r}
+# FAMILY TRAITS
+# Ensure the species names in traits match the columns in Y
+spider_traits_rare_removed <- spider_traits %>% filter(spider_family %in% colnames(Y_spider_rare_removed))
+
+# ensure it's a dataframe in the same order as Y
+spider_traits_ordered <- spider_traits_rare_removed[match(colnames(Y_spider_rare_removed), spider_traits_rare_removed$spider_family), ]
+
+
+# make spider_family the row names
+rownames(spider_traits_ordered) <- spider_traits_ordered$spider_family
+
+# keep only the guild code column
+TR_spider <- spider_traits_ordered %>%
+  dplyr::select(guild_code)
+
+# Make sure it matches!
+all(colnames(Y_spider_rare_removed) %in% rownames(TR_spider))
+sum(colnames(Y_spider_rare_removed) %in% rownames(TR_spider))
+
+
+# make sure reference levels make sense for model
+X_spider$habitat <- relevel(factor(X_spider$habitat), ref = "SNH")
+
+# set dispersal power reference level to macropterous
+TR_spider$guild_code <- relevel(
+  factor(TR_spider$guild_code),
+  ref = "GRH"
+)
+
+```
+
+
+```{r}
+# run gllvm fourth corner model with spider traits
+# still include site_ID as a row effect and offset
+gllvm_spider_traits <- gllvm(
+  y = Y_spider_rare_removed,
+  X = as.data.frame(X_spider),
+  TR = TR_spider,
+  family = "negative.binomial",
+  num.lv = 2,
+  method = "VA",
+  offset = off_vec,
+  studyDesign = studyDesign,
+  row.eff = ~(1 | site_ID),
+  formula = y ~ habitat * (guild_code))
+
+summary(gllvm_spider_traits)
+
+```
+
+
+#### Meeting model assumptions
+
+Checking for collinearity
+Model diagnostics and performance
+
+```{r}
+# biplot of the GLLVM 
+plot(gllvm_spider_traits, biplot = TRUE, ind.spp = TRUE)
+```
+residuals look okay!
+
+#### Model outputs
+
+Let's make a plot for the coefficients from 4th corner model
+
+```{r}
+coefplot(gllvm_spider_traits)
+spider_fourth <- gllvm_spider_traits$fourth.corner
+a <- max( abs(spider_fourth) )
+
+
+# remove guild_code for plotting
+colnames(spider_fourth) <- colnames(spider_fourth) |>
+  str_remove("^guild_code_?") |>   # remove prefix
+  str_replace("_", " / ")          # optional: make combinations readable
+
+
+# custom colors (gradient based on VY/ SNH colors)
+colort <- colorRampPalette(c(
+  custom_colors["SNH"],  # negative
+  "white",
+  custom_colors["VY"]    # positive
+))
+
+# plot use level plot from lattice package
+spider_4th_plot <- levelplot(
+  as.matrix(spider_fourth),
+  xlab = "Habitat",
+  ylab = "Spider hunting strategy",
+  col.regions = colort(100),
+  cex.lab = 1.3,
+  at = seq(-a, a, length = 100),
+  scales = list(x = list(draw = FALSE)),
+  par.settings = list(
+    axis.text = list(cex = 1.3),
+    par.xlab.text = list(cex = 1.5),
+    par.ylab.text = list(cex = 1.5),
+    par.legend.text = list(cex = 1.3)
+  )
+)
+
+spider_4th_plot
+
+# open device (save image using base R, lattice not compatible with ggsave)
+png(
+  filename = here::here("03_figures", "spider_4th_plot.png"),
+  width = 7,
+  height = 7,
+  units = "in",
+  res = 400
+)
+
+# draw the plot
+print(spider_4th_plot)
+
+# close device
+dev.off()
+
+```
+
+Relative to SNH, VY support more SHW/ OTH 
+
+
+### Carabid GLLVM
+
+First we'll prepare the data and get it in the right format for GLLVM modelling
+
+```{r}
+
+# Offset (log effort) and final response matrix
+effort_vec <- pmax(carabid_habitat_summary$trap_count, 1L)   # guard against 0
+off_vec    <- log(effort_vec)
+
+# --- site_ID: grouping factor for random site intercept -------------------
+# one site label per sample row (should be length 90)
+site_ID <- carabid_habitat_summary %>%
+  dplyr::select(site_ID) %>%
+  mutate(across(everything(), as.factor))
+
+
+Y_carabid <- carabid_habitat_summary %>%
+  dplyr::select(all_of(species_columns)) %>%
+  as.matrix()
+
+# Covariate matrix (habitat and season only)
+X_carabid <- carabid_habitat_summary %>%
+  dplyr::select(site_ID, habitat, year) %>%
+  mutate(across(everything(), as.factor))
+
+# --- Identify rare species to exclude -------------------------------------
+species_occurrence_summary <- carabid_habitat_summary %>%
+  summarise(across(all_of(species_columns), ~ sum(. > 0))) %>%
+  pivot_longer(cols = everything(), names_to = "species", values_to = "n_samples")
+
+# Threshold: must occur in at least 5 unique samples
+species_to_keep <- species_occurrence_summary %>%
+  filter(n_samples > 5) %>%
+  pull(species)
+
+# --- Filter Y to include only common species ------------------------------
+Y_rare_carabid_removed <- carabid_habitat_summary %>%
+  dplyr::select(all_of(species_to_keep)) %>%
+  as.matrix()
+
+
+
+```
+
+Next we'll run the gllvm model (with poisson distribution to start)
+
+```{r}
+# Fit GLLVM using factors 
+# rare species (<5) removed
+# habitat as predictors (without continuous covariates)
+# include 2 latent variables and offset
+gllvm_carabid_pois <- gllvm(
+  y = Y_rare_carabid_removed,
+  X = X_carabid,
+  family = "poisson",
+  formula = ~ habitat + year,
+  num.lv = 2,
+  studyDesign = studyDesign,
+  row.eff = ~(1 | site_ID),
+  offset = off_vec,
+  method = "VA"
+)
+
+
+summary(gllvm_carabid_pois)
+
+
+```
+
+
+#### Meeting model assumptions
+
+```{r}
+# plot the residuals
+plot(gllvm_carabid_pois, biplot = TRUE, ind.spp = TRUE)
+
+# no strong violation of homogeneity of variance.
+
+```
+
+Residuals seem okay for poisson model. 
+
+
+#### Model outputs
+
+Let's plot the model coefficients
+
+```{r}
+# plot the gllvm carabid coefficient plot
+coefplot(
+  gllvm_carabid_pois,
+  cex.ylab = 0.7,
+  mar = c(4, 10, 2, 1),
+  xlim.list = list(
+    c(-4, 4),   # habitat
+    c(-4, 4)    # year
+  )
+)
+```
+
+
+and then clean up the plot axis and save
+
+```{r}
+# clean up species names (remove underscore)
+gllvm_carabid_pois_sc <- gllvm_carabid_pois
+
+carabid_names_clean <- rownames(gllvm_carabid_pois_sc$params$Xcoef) |>
+  str_replace_all("_", " ") |>    
+  str_to_sentence()
+
+rownames(gllvm_carabid_pois_sc$params$Xcoef) <- carabid_names_clean 
+rownames(gllvm_carabid_pois_sc$sd$Xcoef)     <- carabid_names_clean 
+
+# open device to save plot using base R
+png(
+  filename = here::here("03_figures", "carabid_gllvm_plot.png"),
+  width = 7,
+  height = 6,
+  units = "in",
+  res = 400
+)
+
+
+# make italic
+par(font.axis = 3)  # 3 = italic
+
+# plot the gllvm carabid coefficient plot
+coefplot(
+  gllvm_carabid_pois_sc,
+  cex.ylab = 0.7,
+  mar = c(4, 10, 2, 1),
+  xlim.list = list(
+    c(-4, 4),   # habitat
+    c(-4, 4)    # year
+  )
+)
+
+# close device
+dev.off()
+
+```
+
+Also make an ordination plot (latent variables as axis)
+
+```{r}
+
+ordiplot(gllvm_carabid_pois,
+         biplot  = TRUE,
+         ind.spp = 16,
+         symbols = TRUE)
+
+
+```
+
+Nothing too obvious from ordination plot, except how carabus taedatus is distanced from the other species. 
+
+
+### Carabid Fourth Corner Model
+
+First we'll prepare the trait data and make sure it lines up with the Y (response) dataframe.
+Again, we'll only keep the carabid species with >5 individuals.
+Let's also set the references as SNH, macropterous and native. 
+
+```{r}
+# SPECIES TRAITS
+# Ensure the species names in traits match the columns in Y
+carabid_traits_rare_removed <- carabid_traits %>% filter(carabid_species %in% colnames(Y_rare_carabid_removed))
+
+# ensure it's a dataframe in the same order as Y
+carabid_traits_ordered <- carabid_traits_rare_removed[match(colnames(Y_rare_carabid_removed), carabid_traits_rare_removed$carabid_species), ]
+
+# make carabid_species the row names
+rownames(carabid_traits_ordered) <- carabid_traits_ordered$carabid_species
+
+# remove non-necessary columns
+TR_carabid <- carabid_traits_ordered %>%
+  dplyr::select(-carabid_species)     # remove non-trait columns
+
+# Make sure it matches!
+all(colnames(Y_rare_carabid_removed) %in% rownames(TR_carabid))
+sum(colnames(Y_rare_carabid_removed) %in% rownames(TR_carabid))
+
+
+# make sure reference levels make sense for model
+X_carabid$habitat <- relevel(factor(X_carabid$habitat), ref = "SNH")
+
+# set dispersal power reference level to macropterous
+TR_carabid$dispersal_power <- relevel(
+  factor(TR_carabid$dispersal_power),
+  ref = "macropterous"
+)
+
+# set status to be introduced
+TR_carabid$status <- relevel(
+  factor(TR_carabid$status),
+  ref = "native"
+)
+
+
+```
+
+
+Now we'll run the gllvm fourth corner model with the traits included. 
+
+```{r}
+# run gllvm model
+# Y is carabid matrix grouped by site/ habitat/ year
+# X is predictor variables (habitat)
+# TR is carabid traits
+# offset for trap count, row effect for site ID
+gllvm_carabid_traits <- gllvm(
+  y = Y_rare_carabid_removed,
+  X = as.data.frame(X_carabid),
+  TR = TR_carabid,
+  family = "negative.binomial",
+  num.lv = 2,
+  method = "VA",
+  offset = off_vec,
+  studyDesign = studyDesign,
+  row.eff = ~(1 | site_ID),
+  formula = y ~ habitat * (dispersal_power + status))
+
+summary(gllvm_carabid_traits)
+
+```
+
+#### Meeting model assumptions
+```{r}
+# biplot of the GLLVM 
+plot(gllvm_carabid_traits, biplot = TRUE, ind.spp = TRUE)
+```
+residuals look okay!
+
+#### Model outputs
+
+Plot and save fourth corner plot 
+
+```{r}
+coefplot(gllvm_carabid_traits)
+carabid_fourth <- gllvm_carabid_traits$fourth.corner
+a <- max( abs(carabid_fourth) )
+
+# remove prefix (status/ dispersal power) for plotting
+colnames(carabid_fourth) <- colnames(carabid_fourth) |>
+  str_remove("^(status|dispersal_power)_?") |>  # remove either prefix
+  str_replace("_", " / ")
+colnames(carabid_fourth) <- colnames(carabid_fourth) |>
+  str_to_sentence()
+
+
+# add colors for habitats
+colort <- colorRampPalette(c(
+  custom_colors["SNH"],  # negative
+  "white",
+  custom_colors["VY"]    # positive
+))
+
+
+# plot fourth corner model using levelplot from lattice package
+carabid_4th_plot <- levelplot(
+  as.matrix(carabid_fourth),
+  xlab = "Habitat",
+  ylab = "Species traits",
+  col.regions = colort(100),
+  at = seq(-a, a, length = 100),
+  scales = list(x = list(draw = FALSE)),
+  par.settings = list(
+    axis.text = list(cex = 1.3),
+    par.xlab.text = list(cex = 1.5),
+    par.ylab.text = list(cex = 1.5),
+    par.legend.text = list(cex = 1.3)
+  )
+)
+
+carabid_4th_plot
+
+
+# open device (save image using base R)
+png(
+  filename = here::here("03_figures", "carabid_4th_plot.png"),
+  width = 7,
+  height = 7,
+  units = "in",
+  res = 400
+)
+
+# draw the plot
+print(carabid_4th_plot)
+
+# close device
+dev.off()
+
+
+```
+
+Polymorphic carabid beeltes associated with SNH.
+
+
+

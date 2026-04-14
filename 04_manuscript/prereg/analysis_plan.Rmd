@@ -1,0 +1,201 @@
+---
+title: "Exploring Vegetation Management and Semi-Natural Habitats on Ground-Dwelling Natural Enemies in Vineyard Landscapes in the Okanagan"
+author:
+  - name: "Hannah Friesen"
+    affiliation: "University of British Columbia Okanagan, Agriculture and Agri-Food Canada"
+date: "13 March 2025`"
+output:
+  pdf_document: default
+  html_document: default
+  word_document: default
+shorttitle: My preregistration
+bibliography:
+  - references_zotero.bib
+  - grateful-refs.bib
+csl: "https://raw.githubusercontent.com/citation-style-language/styles/master/ecology-letters.csl"
+---
+
+------------------------------------------------------------------------
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r loadlib, message = FALSE, include=FALSE}
+library(janitor)
+library(tidyverse)
+library(tinytex)
+library(rmarkdown)
+library(knitr)
+library(RefManageR)
+library(grateful)
+library(DHARMa)
+library(vegan)
+library(landscapemetrics)
+library(terra)
+
+# Generate a BibTeX file with citations for all loaded packages
+cite_packages(out.dir = "C:/Personal/R/LL_VY_BIO/04_manuscript")
+
+
+```
+
+# Introduction
+
+<!-- Verbal description of the effect I am trying to replicate -->
+
+Conversion of land from natural ecosystems to agriculture has contributed to habitat fragmentation and biodiversity loss [@foley2005; @ramankutty2018]. However, there is increasing evidence that shows agricultural lands have the capacity to support biodiversity when managed organically [@tuck2014; @bengtsson2005] and when natural and semi-natural vegetation is retained in the surrounding landscape [@estrada-carmona2022; @kremen2020]. However, the relative importance of local versus landscape-scale factors remains debated, with studies showing variable results across different agricultural systems and regions [@tscharntke2005].
+
+While most agricultural biodiversity research has focused on annual cropping systems, perennial systems remain understudied [@viers2013]. Vineyards provide an ideal agroecosystem to explore the potential for biodiversity conservation, as they frequently occur in areas of high conservation value [@paiola2020]. Research suggests that organic viticulture and inter-row vegetation management can enhance biodiversity [@beaumelle2023; @geldenhuys2021]. However, the magnitude of these benefits is often mediated by landscape heterogeneity, with studies showing that the positive effects of organic viticulture depends on the surrounding landscape [@schirmel2022; @muneret2019]. Although vineyard biodiversity studies have increased in recent years, the effects of vineyard management on biodiversity vary by region and taxa [@paiola2020], limiting our ability to generalize best practices. 
+
+Ground-dwelling natural enemies, such as carabid beetles and spiders, are important generalist predators and are useful indicators of biodiversity due to their sensitivity to environmental changes and wide-spread distribution [@kromp1999]. Therefore, monitoring their populations can provide insights into effective management strategies for both agricultural production and biodiversity conservation. Research has shown that carabid beetles and spiders respond differently to vegetation management and landscape heterogeneity depending on functional traits, such as dispersal ability and hunting strategy [@mei2023; @galle2019]. These differences highlight the need to move beyond taxonomic diversity and assess functional guild responses to vineyard management and landscape complexity.
+
+Additionally, while studies have examined how the proportion of semi-natural habitat in the surrounding landscape influences carabids and spiders within vineyards, few have directly compared natural enemy assemblages in vineyards to those in adjacent semi-natural habitats [@ganem2023]. Understanding how vineyard communities differ from unmanaged ecosystems will provide insights into the degree to which vineyards can support natural enemy populations and the role of semi-natural habitats as reservoirs of biodiversity. Furthermore, arthropod populations vary seasonally, yet little is known about how seasonal changes affect natural enemy composition in vineyards in the Okanagan, which is important for assessing their potential for pest control throughout the growing season [@bolduc2005]
+
+This study integrates field-based sampling, geospatial landscape analysis, and statistical modeling to examine how vineyard management and landscape heterogeneity influence ground-dwelling natural enemies in the Okanagan Valley, British Columbia. Specifically, I investigate (1) how local and landscape factors shape natural enemy abundance and taxonomic richness, (2) how functional guilds of carabid beetles and spiders respond to habitat and landscape complexity, and (3) differences in community composition across habitat types and seasons. 
+
+## Importance
+
+This is the first region-wide study to examine how vineyard management and landscape heterogeneity shape arthropod communities in the Okanagan. The project aims to support evidence-based strategies to strengthen ecosystem services and increase resiliency in vineyards, while also providing valuable baseline data amid increasing viticultural expansion and climate change. Ultimately, these findings will inform management practices that align biodiversity conservation with sustainable grape production. 
+
+## Research Questions and Hypothesis
+
+<!--My reseach questions and hypothesis -->
+
+The overarching objective of this research is to investigate how local vineyard management and landscape heterogeneity influence the abundance and diversity of ground-dwelling natural enemies and whether these effects vary based on functional traits. A secondary objective is to characterize ground-dwelling natural enemy communities in vineyard agroecosystems in the Okanagan and compare their composition across habitat types and seasons to better understand their distribution patterns and ecological drivers.
+
+**Q1: How does the abundance and taxonomic richness of ground-dwelling natural enemies in vineyards vary in relation to a) non-crop vegetation, b) vineyard management and c) landscape heterogeneity? Are there interactions between local and landscape factors?**
+
+The Natural Enemy Hypothesis [@russell1989] states that structurally diverse vegetation provides food, shelter, and microhabitats for predators, leading to an increase in both natural enemy abundance and diversity. Based on this, I predict that greater vegetation complexity (higher plant height, increased ground cover, and greater plant species richness) will result in higher natural enemy abundance and taxonomic richness in vineyards. 
+
+Research in European vineyards has shown that organic management enhances natural enemy abundance but does not consistently increase diversity [@muneret2019]. Additionally, landscape heterogeneity has been found to mediate the effects of local management on biodiversity [@schirmel2022], suggesting that both local vineyard practices and broader landscape composition interact to shape natural enemy communities. However, to my knowledge, no studies have evaluated the combined effects of vineyard management and landscape heterogeneity on arthropod communities in North American vineyards. I hypothesize that organic vineyard management will lead to higher natural enemy abundance, whereas taxonomic richness will be more strongly influenced by landscape heterogeneity. Furthermore, I expect an interaction between local vineyard management and landscape heterogeneity, with a higher positive effect of local organic management in intermediate landscapes compared to simple (<20% semi-natural vegetation) and complex (>50% semi-natural vegetation) landscapes, in line with the intermediate landscape hypothesis [@tscharntke2012a], which predicts that conservation management is most effective in landscapes with moderate levels of complexity, where species pools are neither too depleted nor saturated.  
+
+I will test these hypotheses using Generalized Linear Mixed Models (GLMMs) with interaction terms to assess the combined effects of local and landscape variables on natural enemy abundance and taxonomic richness. See analysis details below for more information.
+
+**Q2: Do carabid and spider functional guilds respond differently to a) non-crop vegetation, b) vineyard management and c) landscape heterogeneity?**
+
+Functional traits, such as feeding habitats and dispersal ability, play a key role in determining species’ responses to habitat structure, management practices, and landscape composition [@jowett2019; @galle2019]. Yet most studies have focused on overall biodiversity in vineyards, with less attention to how local and landscape factors influence different ecological guilds. I predict that responses to local and landscape variables will vary between functional groups based on differences in their feeding habitats and dispersal ability.  I predict that hunting spiders will benefit from dense vegetation in inter-rows where they can ambush prey, whereas web building spiders will benefit from vegetation stability in the vine row. I also expect highly mobile groups (ex. macropterous carabids) will be more effected by the surrounding landscape while low-mobility groups (ex. brachypterous carabids) will be more influenced by local vineyard management. These hypothesis align with the landscape-moderated functional trait selection hypothesis, which states that functional traits mediate how organisms respond to landscape characteristics and habitat structure [@tscharntke2012a]. 
+
+I will test these hypotheses using Generalized Linear Mixed Models (GLMMs) with carabid and spider functional guilds as response variables. 
+
+**Q3: How do carabid beetle and spider community assemblage vary across a) different habitat types and b) different seasons?**
+
+I hypothesize that carabid and spider assemblages will vary by habitat type, with vineyards supporting distinct communities compared to semi-natural habitats. I expect Simpson’s diversity index [@hill1973] to be lower in vineyards compared to semi-natural habitats due to greater disturbance within vineyards, however, I predict that vineyards will exhibit a higher dominance of disturbance-tolerant species, as observed in other vineyard ecosystems [@bolduc2005; @ganem2023].
+
+Previous research has shown that seasonal changes in both vineyards and natural habitats can affect the spider populations, resulting in shifts in community assemblage from early to late season [@ganem2023; @bolduc2005]. I expect carabid and spider communities to change between June and September, reflecting seasonal differences in activity and resource availability.
+
+I will test these hypothesis using Generalized Linear Latent Variable Models (GLLVM) to compare community composition by habitat type and sampling period. 
+
+# Study design
+
+In 2024, I selected 22 vineyards, with a mix of organic and conventional sites along a landscape gradient (7-70% semi-natural habitat). Where possible, organic and conventional sites were selected in close proximity with similar surrounding landscapes and environmental variables to enable meaningful comparisons between management types. In 2025, an additional 16 sites were added to increase replication, and one site was not sampled due to the vines being removed, resulting in a total of 37 study sites. 
+
+
+At 14 vineyards, sampling also occurred in adjacent field margins and/ or semi-natural habitats. Trapping took place twice throughout the season.
+
+
+## Study type
+
+Observational.
+
+# Sampling plan
+
+## Existing data
+
+Mock pre-registration prior to any human observation of the data: As of the date of submission, the data exist but have not yet been quantified, constructed, observed, or reported.
+
+## Location
+
+Field based study.
+
+## Country/Region
+
+South and Central Okanagan Valley, BC, Canada.
+
+## Data collection
+
+Ground arthropods: Pitfall traps were used to sample ground dwelling natural enemies at each vineyard field along a 60m transect, spaced 10m apart. At 14 of the vineyards I also installed six pitfall traps along a 60m transect in semi-natural field margins and adjacent natural vegetation. Trapping took place twice throughout the season to capture variability, once in mid-June during grape flowering and again in mid-September during grape harvest, two key periods in the grape growing season. Traps were left for two weeks during each period. Carabid beetles and spiders will be sorted and identified to the lowest level needed to assign to functional guilds, family level for spiders (@cardoso2011] and species level for carabids [@jowett2019]. Spider feeding traits will be classified by hunting strategy (web-builder, active hunter) [@cardoso2011] and carabid dispersal ability will be classified by wing type as macropterous (fully developed) or brachypterous (reduced or no wings) [@larochelle2003].
+
+Vegetation Surveys: At each site vegetation surveys were conducted between June and July using Daubenmire quadrats (0.2 x 0.5 m; (@daubenmireCanopyCoverageMethod1959). Quadrats were placed every 2m along the same 60m transects as the pitfall traps (30 quadrats total), and herbaceous species composition and total percent vegetation cover was recorded. Vegetation height around each pitfall trap was also recorded for each sampling period by taking the average of three measurements within 0.5m of the trap.
+
+Landscape metrics: Landscape heterogeneity was assessed using the Canadian Annual Crop Inventory (ACI), a raster land cover data set with a resolution of 30m [@fisetteAAFCAnnualCrop2013], to calculate proportion of natural vegetation at multiple scales (250m, 500m and 1000m) and distance to nearest natural habitat using the landscapemetrics package in R [@landscapemetrics].
+
+Environmental variables: Post season soil samples were collected in October (composite sample for each transect) and analyzed for soil organic carbon content using an elemental analyzer. Environmental variables, such as slope, aspect and elevation were collected using a digital elevation model and the terra package (@terra). 
+
+Management information: Management information, including age and variety of vines, pesticide and herbicide application, and mowing and tillage frequency will be collected from growers using an online survey. 
+
+# Design of the replication study
+
+## Sample size
+
+<!-- My target sample size is -->
+
+22 vineyards (n=22), 6 pitfall traps were set up within each vineyard in June (3 in vine row, 3 in inter-row) and 12 pitfall traps within each vineyard in September (6 in vine row, 6 in inter-row), resulting in 396 traps within vineyards.
+
+At 14 vineyards, 6 pitfall traps were also set up in adjacent field margins (n= 13) and/ or natural habitats (n=11) and were sampled twice throughout the growing season, resulting in 288 traps in semi-natural habitats. 
+
+Total pitfall traps = 684. 
+
+## Sample size rationale
+
+<!-- The rationale for my sample size is -->
+
+The rationale for this sample size was to include as many sites while accommodating logistical (time and resource) constraints imposed by field sampling, trap processing and taxa identification. Semi-natural habitat sampling was limited by site accessibility to nearby natural areas. Number of traps per vineyard and spacing was decided based on literature review.
+
+# Variables
+
+## Response Variables
+
+The response variables to be measured in the study include the abundance, taxonomic richness and simpsons diversity of ground-dwelling natural enemies (Coleoptera (Carabidae) and Arachnid (Araneae, Opiliones)). In addition, spiders and carabids will be further divided into functional groups by either feeding habits or dispersal ability. 
+
+## Predictor variables
+
+The predictor variables for factors within vineyards include management (categorical with two levels, organic and conventional), vegetation properties (height (cm), vegetation cover (%), and species richness) and landscape metrics (proportion of semi-natural habitat (%), and distance to nearest semi-natural habitat). 
+
+The predictor variables for factors between habitat types include vegetation properties (height (cm), vegetation cover (%), and species richness) and environmental variables (soil carbon(%), slope, aspect). 
+
+# Analysis and replication evaluation
+
+## Analysis plan
+
+Data will be pooled along transects by habitat type (vineyard crop row, vineyard inter-row, field margin, and natural habitat) and sampling period (June and September).
+
+Sampling adequacy will be assessed per response variable using rarefaction curves using the `vegan` package in R [@vegan].
+
+Descriptive statistics will be calculated for key variables for both organic and conventional vineyards, including the range, mean, standard deviation, median and interquartile range of the data.
+
+Generalized Linear Mixed Models (GLMMs) will be used to model natural enemy abundance and taxonomic richness in response to Vineyard management (organic vs. conventional), vegetation complexity (height, cover, and species richness) and landscape heterogeneity (proportion natural vegetation and distance to nearest semi-natural habitat) as predictor variables, as well as interactions between local and landscape variables. Vineyard site will be included as a random effect to account for repeated measures within sites. Models for count data (abundance and taxonomic richness) will be fit using either a poisson distribution, a negative binomial distribution (if over-dispersed) or a Conway-Maxwell (if under dispersed). Predictor variables will be checked for multicollinearity  by calculation of correlation matrices (function “corrplot” in the R package corrplot; Wei and Simko, 2017) and residuals will be assessed to check for violations of assumptions using the `DHARMa` package [@DHARMa]. Spatial autocorrelation in residuals will also be tested using Moran’s I test, implemented in the `DHARMa` package in R [@DHARMa]. Model selection will be based on Akaike’s Information Criterion (AIC), with likelihood ratio tests used for nested model comparison. 
+
+Simpson's Diversity Index [@hill1973] will be used to compare taxonomic diversity between habitats using the `vegan` package [@vegan].
+
+Multivariate ordination will be used to assess the influence of habitat and season on carabid and spider assembleges using the `vegan` package [@vegan]. Carabid species and spider family composition will be analyzed with Redundancy analysis (RDA) in order to evaluate the influence of the habitat type and sampling time.  If needed, the Hellinger transformation will be applied to abundance data before running RDA. Permutation tests will be run to test significance. 
+
+All statistical analyses will be run using R 4.4.2 (@base).
+
+## Exclusion criteria
+
+<!-- My exclusion criteria are (e.g., handling outliers, removing participants from analysis) -->
+
+Extreme Outliers in Arthropod Counts: Samples with arthropod counts exceeding 3 standard deviations from the mean will be flagged and checked before inclusion.
+
+Unidentified Arthropods: Specimens that cannot be identified to at least family level for spiders or species level for carabids will be excluded from taxonomic analyses but will be included in overall natural enemy abundance metrics.
+
+Collinearity: If two predictor variables are highly correlated (correlation coefficients <0.7), one will be removed to prevent model instability, or a principal component analysis will be used to prevent overfitting while still including all variables.
+
+All exclusions will be documented and justified in the methods section.
+
+## Missing Data
+
+If pitfall traps are destroyed in the field, resulting in NA values for my response variables, I will need to account the for unequal sampling effort when pooling data for statistical analysis. For GLMM's and GLLVM's, I can include the number of traps as an offset in the model which tells the model that more traps should lead to higher counts, adjusting for missing trap data. 
+
+# References
+
+
+## 
+
+\vspace{-2pc}
+\setlength{\parindent}{-0.5in}
+\setlength{\leftskip}{-1in}
+\setlength{\parskip}{8pt}
+
+\noindent
